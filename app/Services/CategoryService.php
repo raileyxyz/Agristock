@@ -6,6 +6,14 @@ use App\Models\Category;
 
 class CategoryService
 {
+    public function getCategories($filters)
+    {
+        return Category::query()
+            ->search($filters['search'] ?? null)
+            ->filterStatus($filters['status'] ?? null)
+            ->paginate(12)
+            ->withQueryString();
+    }
 
     public function create(array $data)
     {

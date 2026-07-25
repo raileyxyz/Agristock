@@ -14,32 +14,23 @@ class CategoryController extends Controller
 
     public function __construct(
         private CategoryService $categoryService
-    ){}
-
-
+    ) {}
 
     public function index(Request $request)
     {
-
-        $categories = Category::query()
-            ->search($request->search)
-            ->filterStatus($request->status)
-            ->paginate(12)
-            ->withQueryString();
-
+        $categories = $this->categoryService
+            ->getCategories(
+                $request->all()
+            );
 
         return view(
             'categories.index',
             compact('categories')
         );
-
     }
-
-
 
     public function store(StoreCategoryRequest $request)
     {
-
         $this->categoryService
             ->create($request->validated());
 
@@ -50,23 +41,15 @@ class CategoryController extends Controller
                 'success',
                 'Category added successfully.'
             );
-
     }
 
-
-
-    public function update(
-        UpdateCategoryRequest $request,
-        Category $category
-    )
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
-
         $this->categoryService
             ->update(
                 $category,
                 $request->validated()
             );
-
 
         return redirect()
             ->route('categories.index')
@@ -74,14 +57,10 @@ class CategoryController extends Controller
                 'success',
                 "{$category->name} updated successfully."
             );
-
     }
-
-
 
     public function destroy(Category $category)
     {
-
         $this->categoryService
             ->archive($category);
 
@@ -92,7 +71,6 @@ class CategoryController extends Controller
                 'success',
                 "{$category->name} archived successfully."
             );
-
     }
 
 }

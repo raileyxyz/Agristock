@@ -14,17 +14,13 @@ class UnitController extends Controller
 
     public function __construct(
         protected UnitService $unitService
-    )
-    {
-
-    }
+    ) {}
 
     public function index(Request $request)
     {
 
         $units = $this->unitService
             ->getUnits($request->search);
-
 
         return view('units.index', compact('units'));
 

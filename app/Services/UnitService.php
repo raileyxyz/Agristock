@@ -13,7 +13,7 @@ class UnitService
             ->when($search, function($query) use ($search){
 
                 $query->where('name','like',"%{$search}%")
-                      ->orWhere('abbreviation','like',"%{$search}%");
+                    ->orWhere('abbreviation','like',"%{$search}%");
 
             })
 
@@ -26,12 +26,10 @@ class UnitService
     }
 
 
-
     public function update(Unit $unit, array $data)
     {
         return $unit->update($data);
     }
-
 
 
     public function delete(Unit $unit)
