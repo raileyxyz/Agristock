@@ -26,6 +26,13 @@ class StoreProductRequest extends FormRequest
     {
         return [
 
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('products', 'name'),
+            ],
+
             'category_id' => [
                 'required',
                 Rule::exists('categories', 'id'),
@@ -36,30 +43,11 @@ class StoreProductRequest extends FormRequest
                 Rule::exists('units', 'id'),
             ],
 
-            'name' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('products', 'name'),
-            ],
-
             'sku' => [
-                'required',
+                'nullable',
                 'string',
                 'max:100',
                 Rule::unique('products', 'sku'),
-            ],
-
-            'minimum_stock' => [
-                'required',
-                'integer',
-                'min:0',
-            ],
-
-            'reorder_point' => [
-                'required',
-                'integer',
-                'min:0',
             ],
 
             'cost_price' => [
@@ -72,6 +60,18 @@ class StoreProductRequest extends FormRequest
                 'required',
                 'numeric',
                 'gte:cost_price',
+            ],
+
+            'minimum_stock' => [
+                'required',
+                'integer',
+                'min:0',
+            ],
+
+            'reorder_point' => [
+                'required',
+                'integer',
+                'min:0',
             ],
 
             'description' => [
@@ -88,7 +88,7 @@ class StoreProductRequest extends FormRequest
             ],
 
             'expiry_track' => [
-                'required',
+                'nullable',
                 'boolean',
             ],
 

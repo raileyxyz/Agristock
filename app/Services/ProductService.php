@@ -3,9 +3,14 @@
 namespace App\Services;
 
 use App\Models\Product;
+use App\Models\Category;
 
 class ProductService
 {
+    public function __construct(
+        private SkuGeneratorService $skuGenerator
+    ) {}
+
     public function getProducts(array $filters)
     {
         return Product::query()
@@ -33,6 +38,12 @@ class ProductService
 
     public function create(array $data): Product
     {
+        if(empty($data['sku'])){
+            $category = Category::findOrFail($data['category_id']);
+
+            $data['sku'] = $this->skuGenerator->generate($category);
+        }
+
         return Product::create($data);
     }
 

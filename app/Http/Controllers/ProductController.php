@@ -47,7 +47,7 @@ class ProductController extends Controller
             ->create($request->validated());
 
         return redirect()
-            ->route('products.index')
+            ->route('products.create')
             ->with('success', 'Product created successfully.');
     }
 
