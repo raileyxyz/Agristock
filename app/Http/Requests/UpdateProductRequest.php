@@ -24,6 +24,13 @@ class UpdateProductRequest extends FormRequest
     public function rules(): array
     {
         return [
+
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+
             'category_id' => [
                 'required',
                 Rule::exists('categories', 'id'),
@@ -34,18 +41,25 @@ class UpdateProductRequest extends FormRequest
                 Rule::exists('units', 'id'),
             ],
 
-            'name' => [
-                'required',
-                'string',
-                'max:255',
-            ],
-
             'sku' => [
-                'required',
+                'nullable',
                 'string',
                 'max:100',
                 Rule::unique('products', 'sku')
                     ->ignore($this->product),
+            ],
+
+            'cost_price' => [
+                'required',
+                'numeric',
+                'min:0',
+            ],
+
+            'selling_price' => [
+                'required',
+                'numeric',
+                'min:0',
+                'gte:cost_price',
             ],
 
             'minimum_stock' => [
@@ -58,18 +72,7 @@ class UpdateProductRequest extends FormRequest
                 'required',
                 'integer',
                 'min:0',
-            ],
-
-            'cost_price' => [
-                'required',
-                'numeric',
-                'min:0',
-            ],
-
-            'selling_price' => [
-                'required',
-                'numeric',
-                'gte:cost_price',
+                'gte:minimum_stock',
             ],
 
             'description' => [
@@ -86,7 +89,7 @@ class UpdateProductRequest extends FormRequest
             ],
 
             'expiry_track' => [
-                'required',
+                'nullable',
                 'boolean',
             ],
         ];
@@ -97,12 +100,11 @@ class UpdateProductRequest extends FormRequest
         return [
             'category_id.exists' => 'Selected category is invalid.',
             'unit_id.exists' => 'Selected unit is invalid.',
-
             'sku.unique' => 'SKU already exists.',
-
-            'selling_price.gte' => 'Selling price must be greater than or equal to the cost price.',
-
+            'selling_price.gte' => 'Selling price must not be lower than the cost price.',
+            'reorder_point.gte' => 'Reorder point must not be lower than the minimum stock level.',
             'expiry_track.boolean' => 'Expiry tracking must be true or false.',
+
         ];
     }
 }

@@ -59,6 +59,7 @@ class StoreProductRequest extends FormRequest
             'selling_price' => [
                 'required',
                 'numeric',
+                'min:0',
                 'gte:cost_price',
             ],
 
@@ -72,6 +73,7 @@ class StoreProductRequest extends FormRequest
                 'required',
                 'integer',
                 'min:0',
+                'gte:minimum_stock',
             ],
 
             'description' => [
@@ -101,6 +103,8 @@ class StoreProductRequest extends FormRequest
             'name.unique' => 'Product already exists.',
             'sku.unique' => 'SKU already exists.',
             'selling_price.gte' => 'Selling price must be greater than or equal to the cost price.',
+            'selling_price.gte' => 'Selling price must not be lower than the cost price.',
+            'reorder_point.gte' => 'Reorder point must not be lower than the minimum stock level.',
         ];
     }
 }

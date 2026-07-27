@@ -60,7 +60,7 @@
                     <i data-lucide="chevron-right" class="w-4 h-4 transition-transform duration-200" :class="open === 'products' && 'rotate-90'"></i>
                 </button>
 
-                <div x-show="open === 'products'" x-collapse class="mt-0.5 ml-[1.15rem] pl-4 border-l border-gray-150 space-y-0.5">
+                <div x-show="open === 'products'" x-collapse class="mt-1 ml-[1.15rem] pl-4 border-l border-gray-150 space-y-0.5">
                     <a href="{{ route('products.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('products.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
                         <i data-lucide="eye" class="w-3.5 h-3.5"></i> All Products
                     </a>
@@ -93,7 +93,7 @@
                     </span>
                 </button>
 
-                <div x-show="open === 'inventory'" x-collapse class="mt-0.5 ml-[1.15rem] pl-4 border-l border-gray-150 space-y-0.5">
+                <div x-show="open === 'inventory'" x-collapse class="mt-1 ml-[1.15rem] pl-4 border-l border-gray-150 space-y-0.5">
                     <a href="" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('inventory.stock') ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
                         <i data-lucide="layers" class="w-3.5 h-3.5"></i> Current Stock
                     </a>

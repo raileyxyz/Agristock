@@ -1,0 +1,525 @@
+<x-app-layout>
+    <div
+        x-data="{
+            showArchiveModal: false,
+            archiveTarget: { id: null, name: '' },
+            showSuccessModal: false,
+            successMessage: '{{ addslashes(session('success', '')) }}',
+            showViewModal: false,
+            viewTarget: null,
+
+            openArchive(id, name) {
+                this.archiveTarget = { id, name };
+                this.showArchiveModal = true;
+            },
+
+            openView(product) {
+                this.viewTarget = product;
+                this.showViewModal = true;
+                this.$nextTick(() => lucide.createIcons());
+            },
+
+            openEdit(product) {
+                this.editForm = { ...product };
+                this.showEditModal = true;
+                this.$nextTick(() => lucide.createIcons());
+            },
+
+            closeEdit() {
+                this.showEditModal = false;
+                this.editForm = null;
+            }
+        }"
+        x-init="
+            @if(session('success'))
+                showSuccessModal = true;
+            @endif
+        ">
+
+        <div class="flex items-center justify-between mb-1">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">All Products</h1>
+
+                <p class="mt-1 text-sm text-gray-500">
+                    {{ $statistics['total'] }} Products
+                    <span class="mx-2">•</span>
+
+                    <span class="text-green-600 font-medium">
+                        {{ $statistics['active'] }} Active
+                    </span>
+
+                    <span class="mx-2 text-gray-400">•</span>
+
+                    <span>
+                        {{ $statistics['archived'] }} Archived
+                    </span>
+                </p>
+
+            </div>
+            <a href="{{ route('products.create') }}"
+            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                Add Product
+            </a>
+        </div>
+
+        <!-- Search + Category + Status filters -->
+        <form method="GET"
+            x-data="{ search: '{{ addslashes(request('search')) }}' }"
+            x-init="$watch('search', value => {
+                clearTimeout(window._productSearchDebounce);
+                window._productSearchDebounce = setTimeout(() => $el.submit(), 500);
+            })"
+            class="flex flex-col sm:flex-row gap-3 mt-6">
+
+            <div class="relative flex-1">
+                <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                <input type="text" name="search" x-model="search" placeholder="Search by product name or SKU"
+                    class="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+            </div>
+
+            <div class="relative">
+                <select name="category_id" onchange="this.form.submit()"
+                        class="appearance-none border border-gray-300 rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    <option value="">All Categories</option>
+                    @foreach($categories ?? [] as $category)
+                        <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            </div>
+
+            <div class="relative">
+                <select name="status" onchange="this.form.submit()"
+                        class="appearance-none border border-gray-300 rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    <option value="Active" {{ request('status', 'Active') === 'Active' ? 'selected' : '' }}>Active</option>
+                    <option value="Archived" {{ request('status') === 'Archived' ? 'selected' : '' }}>Archived</option>
+                    <option value="all" {{ request('status') === 'all' ? 'selected' : '' }}>All</option>
+                </select>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            </div>
+        </form>
+
+        <!-- Products table -->
+        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mt-4">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm min-w-[1100px]">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200 text-left text-gray-500">
+                            <th class="px-3 py-2 font-medium whitespace-nowrap">ID</th>
+                            <th class="px-3 py-2 font-medium whitespace-nowrap">SKU</th>
+                            <th class="px-3 py-2 font-medium whitespace-nowrap">Product Name</th>
+                            <th class="px-3 py-2 font-medium whitespace-nowrap">Category</th>
+                            <th class="px-3 py-2 font-medium whitespace-nowrap">Unit</th>
+                            <th class="px-3 py-2 font-medium text-right whitespace-nowrap">Cost</th>
+                            <th class="px-3 py-2 font-medium text-right whitespace-nowrap">Price</th>
+                            <th class="px-3 py-2 font-medium text-right whitespace-nowrap">Stock</th>
+                            <th class="px-3 py-2 font-medium text-right whitespace-nowrap">Min</th>
+                            <th class="px-3 py-2 font-medium text-right whitespace-nowrap">Reorder</th>
+                            <th class="px-3 py-2 font-medium whitespace-nowrap">Expiry</th>
+                            <th class="px-3 py-2 font-medium whitespace-nowrap">Status</th>
+                            <th class="px-3 py-2 font-medium text-right whitespace-nowrap">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @forelse($products as $product)
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-3 py-2 text-gray-400 font-mono whitespace-nowrap">P{{ str_pad($product->id, 3, '0', STR_PAD_LEFT) }}</td>
+                                <td class="px-3 py-2 text-gray-500 whitespace-nowrap">{{ $product->sku }}</td>
+                                <td class="px-3 py-2 font-medium text-gray-800 max-w-[200px] truncate" title="{{ $product->name }}">{{ $product->name }}</td>
+                                <td class="px-3 py-2 whitespace-nowrap">
+                                    <span class="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full text-white"
+                                        style="background-color: {{ $product->category->icon_color ?? '#6b7280' }};">
+                                        {{ $product->category->icon ?? '' }} {{ $product->category->name ?? '—' }}
+                                    </span>
+                                </td>
+                                <td class="px-3 py-2 text-gray-500 whitespace-nowrap">
+                                    {{ $product->unit->abbreviation ?? '' }} ({{ $product->unit->name ?? '—' }})
+                                </td>
+                                <td class="px-3 py-2 text-right text-gray-600 whitespace-nowrap">₱{{ number_format($product->cost_price, 2) }}</td>
+                                <td class="px-3 py-2 text-right text-gray-600 whitespace-nowrap">₱{{ number_format($product->selling_price, 2) }}</td>
+                                <td class="px-3 py-2 text-right font-medium text-gray-800 whitespace-nowrap">{{ $product->current_stock ?? 0 }}</td>
+                                <td class="px-3 py-2 text-right text-gray-500 whitespace-nowrap">{{ $product->minimum_stock }}</td>
+                                <td class="px-3 py-2 text-right text-gray-500 whitespace-nowrap">{{ $product->reorder_point }}</td>
+                                <td class="px-3 py-2 whitespace-nowrap">
+                                    @if($product->expiry_track)
+                                        <span class="inline-flex items-center gap-1 text-green-600 font-medium">
+                                            <i data-lucide="check-circle" class="w-3 h-3"></i> Yes
+                                        </span>
+                                    @else
+                                        <span class="text-gray-400">No</span>
+                                    @endif
+                                </td>
+                                <td class="px-3 py-2 whitespace-nowrap">
+                                    <span class="text-xs font-medium px-2 py-0.5 rounded-full
+                                        {{ $product->status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">
+                                        {{ ($product->status) }}
+                                    </span>
+                                </td>
+                                <td class="px-3 py-2 whitespace-nowrap">
+                                    <div class="flex items-center justify-end gap-0.5">
+                                        <button @click="openView(@js($product))"
+                                                title="View product"
+                                                class="text-gray-400 hover:text-blue-700 p-1 rounded-md hover:bg-gray-100">
+                                            <i data-lucide="eye" class="w-4 h-4"></i>
+                                        </button>
+
+                                        <button @click="openEdit(@js($product))"
+                                                title="Edit product"
+                                                class="text-gray-400 hover:text-green-700 p-1 rounded-md hover:bg-gray-100">
+                                            <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                                        </button>
+
+                                        <button @click="openArchive({{ $product->id }}, '{{ addslashes($product->name) }}')"
+                                                title="Archive product"
+                                                class="text-gray-400 hover:text-red-600 p-1 rounded-md hover:bg-gray-100">
+                                            <i data-lucide="archive" class="w-3.5 h-3.5"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="13" class="px-5 py-14 text-center">
+                                    <i data-lucide="package" class="w-8 h-8 text-gray-300 mx-auto mb-2"></i>
+                                    <p class="text-gray-500 text-sm">No products found.</p>
+                                    <p class="text-gray-400 text-xs mt-1">Try a different search, or add your first product.</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        @if($products->hasPages())
+            <div class="mt-6">
+                {{ $products->links() }}
+            </div>
+        @endif
+
+        <!-- Edit Product Modal -->
+        <div x-show="showEditModal"
+            x-transition:enter="transition-opacity ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-150"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            style="display: none;"
+            x-cloak>
+            <div @click.outside="closeEdit()"
+                x-show="showEditModal"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden max-h-[90vh] flex flex-col">
+
+                <template x-if="editForm">
+                    <form method="POST" :action="'/products/' + editForm.id" class="flex flex-col overflow-hidden">
+                        @csrf
+                        @method('PUT')
+
+                        <!-- Header -->
+                        <div class="flex items-start justify-between px-6 pt-6 pb-5 shrink-0">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center shrink-0">
+                                    <i data-lucide="pencil" class="w-4.5 h-4.5"></i>
+                                </div>
+                                <div>
+                                    <h2 class="font-semibold text-gray-800 text-base leading-tight">Edit product</h2>
+                                    <p class="text-xs text-gray-400 mt-0.5">Update this product's details</p>
+                                </div>
+                            </div>
+                            <button type="button" @click="closeEdit()"
+                                    class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 -mt-1 -mr-1 transition-colors">
+                                <i data-lucide="x" class="w-4.5 h-4.5"></i>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="px-6 pb-6 space-y-4 overflow-y-auto">
+
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div class="sm:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Product Name</label>
+                                    <input type="text" name="name" x-model="editForm.name"
+                                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">SKU</label>
+                                    <input type="text" name="sku" x-model="editForm.sku"
+                                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Category</label>
+                                    <select name="category_id" x-model="editForm.category_id"
+                                            class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                        @foreach($categories ?? [] as $category)
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Unit</label>
+                                    <select name="unit_id" x-model="editForm.unit_id"
+                                            class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                        @foreach($units ?? [] as $unit)
+                                            <option value="{{ $unit->id }}">{{ $unit->name }} ({{ $unit->abbreviation }})</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Cost Price</label>
+                                    <input type="number" step="0.01" name="cost_price" x-model="editForm.cost_price"
+                                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Selling Price</label>
+                                    <input type="number" step="0.01" name="selling_price" x-model="editForm.selling_price"
+                                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Minimum Stock</label>
+                                    <input type="number" name="minimum_stock" x-model="editForm.minimum_stock"
+                                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Reorder Point</label>
+                                    <input type="number" name="reorder_point" x-model="editForm.reorder_point"
+                                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Description</label>
+                                <textarea name="description" x-model="editForm.description" rows="3"
+                                    class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors resize-none"></textarea>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <label class="flex-1 flex items-center gap-2.5 bg-gray-50 border border-gray-200 rounded-lg p-3.5 cursor-pointer">
+                                    <input type="checkbox" name="expiry_track" value="1" x-model="editForm.expiry_track"
+                                        class="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500/40">
+                                    <span class="text-sm font-medium text-gray-700">Track expiry dates</span>
+                                </label>
+
+                                <div class="sm:w-40">
+                                    <select name="status" x-model="editForm.status"
+                                            class="w-full h-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                        <option value="Active">Active</option>
+                                        <option value="Archived">Archived</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="flex items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100 shrink-0">
+                            <button type="button" @click="closeEdit()"
+                                    class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                                Save changes
+                            </button>
+                        </div>
+                    </form>
+                </template>
+            </div>
+        </div>
+
+        <!-- Archive Confirmation Modal -->
+        <div x-show="showArchiveModal"
+            x-transition:enter="transition-opacity ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-150"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            style="display: none;">
+            <div @click.outside="showArchiveModal = false"
+                x-show="showArchiveModal"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+
+                <div class="px-6 pt-6 pb-5">
+                    <div class="w-11 h-11 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mb-4">
+                        <i data-lucide="archive" class="w-5 h-5"></i>
+                    </div>
+                    <h2 class="font-semibold text-gray-800 text-base mb-1.5">Archive product?</h2>
+                    <p class="text-sm text-gray-500 leading-relaxed">
+                        <span class="font-medium text-gray-700" x-text="archiveTarget.name"></span> will be moved to Archived and hidden from active use.
+                    </p>
+                </div>
+
+                <form method="POST" :action="`/products/${archiveTarget.id}`"
+                    class="flex items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" @click="showArchiveModal = false"
+                            class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                        Archive
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div x-show="showSuccessModal"
+            x-transition:enter="transition-opacity ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-150"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            style="display: none;">
+            <div @click.outside="showSuccessModal = false"
+                x-show="showSuccessModal"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+
+                <div class="px-6 pt-6 pb-5 text-center">
+                    <div class="w-12 h-12 rounded-full bg-green-50 text-green-600 flex items-center justify-center mb-4 mx-auto">
+                        <i data-lucide="check" class="w-6 h-6"></i>
+                    </div>
+                    <h2 class="font-semibold text-gray-800 text-base mb-1.5">Done</h2>
+                    <p class="text-sm text-gray-500" x-text="successMessage"></p>
+                </div>
+
+                <div class="flex items-center justify-center px-6 py-4 bg-gray-50 border-t border-gray-100">
+                    <button @click="showSuccessModal = false"
+                            class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                        Got it
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick View Modal -->
+        <div x-show="showViewModal"
+            x-transition:enter="transition-opacity ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-150"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            style="display: none;">
+            <div @click.outside="showViewModal = false"
+                x-show="showViewModal"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden max-h-[90vh] flex flex-col"
+                x-cloak>
+
+                <template x-if="viewTarget">
+                    <div class="flex flex-col overflow-hidden">
+
+                        <!-- Header -->
+                        <div class="flex items-start justify-between px-6 pt-6 pb-5 shrink-0">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                    <i data-lucide="package" class="w-4.5 h-4.5"></i>
+                                </div>
+                                <div>
+                                    <h2 class="font-semibold text-gray-800 text-base leading-tight" x-text="viewTarget.name"></h2>
+                                    <p class="text-xs text-gray-400 mt-0.5" x-text="'SKU: ' + (viewTarget.sku || '—')"></p>
+                                </div>
+                            </div>
+                            <button type="button" @click="showViewModal = false"
+                                    class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 -mt-1 -mr-1 transition-colors">
+                                <i data-lucide="x" class="w-4.5 h-4.5"></i>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="px-6 pb-6 overflow-y-auto">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-xs text-gray-400 mb-1">Category</p>
+                                    <p class="text-sm font-medium text-gray-800" x-text="viewTarget.category?.name || '—'"></p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400 mb-1">Unit</p>
+                                    <p class="text-sm font-medium text-gray-800" x-text="(viewTarget.unit?.abbreviation || '') + ' (' + (viewTarget.unit?.name || '—') + ')'"></p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400 mb-1">Cost Price</p>
+                                    <p class="text-sm font-medium text-gray-800" x-text="'₱' + Number(viewTarget.cost_price).toFixed(2)"></p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400 mb-1">Selling Price</p>
+                                    <p class="text-sm font-medium text-gray-800" x-text="'₱' + Number(viewTarget.selling_price).toFixed(2)"></p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400 mb-1">Minimum Stock</p>
+                                    <p class="text-sm font-medium text-gray-800" x-text="viewTarget.minimum_stock"></p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400 mb-1">Reorder Point</p>
+                                    <p class="text-sm font-medium text-gray-800" x-text="viewTarget.reorder_point"></p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400 mb-1">Expiry Track</p>
+                                    <p class="text-sm font-medium text-gray-800" x-text="viewTarget.expiry_track ? 'Yes' : 'No'"></p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400 mb-1">Status</p>
+                                    <span class="inline-block text-xs font-medium px-2 py-0.5 rounded-full"
+                                        :class="viewTarget.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'"
+                                        x-text="viewTarget.status"></span>
+                                </div>
+                            </div>
+
+                            <template x-if="viewTarget.description">
+                                <div class="mt-4">
+                                    <p class="text-xs text-gray-400 mb-1">Description</p>
+                                    <p class="text-sm text-gray-600" x-text="viewTarget.description"></p>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="flex items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100 shrink-0">
+                            <button type="button" @click="showViewModal = false"
+                                    class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                Close
+                            </button>
+                            <a :href="'/products/' + viewTarget.id + '/edit'"
+                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                                Edit Product
+                            </a>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+    </div>
+</x-app-layout>

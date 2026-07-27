@@ -61,16 +61,18 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        $this->categoryService
-            ->archive($category);
+        try {
+            $this->categoryService->archive($category);
 
+            return redirect()
+                ->route('categories.index')
+                ->with('success', "{$category->name} archived successfully.");
 
-        return redirect()
-            ->route('categories.index')
-            ->with(
-                'success',
-                "{$category->name} archived successfully."
-            );
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('categories.index')
+                ->with('error', $e->getMessage());
+        }
     }
 
 }

@@ -11,6 +11,9 @@ class CategoryService
         return Category::query()
             ->search($filters['search'] ?? null)
             ->filterStatus($filters['status'] ?? null)
+            ->withCount(['products' => function ($query) {
+                $query->where('status', 'Active');
+            }])
             ->paginate(12)
             ->withQueryString();
     }
@@ -29,6 +32,15 @@ class CategoryService
 
     public function archive(Category $category)
     {
+        $activeProductsCount = $category->products()->where('status', 'Active')->count();
+
+        if ($activeProductsCount > 0) {
+            throw new \Exception(
+                "Cannot archive \"{$category->name}\" — it still has {$activeProductsCount} active " .
+                ($activeProductsCount === 1 ? 'product' : 'products') . '.'
+            );
+        }
+
         return $category->update([
             'status' => 'Archived'
         ]);

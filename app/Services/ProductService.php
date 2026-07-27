@@ -16,8 +16,8 @@ class ProductService
         return Product::query()
             ->with(['category', 'unit']) // Eager Loading
             ->search($filters['search'] ?? null)
-            ->filterStatus($filters['status'] ?? null)
-            ->filterCategories($filters['category'] ?? null)
+            ->filterStatus($filters['status'] ?? 'Active')
+            ->filterCategories($filters['category_id'] ?? null)
             ->select([
                 'id',
                 'category_id',
@@ -28,11 +28,12 @@ class ProductService
                 'reorder_point',
                 'cost_price',
                 'selling_price',
+                'description',
                 'status',
                 'expiry_track',
             ])
             ->latest()
-            ->paginate(10)
+            ->paginate(15)
             ->withQueryString();
     }
 
@@ -59,5 +60,14 @@ class ProductService
         $product->update([
             'status' => 'Archived',
         ]);
+    }
+
+    public function getStatistics(): array
+    {
+        return [
+            'total' => Product::count(),
+            'active' => Product::where('status', 'Active')->count(),
+            'archived' => Product::where('status', 'Archived')->count(),
+        ];
     }
 }

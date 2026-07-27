@@ -8,6 +8,8 @@
             archiveTarget: { id: null, name: '' },
             showSuccessModal: false,
             successMessage: '{{ addslashes(session('success', '')) }}',
+            showErrorModal: false,
+            errorMessage: '{{ addslashes(session('error', '')) }}',
 
             editCategory(category) {
                 this.showModal = true;
@@ -35,6 +37,9 @@
         x-init="
             @if(session('success'))
                 showSuccessModal = true;
+            @endif
+            @if(session('error'))
+                showErrorModal = true;
             @endif
         ">
 
@@ -137,27 +142,27 @@
 
         <!-- Add / Edit Category Modal -->
         <div x-show="showModal"
-             x-transition:enter="transition-opacity ease-out duration-200"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition-opacity ease-in duration-150"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-             style="display: none;">
+            x-transition:enter="transition-opacity ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-150"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            style="display: none;">
             <div @click.outside="closeModal()"
-                 x-show="showModal"
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0 scale-95 translate-y-2"
-                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                 x-transition:leave="transition ease-in duration-150"
-                 x-transition:leave-start="opacity-100 scale-100"
-                 x-transition:leave-end="opacity-0 scale-95"
-                 class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden max-h-[90vh] flex flex-col">
+                x-show="showModal"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-95"
+                class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden max-h-[90vh] flex flex-col">
 
                 <form method="POST"
-                      :action="editingId ? '/categories/' + editingId : '{{ route('categories.store') }}'"
-                      class="flex flex-col overflow-hidden">
+                    :action="editingId ? '/categories/' + editingId : '{{ route('categories.store') }}'"
+                    class="flex flex-col overflow-hidden">
                     @csrf
                     <template x-if="editingId">
                         <input type="hidden" name="_method" value="PUT">
@@ -245,23 +250,23 @@
 
         <!-- Archive Confirmation Modal -->
         <div x-show="showArchiveModal"
-             x-transition:enter="transition-opacity ease-out duration-200"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition-opacity ease-in duration-150"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-             style="display: none;">
+            x-transition:enter="transition-opacity ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-150"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            style="display: none;">
             <div @click.outside="showArchiveModal = false"
-                 x-show="showArchiveModal"
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0 scale-95 translate-y-2"
-                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                 x-transition:leave="transition ease-in duration-150"
-                 x-transition:leave-start="opacity-100 scale-100"
-                 x-transition:leave-end="opacity-0 scale-95"
-                 class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+                x-show="showArchiveModal"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-95"
+                class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
 
                 <div class="px-6 pt-6 pb-5">
                     <div class="w-11 h-11 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mb-4">
@@ -274,7 +279,7 @@
                 </div>
 
                 <form method="POST" :action="`/categories/${archiveTarget.id}`"
-                      class="flex items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100">
+                    class="flex items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100">
                     @csrf
                     @method('DELETE')
                     <button type="button" @click="showArchiveModal = false"
@@ -291,20 +296,20 @@
 
         <!-- Success Modal -->
         <div x-show="showSuccessModal"
-             x-transition:enter="transition-opacity ease-out duration-200"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition-opacity ease-in duration-150"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-             style="display: none;">
+            x-transition:enter="transition-opacity ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-150"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            style="display: none;">
             <div @click.outside="showSuccessModal = false"
-                 x-show="showSuccessModal"
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0 scale-95 translate-y-2"
-                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                 class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+                x-show="showSuccessModal"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
 
                 <div class="px-6 pt-6 pb-5 text-center">
                     <div class="w-12 h-12 rounded-full bg-green-50 text-green-600 flex items-center justify-center mb-4 mx-auto">
@@ -317,6 +322,40 @@
                 <div class="flex items-center justify-center px-6 py-4 bg-gray-50 border-t border-gray-100">
                     <button @click="showSuccessModal = false"
                             class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                        Got it
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Modal -->
+        <div x-show="showErrorModal"
+            x-transition:enter="transition-opacity ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-150"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            style="display: none;">
+            <div @click.outside="showErrorModal = false"
+                x-show="showErrorModal"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+
+                <div class="px-6 pt-6 pb-5 text-center">
+                    <div class="w-12 h-12 rounded-full bg-red-50 text-red-600 flex items-center justify-center mb-4 mx-auto">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </div>
+                    <h2 class="font-semibold text-gray-800 text-base mb-1.5">Cannot archive</h2>
+                    <p class="text-sm text-gray-500" x-text="errorMessage"></p>
+                </div>
+
+                <div class="flex items-center justify-center px-6 py-4 bg-gray-50 border-t border-gray-100">
+                    <button @click="showErrorModal = false"
+                            class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                         Got it
                     </button>
                 </div>
