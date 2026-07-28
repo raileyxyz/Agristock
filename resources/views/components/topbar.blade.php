@@ -6,7 +6,25 @@
         </button>
 
         <p class="text-xs text-gray-400 truncate">
-            AgriStock / <span class="text-black font-bold">Dashboard</span>
+            AgriStock / <span class="text-black font-bold">
+                @php
+                    $pageTitle = match(true) {
+                        request()->routeIs('dashboard') => 'Dashboard',
+
+                        request()->routeIs('products.*', 'categories.*', 'units.*') => 'Product Management',
+
+                        request()->routeIs('inventory.*') => 'Inventory Management',
+
+                        request()->routeIs('suppliers.*') => 'Suppliers',
+                        request()->routeIs('purchase-orders.*') => 'Purchase Orders',
+                        request()->routeIs('reports.*') => 'Reports',
+                        request()->routeIs('users.*') => 'User Management',
+
+                        default => 'Dashboard',
+                    };
+                @endphp
+                {{ $pageTitle }}
+            </span>
         </p>
     </div>
 

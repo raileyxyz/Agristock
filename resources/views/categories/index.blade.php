@@ -10,23 +10,27 @@
             successMessage: '{{ addslashes(session('success', '')) }}',
             showErrorModal: false,
             errorMessage: '{{ addslashes(session('error', '')) }}',
+            formErrors: {},
 
             editCategory(category) {
                 this.showModal = true;
                 this.editingId = category.id;
                 this.selectedCategory = category;
+                this.formErrors = {};
             },
 
             openCreate() {
                 this.showModal = true;
                 this.editingId = null;
                 this.selectedCategory = null;
+                this.formErrors = {};
             },
 
             closeModal() {
                 this.showModal = false;
                 this.editingId = null;
                 this.selectedCategory = null;
+                this.formErrors = {};
             },
 
             openArchive(id, name) {
@@ -40,6 +44,29 @@
             @endif
             @if(session('error'))
                 showErrorModal = true;
+            @endif
+            @if($errors->any() && old('id') !== null)
+                selectedCategory = {
+                    id: '{{ old('id') }}',
+                    name: '{{ addslashes(old('name')) }}',
+                    description: '{{ addslashes(old('description')) }}',
+                    icon: '{{ addslashes(old('icon')) }}',
+                    icon_color: '{{ old('icon_color', '#16a34a') }}'
+                };
+                editingId = '{{ old('id') }}';
+                formErrors = @js($errors->messages());
+                showModal = true;
+            @elseif($errors->any())
+                selectedCategory = {
+                    id: null,
+                    name: '{{ addslashes(old('name')) }}',
+                    description: '{{ addslashes(old('description')) }}',
+                    icon: '{{ addslashes(old('icon')) }}',
+                    icon_color: '{{ old('icon_color', '#16a34a') }}'
+                };
+                editingId = null;
+                formErrors = @js($errors->messages());
+                showModal = true;
             @endif
         ">
 
@@ -167,6 +194,7 @@
                     <template x-if="editingId">
                         <input type="hidden" name="_method" value="PUT">
                     </template>
+                    <input type="hidden" name="id" :value="editingId">
 
                     <!-- Header -->
                     <div class="flex items-start justify-between px-6 pt-6 pb-5 shrink-0">
@@ -194,8 +222,13 @@
                                 name="name"
                                 x-model="selectedCategory ? selectedCategory.name : ''"
                                 placeholder="Category name"
-                                required
-                                class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                class="w-full border rounded-lg px-3.5 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 transition-colors"
+                                :class="formErrors.name ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                            <template x-if="formErrors.name">
+                                <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                    <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="formErrors.name?.[0]"></span>
+                                </p>
+                            </template>
                         </div>
 
                         <div>
@@ -205,7 +238,13 @@
                                 x-model="selectedCategory ? selectedCategory.description : ''"
                                 rows="3"
                                 placeholder="Short description of this category"
-                                class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors resize-none"></textarea>
+                                class="w-full border rounded-lg px-3.5 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 transition-colors resize-none"
+                                :class="formErrors.description ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'"></textarea>
+                            <template x-if="formErrors.description">
+                                <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                    <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="formErrors.description?.[0]"></span>
+                                </p>
+                            </template>
                         </div>
 
                         <div class="grid grid-cols-2 gap-4">
@@ -216,8 +255,13 @@
                                     name="icon"
                                     x-model="selectedCategory ? selectedCategory.icon : ''"
                                     maxlength="4"
-                                    required
-                                    class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-center text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                    class="w-full border rounded-lg px-3.5 py-2.5 text-sm text-center text-gray-800 focus:outline-none focus:ring-2 transition-colors"
+                                    :class="formErrors.icon ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                <template x-if="formErrors.icon">
+                                    <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                        <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="formErrors.icon?.[0]"></span>
+                                    </p>
+                                </template>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Color</label>
@@ -225,8 +269,13 @@
                                     type="color"
                                     name="icon_color"
                                     x-model="selectedCategory ? selectedCategory.icon_color : '#16a34a'"
-                                    required
-                                    class="w-full h-[42px] border border-gray-300 rounded-lg cursor-pointer">
+                                    class="w-full h-[42px] border rounded-lg cursor-pointer"
+                                    :class="formErrors.icon_color ? 'border-red-300' : 'border-gray-300'">
+                                <template x-if="formErrors.icon_color">
+                                    <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                        <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="formErrors.icon_color?.[0]"></span>
+                                    </p>
+                                </template>
                             </div>
                         </div>
 

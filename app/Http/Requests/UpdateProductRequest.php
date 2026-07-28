@@ -42,7 +42,7 @@ class UpdateProductRequest extends FormRequest
             ],
 
             'sku' => [
-                'nullable',
+                'required',
                 'string',
                 'max:100',
                 Rule::unique('products', 'sku')

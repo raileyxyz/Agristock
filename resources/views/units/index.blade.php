@@ -8,21 +8,25 @@
             search: '{{ addslashes(request('search')) }}',
             unitForm: { id: null, name: '', abbreviation: '' },
             deleteTarget: { id: null, name: '' },
+            formErrors: {},
 
             openCreate() {
                 this.unitForm = { id: null, name: '', abbreviation: '' };
                 this.editingId = null;
+                this.formErrors = {};
                 this.showModal = true;
             },
             openEdit(id, name, abbreviation) {
                 this.unitForm = { id, name, abbreviation };
                 this.editingId = id;
+                this.formErrors = {};
                 this.showModal = true;
             },
             closeModal() {
                 this.showModal = false;
                 this.editingId = null;
                 this.unitForm = { id: null, name: '', abbreviation: '' };
+                this.formErrors = {};
             },
             openDelete(id, name) {
                 this.deleteTarget = { id, name };
@@ -36,6 +40,17 @@
             });
             @if(session('success'))
                 showSuccessModal = true;
+            @endif
+            @if($errors->any() && old('id') !== null)
+                unitForm = { id: '{{ old('id') }}', name: '{{ addslashes(old('name')) }}', abbreviation: '{{ addslashes(old('abbreviation')) }}' };
+                editingId = '{{ old('id') }}';
+                formErrors = @js($errors->messages());
+                showModal = true;
+            @elseif($errors->any())
+                unitForm = { id: null, name: '{{ addslashes(old('name')) }}', abbreviation: '{{ addslashes(old('abbreviation')) }}' };
+                editingId = null;
+                formErrors = @js($errors->messages());
+                showModal = true;
             @endif
          "
          data-page>
@@ -144,6 +159,7 @@
                     <template x-if="editingId">
                         <input type="hidden" name="_method" value="PUT">
                     </template>
+                    <input type="hidden" name="id" :value="editingId">
 
                     <!-- Header -->
                     <div class="flex items-start justify-between px-6 pt-6 pb-5">
@@ -167,14 +183,26 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1.5">Unit name</label>
                             <input type="text" name="name" x-model="unitForm.name" placeholder="Full name (e.g. Kilogram)"
-                                class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                class="w-full border rounded-lg px-3.5 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 transition-colors"
+                                :class="formErrors.name ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                            <template x-if="formErrors.name">
+                                <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                    <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="formErrors.name?.[0]"></span>
+                                </p>
+                            </template>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1.5">Abbreviation</label>
                             <input type="text" name="abbreviation" maxlength="10" x-model="unitForm.abbreviation" placeholder="Abbreviation (e.g. kg)"
-                                class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
-                            <p class="text-xs text-gray-400 mt-1.5">Short form shown throughout the app, e.g. in product quantities.</p>
+                                class="w-full border rounded-lg px-3.5 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 transition-colors"
+                                :class="formErrors.abbreviation ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                            <template x-if="formErrors.abbreviation">
+                                <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                    <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="formErrors.abbreviation?.[0]"></span>
+                                </p>
+                            </template>
+                            <p class="text-xs text-gray-400 mt-1.5" x-show="!formErrors.abbreviation">Short form shown throughout the app, e.g. in product quantities.</p>
                         </div>
                     </div>
 

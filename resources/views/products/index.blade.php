@@ -7,6 +7,10 @@
             successMessage: '{{ addslashes(session('success', '')) }}',
             showViewModal: false,
             viewTarget: null,
+            showEditModal: false,
+            editForm: null,
+            editErrors: {},
+            originalForm: null,
 
             openArchive(id, name) {
                 this.archiveTarget = { id, name };
@@ -21,18 +25,46 @@
 
             openEdit(product) {
                 this.editForm = { ...product };
+                this.originalForm = { ...product };
+                this.editErrors = {};
                 this.showEditModal = true;
                 this.$nextTick(() => lucide.createIcons());
+            },
+
+            hasChanges() {
+                if (!this.editForm || !this.originalForm) return false;
+                return JSON.stringify(this.editForm) !== JSON.stringify(this.originalForm);
             },
 
             closeEdit() {
                 this.showEditModal = false;
                 this.editForm = null;
+                this.originalForm = null;
+                this.editErrors = {};
             }
         }"
         x-init="
             @if(session('success'))
                 showSuccessModal = true;
+            @endif
+            @if($errors->any() && old('id'))
+                editForm = {
+                    id: '{{ old('id') }}',
+                    name: '{{ addslashes(old('name')) }}',
+                    sku: '{{ addslashes(old('sku')) }}',
+                    category_id: '{{ old('category_id') }}',
+                    unit_id: '{{ old('unit_id') }}',
+                    cost_price: '{{ old('cost_price') }}',
+                    selling_price: '{{ old('selling_price') }}',
+                    minimum_stock: '{{ old('minimum_stock') }}',
+                    reorder_point: '{{ old('reorder_point') }}',
+                    description: '{{ addslashes(old('description')) }}',
+                    status: '{{ old('status') }}',
+                    expiry_track: {{ old('expiry_track') ? 'true' : 'false' }}
+                };
+                editErrors = @js($errors->messages());
+                showEditModal = true;
+                $nextTick(() => lucide.createIcons());
             @endif
         ">
 
@@ -222,6 +254,7 @@
                     <form method="POST" :action="'/products/' + editForm.id" class="flex flex-col overflow-hidden">
                         @csrf
                         @method('PUT')
+                        <input type="hidden" name="id" :value="editForm.id">
 
                         <!-- Header -->
                         <div class="flex items-start justify-between px-6 pt-6 pb-5 shrink-0">
@@ -247,33 +280,57 @@
                                 <div class="sm:col-span-2">
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Product Name</label>
                                     <input type="text" name="name" x-model="editForm.name"
-                                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
+                                        :class="editErrors.name ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                    <template x-if="editErrors.name">
+                                        <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                            <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="editErrors.name?.[0]"></span>
+                                        </p>
+                                    </template>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">SKU</label>
                                     <input type="text" name="sku" x-model="editForm.sku"
-                                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
+                                        :class="editErrors.sku ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                    <template x-if="editErrors.sku">
+                                        <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                            <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="editErrors.sku?.[0]"></span>
+                                        </p>
+                                    </template>
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Category</label>
-                                    <select name="category_id" x-model="editForm.category_id"
-                                            class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                    <select name="category_id" x-model.number="editForm.category_id"
+                                            class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors"
+                                            :class="editErrors.category_id ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
                                         @foreach($categories ?? [] as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                                         @endforeach
                                     </select>
+                                    <template x-if="editErrors.category_id">
+                                        <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                            <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="editErrors.category_id?.[0]"></span>
+                                        </p>
+                                    </template>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Unit</label>
-                                    <select name="unit_id" x-model="editForm.unit_id"
-                                            class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                    <select name="unit_id" x-model.number="editForm.unit_id"
+                                            class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors"
+                                            :class="editErrors.unit_id ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
                                         @foreach($units ?? [] as $unit)
                                             <option value="{{ $unit->id }}">{{ $unit->name }} ({{ $unit->abbreviation }})</option>
                                         @endforeach
                                     </select>
+                                    <template x-if="editErrors.unit_id">
+                                        <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                            <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="editErrors.unit_id?.[0]"></span>
+                                        </p>
+                                    </template>
                                 </div>
                             </div>
 
@@ -281,12 +338,24 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Cost Price</label>
                                     <input type="number" step="0.01" name="cost_price" x-model="editForm.cost_price"
-                                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
+                                        :class="editErrors.cost_price ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                    <template x-if="editErrors.cost_price">
+                                        <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                            <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="editErrors.cost_price?.[0]"></span>
+                                        </p>
+                                    </template>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Selling Price</label>
                                     <input type="number" step="0.01" name="selling_price" x-model="editForm.selling_price"
-                                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
+                                        :class="editErrors.selling_price ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                    <template x-if="editErrors.selling_price">
+                                        <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                            <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="editErrors.selling_price?.[0]"></span>
+                                        </p>
+                                    </template>
                                 </div>
                             </div>
 
@@ -294,19 +363,37 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Minimum Stock</label>
                                     <input type="number" name="minimum_stock" x-model="editForm.minimum_stock"
-                                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
+                                        :class="editErrors.minimum_stock ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                    <template x-if="editErrors.minimum_stock">
+                                        <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                            <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="editErrors.minimum_stock?.[0]"></span>
+                                        </p>
+                                    </template>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Reorder Point</label>
                                     <input type="number" name="reorder_point" x-model="editForm.reorder_point"
-                                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
+                                        :class="editErrors.reorder_point ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                    <template x-if="editErrors.reorder_point">
+                                        <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                            <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="editErrors.reorder_point?.[0]"></span>
+                                        </p>
+                                    </template>
                                 </div>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Description</label>
                                 <textarea name="description" x-model="editForm.description" rows="3"
-                                    class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors resize-none"></textarea>
+                                    class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors resize-none"
+                                    :class="editErrors.description ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'"></textarea>
+                                <template x-if="editErrors.description">
+                                    <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                        <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="editErrors.description?.[0]"></span>
+                                    </p>
+                                </template>
                             </div>
 
                             <div class="flex flex-col sm:flex-row gap-3">
@@ -318,10 +405,16 @@
 
                                 <div class="sm:w-40">
                                     <select name="status" x-model="editForm.status"
-                                            class="w-full h-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                            class="w-full h-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors"
+                                            :class="editErrors.status ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
                                         <option value="Active">Active</option>
                                         <option value="Archived">Archived</option>
                                     </select>
+                                    <template x-if="editErrors.status">
+                                        <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                            <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="editErrors.status?.[0]"></span>
+                                        </p>
+                                    </template>
                                 </div>
                             </div>
 
@@ -334,7 +427,9 @@
                                 Cancel
                             </button>
                             <button type="submit"
-                                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                                    :disabled="!hasChanges()"
+                                    :class="hasChanges() ? 'bg-green-600 hover:bg-green-700 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
+                                    class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                                 Save changes
                             </button>
                         </div>
@@ -511,10 +606,11 @@
                                     class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                                 Close
                             </button>
-                            <a :href="'/products/' + viewTarget.id + '/edit'"
-                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                            <button type="button"
+                                    @click="showViewModal = false; openEdit(viewTarget)"
+                                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                                 Edit Product
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </template>
