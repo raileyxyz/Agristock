@@ -26,9 +26,22 @@ class CategoryService
 
     public function update(Category $category, array $data)
     {
+        $isArchivingNow = ($data['status'] ?? $category->status) === 'Archived'
+            && $category->status !== 'Archived';
+
+        if ($isArchivingNow) {
+            $activeProductsCount = $category->products()->where('status', 'Active')->count();
+
+            if ($activeProductsCount > 0) {
+                throw new \Exception(
+                    "Cannot archive \"{$category->name}\" — it still has {$activeProductsCount} active " .
+                    ($activeProductsCount === 1 ? 'product' : 'products') . '.'
+                );
+            }
+        }
+
         return $category->update($data);
     }
-
 
     public function archive(Category $category)
     {

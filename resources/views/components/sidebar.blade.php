@@ -198,7 +198,6 @@
                 </div>
             </div>
 
-            @if(Auth::user()->role === 'Admin')
             <!-- User Management -->
             <div>
                 <button @click="open = (open === 'users' ? '' : 'users')"
@@ -223,27 +222,80 @@
                     </a>
                 </div>
             </div>
-            @endif
 
         </div>
     </nav>
 
     <!-- User -->
-    <div class="border-t border-gray-100 p-4 shrink-0">
-        <div class="flex items-center gap-3 px-1">
+    <div class="border-t border-gray-100 p-4 shrink-0 relative" x-data="{ userMenuOpen: false }">
+
+        <button @click="userMenuOpen = !userMenuOpen"
+                class="flex items-center gap-3 px-1 w-full rounded-lg hover:bg-gray-50 transition-colors py-1"
+                :class="userMenuOpen && 'bg-gray-50'">
 
             <div class="w-9 h-9 rounded-full bg-green-600 text-white flex items-center justify-center text-sm font-semibold shrink-0">
                 {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
             </div>
 
-            <div class="min-w-0">
+            <div class="min-w-0 text-left">
                 <p class="text-sm font-semibold text-gray-800 truncate">{{ Auth::user()->name }}</p>
                 <p class="text-xs text-gray-500">{{ Auth::user()->role }}</p>
             </div>
 
-            <button class="ml-auto text-gray-400 hover:text-gray-600">
-                <i data-lucide="log-out" class="w-4 h-4"></i>
-            </button>
+            <i data-lucide="chevron-up" class="w-4 h-4 text-gray-400 ml-auto shrink-0 transition-transform duration-200"
+            :class="userMenuOpen && 'rotate-180'"></i>
+        </button>
+
+        <!-- Dropdown card -->
+        <div x-show="userMenuOpen"
+            @click.outside="userMenuOpen = false"
+            x-transition:enter="transition ease-out duration-150"
+            x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-100"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-95"
+            class="absolute bottom-full left-4 right-4 mb-2 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+            style="display: none;">
+
+            <!-- Identity block -->
+            <div class="flex items-center gap-3 p-4 bg-gray-50">
+                <div class="w-11 h-11 rounded-full bg-green-600 text-white flex items-center justify-center font-semibold shrink-0">
+                    {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-gray-800 truncate">{{ Auth::user()->name }}</p>
+                    <p class="text-xs text-gray-500 truncate">{{ Auth::user()->email }}</p>
+                    <span class="inline-block mt-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">
+                        {{ Auth::user()->role }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="py-1.5">
+                <a href=""
+                class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                    <i data-lucide="settings" class="w-4 h-4 text-gray-400"></i>
+                    Account Settings
+                </a>
+                <a href=""
+                class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                    <i data-lucide="home" class="w-4 h-4 text-gray-400"></i>
+                    Landing Page
+                </a>
+            </div>
+
+            <div class="border-t border-gray-100 py-1.5">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
+                            class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                        Sign out
+                    </button>
+                </form>
+            </div>
 
         </div>
     </div>

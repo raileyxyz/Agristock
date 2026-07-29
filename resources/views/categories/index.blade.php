@@ -11,18 +11,21 @@
             showErrorModal: false,
             errorMessage: '{{ addslashes(session('error', '')) }}',
             formErrors: {},
+            originalCategory: null,
 
             editCategory(category) {
                 this.showModal = true;
                 this.editingId = category.id;
                 this.selectedCategory = category;
+                this.originalCategory = { ...category };
                 this.formErrors = {};
             },
 
             openCreate() {
                 this.showModal = true;
                 this.editingId = null;
-                this.selectedCategory = null;
+                this.selectedCategory = { name: '', description: '', icon: '', icon_color: '#16a34a', status: 'Active' };
+                this.originalCategory = null;
                 this.formErrors = {};
             },
 
@@ -30,7 +33,13 @@
                 this.showModal = false;
                 this.editingId = null;
                 this.selectedCategory = null;
+                this.originalCategory = null;
                 this.formErrors = {};
+            },
+
+            hasCategoryChanges() {
+                if (!this.originalCategory) return true;
+                return JSON.stringify(this.selectedCategory) !== JSON.stringify(this.originalCategory);
             },
 
             openArchive(id, name) {
@@ -145,12 +154,18 @@
                             <i data-lucide="pencil" class="w-4 h-4"></i>
                         </button>
 
-                        <button
-                            @click="openArchive({{ $category->id }}, '{{ addslashes($category->name) }}')"
-                            title="Archive category"
-                            class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-gray-100">
-                            <i data-lucide="archive" class="w-4 h-4"></i>
-                        </button>
+                        @if($category->status === 'Active')
+                            <button
+                                @click="openArchive({{ $category->id }}, '{{ addslashes($category->name) }}')"
+                                title="Archive category"
+                                class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-gray-100">
+                                <i data-lucide="archive" class="w-4 h-4"></i>
+                            </button>
+                        @else
+                            <span title="Already archived" class="text-gray-200 p-1.5 cursor-not-allowed">
+                                <i data-lucide="archive" class="w-4 h-4"></i>
+                            </span>
+                        @endif
 
                     </div>
                 </div>
@@ -220,7 +235,7 @@
                             <input
                                 type="text"
                                 name="name"
-                                x-model="selectedCategory ? selectedCategory.name : ''"
+                                x-model="selectedCategory.name" ...
                                 placeholder="Category name"
                                 class="w-full border rounded-lg px-3.5 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 transition-colors"
                                 :class="formErrors.name ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
@@ -235,7 +250,7 @@
                             <label class="block text-sm font-medium text-gray-700 mb-1.5">Description (optional)</label>
                             <textarea
                                 name="description"
-                                x-model="selectedCategory ? selectedCategory.description : ''"
+                                x-model="selectedCategory.description" ...
                                 rows="3"
                                 placeholder="Short description of this category"
                                 class="w-full border rounded-lg px-3.5 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 transition-colors resize-none"
@@ -253,7 +268,7 @@
                                 <input
                                     type="text"
                                     name="icon"
-                                    x-model="selectedCategory ? selectedCategory.icon : ''"
+                                    x-model="selectedCategory.icon" ...
                                     maxlength="4"
                                     class="w-full border rounded-lg px-3.5 py-2.5 text-sm text-center text-gray-800 focus:outline-none focus:ring-2 transition-colors"
                                     :class="formErrors.icon ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
@@ -268,7 +283,7 @@
                                 <input
                                     type="color"
                                     name="icon_color"
-                                    x-model="selectedCategory ? selectedCategory.icon_color : '#16a34a'"
+                                    x-model="selectedCategory.icon_color" ...
                                     class="w-full h-[42px] border rounded-lg cursor-pointer"
                                     :class="formErrors.icon_color ? 'border-red-300' : 'border-gray-300'">
                                 <template x-if="formErrors.icon_color">
@@ -279,7 +294,33 @@
                             </div>
                         </div>
 
+                        <template x-if="editingId">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Status</label>
+                                <div class="flex items-center gap-1.5 bg-gray-50 border border-gray-200 p-1 rounded-lg w-fit">
+                                    <button type="button" @click="selectedCategory.status = 'Active'"
+                                            :class="selectedCategory.status === 'Active' ? 'bg-green-600 text-white' : 'text-gray-500 hover:text-gray-700'"
+                                            class="px-4 py-1.5 rounded-md text-xs font-medium transition-colors">
+                                        Active
+                                    </button>
+                                    <button type="button" @click="selectedCategory.status = 'Archived'"
+                                            :class="selectedCategory.status === 'Archived' ? 'bg-gray-600 text-white' : 'text-gray-500 hover:text-gray-700'"
+                                            class="px-4 py-1.5 rounded-md text-xs font-medium transition-colors">
+                                        Archived
+                                    </button>
+                                </div>
+                                <input type="hidden" name="status" :value="selectedCategory.status">
+                                <template x-if="formErrors.status">
+                                    <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                        <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="formErrors.status?.[0]"></span>
+                                    </p>
+                                </template>
+                            </div>
+                        </template>
+
+                    <template x-if="!editingId">
                         <input type="hidden" name="status" value="Active">
+                    </template>
                     </div>
 
                     <!-- Footer -->
@@ -289,7 +330,9 @@
                             Cancel
                         </button>
                         <button type="submit"
-                                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                                :disabled="!hasCategoryChanges()"
+                                :class="hasCategoryChanges() ? 'bg-green-600 hover:bg-green-700 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
+                                class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                             <span x-text="editingId ? 'Save changes' : 'Create category'"></span>
                         </button>
                     </div>

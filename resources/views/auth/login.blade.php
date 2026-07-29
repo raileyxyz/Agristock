@@ -1,47 +1,76 @@
 <x-guest-layout>
+    <h1 class="font-display text-3xl font-bold text-gray-900 mb-1.5">Welcome back</h1>
+    <p class="text-gray-500 mb-8">Sign in to your {{ config('app.name', 'AgriStock') }} account</p>
+
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}">
+    <!-- Validation Errors -->
+    @if($errors->any())
+        <div class="mb-5 bg-red-50 border border-red-200 rounded-xl p-3.5 flex items-start gap-2.5">
+            <i data-lucide="circle-alert" class="w-4 h-4 text-red-600 mt-0.5 shrink-0"></i>
+            <p class="text-sm text-red-700">{{ $errors->first() }}</p>
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('login') }}" x-data="{ showPassword: false }">
         @csrf
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <!-- Email -->
+        <div class="mb-5">
+            <x-input-label for="email" value="Email Address" class="text-sm font-medium text-gray-700 mb-1.5" />
+            <x-text-input id="email" class="block w-full border-gray-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-green-500/40 focus:border-green-500"
+                type="email" name="email" :value="old('email')" placeholder="demo@agristock.ph" required autofocus autocomplete="username" />
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div class="mb-4">
+            <div class="flex items-center justify-between mb-1.5">
+                <x-input-label for="password" value="Password" class="text-sm font-medium text-gray-700" />
+                @if(Route::has('password.request'))
+                    <a class="text-sm text-green-700 hover:text-green-800 font-medium" href="{{ route('password.request') }}">
+                        Forgot password?
+                    </a>
+                @endif
+            </div>
+            <div class="relative">
+                <input :type="showPassword ? 'text' : 'password'" id="password" name="password" required autocomplete="current-password"
+                       placeholder="Enter your password"
+                       class="block w-full border-gray-300 rounded-lg px-4 py-3 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                <button type="button" @click="showPassword = !showPassword"
+                        class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                    <i data-lucide="eye" class="w-4 h-4" x-show="!showPassword"></i>
+                    <i data-lucide="eye-off" class="w-4 h-4" x-show="showPassword" x-cloak></i>
+                </button>
+            </div>
         </div>
 
         <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
-        </div>
+        <label class="flex items-center gap-2.5 mb-6 cursor-pointer">
+            <input type="checkbox" name="remember" class="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500/40">
+            <span class="text-sm text-gray-600">Remember me for 30 days</span>
+        </label>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
+        <button type="submit"
+                class="w-full bg-green-700 hover:bg-green-800 text-white py-3 rounded-lg font-semibold transition-colors">
+            Sign In
+        </button>
     </form>
+
+    @if(app()->environment('local'))
+        <div class="mt-5 bg-green-50 border border-green-200 rounded-xl p-4"
+             x-data="{
+                fill() {
+                    document.getElementById('email').value = 'demo@agristock.ph';
+                    document.getElementById('password').value = 'password123';
+                }
+             }">
+            <p class="text-sm font-semibold text-green-800 mb-1.5">Demo Credentials</p>
+            <p class="text-xs text-green-700">Email: <span class="font-mono">demo@agristock.ph</span></p>
+            <p class="text-xs text-green-700">Password: <span class="font-mono">password123</span></p>
+            <button type="button" @click="fill()" class="text-xs font-semibold text-green-800 hover:text-green-900 mt-2 underline">
+                Fill credentials →
+            </button>
+        </div>
+    @endif
 </x-guest-layout>

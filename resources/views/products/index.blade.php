@@ -204,11 +204,17 @@
                                             <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
                                         </button>
 
-                                        <button @click="openArchive({{ $product->id }}, '{{ addslashes($product->name) }}')"
-                                                title="Archive product"
-                                                class="text-gray-400 hover:text-red-600 p-1 rounded-md hover:bg-gray-100">
-                                            <i data-lucide="archive" class="w-3.5 h-3.5"></i>
-                                        </button>
+                                        @if($product->status === 'Active')
+                                            <button @click="openArchive({{ $product->id }}, '{{ addslashes($product->name) }}')"
+                                                    title="Archive product"
+                                                    class="text-gray-400 hover:text-red-600 p-1 rounded-md hover:bg-gray-100">
+                                                <i data-lucide="archive" class="w-3.5 h-3.5"></i>
+                                            </button>
+                                        @else
+                                            <span title="Already archived" class="text-gray-200 p-1 cursor-not-allowed inline-flex">
+                                                <i data-lucide="archive" class="w-3.5 h-3.5"></i>
+                                            </span>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

@@ -9,31 +9,43 @@
             unitForm: { id: null, name: '', abbreviation: '' },
             deleteTarget: { id: null, name: '' },
             formErrors: {},
+            originalUnitForm: null,
 
             openCreate() {
                 this.unitForm = { id: null, name: '', abbreviation: '' };
+                this.originalUnitForm = null;
                 this.editingId = null;
                 this.formErrors = {};
                 this.showModal = true;
             },
-            openEdit(id, name, abbreviation) {
-                this.unitForm = { id, name, abbreviation };
-                this.editingId = id;
-                this.formErrors = {};
-                this.showModal = true;
-            },
+
             closeModal() {
                 this.showModal = false;
                 this.editingId = null;
                 this.unitForm = { id: null, name: '', abbreviation: '' };
+                this.originalUnitForm = null;
                 this.formErrors = {};
             },
+
+            openEdit(id, name, abbreviation) {
+                this.unitForm = { id, name, abbreviation };
+                this.originalUnitForm = { id, name, abbreviation };
+                this.editingId = id;
+                this.formErrors = {};
+                this.showModal = true;
+            },
+
+            hasUnitChanges() {
+                if (!this.originalUnitForm) return true;
+                return JSON.stringify(this.unitForm) !== JSON.stringify(this.originalUnitForm);
+            },
+
             openDelete(id, name) {
                 this.deleteTarget = { id, name };
                 this.showDeleteModal = true;
             }
-         }"
-         x-init="
+        }"
+        x-init="
             $watch('search', value => {
                 clearTimeout(window._unitSearchDebounce);
                 window._unitSearchDebounce = setTimeout(() => $el.closest('[data-page]').querySelector('form[data-search-form]').submit(), 500);
@@ -52,8 +64,8 @@
                 formErrors = @js($errors->messages());
                 showModal = true;
             @endif
-         "
-         data-page>
+        "
+        data-page>
 
         <div class="flex items-center justify-between mb-1">
             <div>
@@ -71,7 +83,7 @@
         <form method="GET" data-search-form class="relative max-w-sm mt-6">
             <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
             <input type="text" name="search" x-model="search" placeholder="Search units by name or abbreviation"
-                   class="w-full border border-gray-300 rounded-lg pl-9 pr-9 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                class="w-full border border-gray-300 rounded-lg pl-9 pr-9 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
             <button type="button" x-show="search" @click="search = ''"
                     class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                 <i data-lucide="x" class="w-4 h-4"></i>
@@ -154,7 +166,7 @@
                 class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
 
                 <form method="POST"
-                      :action="editingId ? `/units/${editingId}` : '{{ route('units.store') }}'">
+                    :action="editingId ? `/units/${editingId}` : '{{ route('units.store') }}'">
                     @csrf
                     <template x-if="editingId">
                         <input type="hidden" name="_method" value="PUT">
@@ -213,7 +225,9 @@
                             Cancel
                         </button>
                         <button type="submit"
-                                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                                :disabled="!hasUnitChanges()"
+                                :class="hasUnitChanges() ? 'bg-green-600 hover:bg-green-700 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
+                                class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                             <span x-text="editingId ? 'Save changes' : 'Create unit'"></span>
                         </button>
                     </div>

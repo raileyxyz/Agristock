@@ -45,18 +45,18 @@ class CategoryController extends Controller
 
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $this->categoryService
-            ->update(
-                $category,
-                $request->validated()
-            );
+        try {
+            $this->categoryService->update($category, $request->validated());
 
-        return redirect()
-            ->route('categories.index')
-            ->with(
-                'success',
-                "{$category->name} updated successfully."
-            );
+            return redirect()
+                ->route('categories.index')
+                ->with('success', "{$category->name} updated successfully.");
+
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('categories.index')
+                ->with('error', $e->getMessage());
+        }
     }
 
     public function destroy(Category $category)
