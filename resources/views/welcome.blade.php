@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AgriStock — Farm Smarter, Stock Wiser</title>
+    <title>AgriStock</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700|playfair-display:700,800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -32,15 +32,18 @@
             </nav>
 
             <a href="{{ route('login') }}"
-               class="bg-green-700 hover:bg-green-800 text-white px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+            class="bg-green-700 hover:bg-green-800 text-white px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
                 Open System <i data-lucide="arrow-right" class="w-4 h-4"></i>
             </a>
         </div>
     </header>
 
     <!-- Hero -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-green-950 via-green-900 to-green-800">
-        <div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_20%_20%,white,transparent_45%)]"></div>
+    <section class="relative overflow-hidden bg-cover bg-center"
+            style="background-image: url('{{ asset('images/hero-farm.jpg') }}');">
+
+        <!-- Dark green overlay -->
+        <div class="absolute inset-0 bg-gradient-to-br from-green-950/90 via-green-900/85 to-green-800/80"></div>
 
         <div class="relative max-w-7xl mx-auto px-6 lg:px-10 py-20 lg:py-28 grid lg:grid-cols-2 gap-16 items-center">
 
@@ -63,11 +66,11 @@
 
                 <div class="flex flex-col sm:flex-row gap-3 mb-8">
                     <a href="{{ route('login') }}"
-                       class="bg-green-500 hover:bg-green-400 text-green-950 px-6 py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors">
+                    class="bg-green-500 hover:bg-green-600 text-white px-6 py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors">
                         Launch Dashboard <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </a>
                     <a href="#features"
-                       class="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-3.5 rounded-lg font-semibold text-center transition-colors">
+                    class="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-3.5 rounded-lg font-semibold text-center transition-colors">
                         Explore Features
                     </a>
                 </div>
@@ -76,6 +79,7 @@
                     <span class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i> Low Stock Alerts</span>
                     <span class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i> Expiry Monitoring</span>
                     <span class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i> Purchase Orders</span>
+                    <span class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i> Multi-user Access</span>
                 </div>
             </div>
 
