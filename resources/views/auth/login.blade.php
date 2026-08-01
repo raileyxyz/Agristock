@@ -18,9 +18,9 @@
 
         <!-- Email -->
         <div class="mb-5">
-            <x-input-label for="email" value="Email Address" class="text-sm font-medium text-gray-700 mb-1.5" />
-            <x-text-input id="email" class="block w-full border-gray-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-green-500/40 focus:border-green-500"
-                type="email" name="email" :value="old('email')" placeholder="demo@agristock.ph" required autofocus autocomplete="username" />
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Email Address</label>
+            <input id="email" type="email" name="email" value="{{ old('email') }}" placeholder="agristock@gmail.com" required autofocus autocomplete="username"
+                class="block w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
         </div>
 
         <!-- Password -->
@@ -57,20 +57,4 @@
         </button>
     </form>
 
-    @if(app()->environment('local'))
-        <div class="mt-5 bg-green-50 border border-green-200 rounded-xl p-4"
-             x-data="{
-                fill() {
-                    document.getElementById('email').value = 'demo@agristock.ph';
-                    document.getElementById('password').value = 'password123';
-                }
-             }">
-            <p class="text-sm font-semibold text-green-800 mb-1.5">Demo Credentials</p>
-            <p class="text-xs text-green-700">Email: <span class="font-mono">demo@agristock.ph</span></p>
-            <p class="text-xs text-green-700">Password: <span class="font-mono">password123</span></p>
-            <button type="button" @click="fill()" class="text-xs font-semibold text-green-800 hover:text-green-900 mt-2 underline">
-                Fill credentials →
-            </button>
-        </div>
-    @endif
 </x-guest-layout>
