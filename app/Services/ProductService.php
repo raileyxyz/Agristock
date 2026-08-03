@@ -14,7 +14,7 @@ class ProductService
     public function getProducts(array $filters)
     {
         return Product::query()
-            ->with(['category', 'unit']) // Eager Loading
+            ->with(['category', 'unit'])
             ->search($filters['search'] ?? null)
             ->filterStatus($filters['status'] ?? 'Active')
             ->filterCategories($filters['category_id'] ?? null)

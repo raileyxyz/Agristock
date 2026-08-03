@@ -36,6 +36,16 @@ class Product extends Model
         return $this->belongsTo(Unit::class);
     }
 
+    public function inventories()
+    {
+        return $this->hasMany(Inventory::class);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'Active');
+    }
+
     public function scopeSearch($query, $search)
     {
         return $query->when($search, function ($query) use ($search) {
@@ -61,4 +71,5 @@ class Product extends Model
             fn ($query) => $query->where('category_id', $categoryId)
         );
     }
+
 }

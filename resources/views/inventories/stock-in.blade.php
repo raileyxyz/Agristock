@@ -1,17 +1,5 @@
 <x-app-layout>
-    <div x-data="{
-            products: @json($products->map(fn($p) => ['id' => $p->id, 'sku' => $p->sku, 'name' => $p->name, 'expiry_track' => (bool) $p->expiry_track])),
-            form: { product_id: '' },
-
-            get selectedProduct() {
-                return this.products.find(p => p.id == this.form.product_id) || null;
-            },
-
-            get showExpiry() {
-                return this.selectedProduct?.expiry_track ?? false;
-            }
-         }"
-         class="max-w-2xl">
+    <div>
 
         <h1 class="text-2xl font-bold text-gray-900">Stock In</h1>
         <p class="text-gray-400 text-sm mt-1">Record incoming inventory — deliveries, transfers, or opening stock.</p>
@@ -41,7 +29,7 @@
                 Stock In increases quantity in current stock.
             </div>
 
-            <form method="POST" action="{{ route('inventory.stock-in.store') }}" class="space-y-5">
+            <form method="POST" action="{{ route('inventories.store') }}" class="space-y-5">
                 @csrf
 
                 <!-- Product -->
