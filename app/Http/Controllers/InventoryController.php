@@ -19,7 +19,7 @@ class InventoryController extends Controller
     {
         $inventories = $this->inventoryService->getInventories($request->all());
 
-        return view('inventories.index', compact('inventories'));
+        return view('inventories.current-stock', compact('inventories'));
     }
 
     public function create()
@@ -34,7 +34,7 @@ class InventoryController extends Controller
         $this->inventoryService->create($request->validated());
 
         return redirect()
-            ->route('inventories.index')
+            ->route('inventories.create')
             ->with('success', 'Stock added successfully.');
     }
 
@@ -65,6 +65,6 @@ class InventoryController extends Controller
 
     private function getActiveProducts()
     {
-        return Product::active()->orderBy('name')->get();
+        return Product::active()->with('unit')->orderBy('name')->get();
     }
 }
