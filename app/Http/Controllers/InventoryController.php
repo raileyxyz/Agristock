@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Inventory;
 use Illuminate\Http\Request;
@@ -18,15 +19,18 @@ class InventoryController extends Controller
     public function index(Request $request)
     {
         $inventories = $this->inventoryService->getInventories($request->all());
+        $summary = $this->inventoryService->getSummary();
+        $categories = Category::where('status', 'Active')->orderBy('name')->get();
+        $products = $this->getActiveProducts();
 
-        return view('inventories.current-stock', compact('inventories'));
+        return view('inventories.index', compact('inventories', 'summary', 'categories', 'products'));
     }
 
     public function create()
     {
         $products = $this->getActiveProducts();
 
-        return view('inventories.stock-in', compact('products'));
+        return view('inventories.create', compact('products'));
     }
 
     public function store(StoreInventoryRequest $request)

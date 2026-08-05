@@ -8,10 +8,9 @@ class BatchNumberGeneratorService
 {
     public function generate(): string
     {
-        $today = now()->format('Ymd');
-        $countToday = Inventory::whereDate('created_at', now())->count();
-        $nextNumber = $countToday + 1;
+        $year = now()->format('Y');
+        $countThisYear = Inventory::whereYear('created_at', now()->year)->count();
 
-        return 'BT-' . $today . '-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+        return 'BT-' . $year . '-' . str_pad($countThisYear + 1, 3, '0', STR_PAD_LEFT);
     }
 }

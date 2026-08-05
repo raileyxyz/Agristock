@@ -81,6 +81,7 @@
                     <span class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i> Low Stock Alerts</span>
                     <span class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i> Expiry Monitoring</span>
                     <span class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i> Purchase Orders</span>
+                    <span class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i> Inventory History</span>
                     <span class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i> Multi-user Access</span>
                 </div>
             </div>

@@ -1,0 +1,324 @@
+<x-app-layout>
+    @php
+        $productsForJs = $products->map(function ($p) {
+            return [
+                'id' => $p->id,
+                'name' => $p->name,
+                'expiry_track' => (bool) $p->expiry_track,
+                'unit_abbr' => $p->unit->abbreviation ?? '',
+            ];
+        });
+    @endphp
+
+    <div
+        x-data='{
+            products: @json($productsForJs),
+            showEditModal: false,
+            editForm: null,
+            editErrors: {},
+
+            get selectedProduct() {
+                return this.editForm
+                    ? this.products.find(p => p.id == this.editForm.product_id) || null
+                    : null;
+            },
+
+            get showExpiry() {
+                return this.selectedProduct?.expiry_track ?? false;
+            },
+
+            openEdit(inventory) {
+                this.editForm = {
+                    id: inventory.id,
+                    product_id: inventory.product_id,
+                    quantity: inventory.remaining_quantity,
+                    batch_number: inventory.batch_number,
+                    expiry_date: inventory.expiry_date,
+                    location: inventory.location,
+                    notes: inventory.notes
+                };
+                this.editErrors = {};
+                this.showEditModal = true;
+                this.$nextTick(() => lucide.createIcons());
+            },
+
+            closeEdit() {
+                this.showEditModal = false;
+                this.editForm = null;
+                this.editErrors = {};
+            }
+        }'
+        x-init="
+            @if($errors->any() && old('id'))
+                editForm = {
+                    id: '{{ old('id') }}',
+                    product_id: '{{ old('product_id') }}',
+                    quantity: '{{ old('quantity') }}',
+                    batch_number: '{{ addslashes(old('batch_number')) }}',
+                    expiry_date: '{{ old('expiry_date') }}',
+                    location: '{{ old('location') }}',
+                    notes: '{{ addslashes(old('notes')) }}'
+                };
+                editErrors = @js($errors->messages());
+                showEditModal = true;
+                $nextTick(() => lucide.createIcons());
+            @endif
+        "
+    >
+
+        <div class="flex items-center justify-between mb-1">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">Current Stock</h1>
+                <p class="text-gray-400 text-sm mt-1">
+                    {{ $summary['total_items'] }} items tracked across {{ $summary['total_locations'] }} locations
+                </p>
+            </div>
+            <a href="{{ route('inventories.create') }}"
+               class="bg-green-700 hover:bg-green-800 text-white px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                Stock In
+            </a>
+        </div>
+
+        <!-- Search + Category filter -->
+        <form method="GET"
+              x-data="{ search: '{{ addslashes(request('search')) }}' }"
+              x-init="$watch('search', value => {
+                  clearTimeout(window._inventorySearchDebounce);
+                  window._inventorySearchDebounce = setTimeout(() => $el.submit(), 500);
+              })"
+              class="flex flex-col sm:flex-row gap-3 mt-6">
+
+            <div class="relative flex-1">
+                <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                <input type="text" name="search" x-model="search" placeholder="Search products..."
+                       class="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+            </div>
+
+            <div class="relative">
+                <select name="category_id" onchange="this.form.submit()"
+                        class="appearance-none border border-gray-300 rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    <option value="">All Categories</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            </div>
+        </form>
+
+        <!-- Inventory table -->
+        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mt-4">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm min-w-[950px]">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200 text-left text-gray-500">
+                            <th class="px-4 py-3 font-medium whitespace-nowrap">Product</th>
+                            <th class="px-4 py-3 font-medium whitespace-nowrap">Category</th>
+                            <th class="px-4 py-3 font-medium text-right whitespace-nowrap">Qty</th>
+                            <th class="px-4 py-3 font-medium whitespace-nowrap">Batch No.</th>
+                            <th class="px-4 py-3 font-medium whitespace-nowrap">Location</th>
+                            <th class="px-4 py-3 font-medium whitespace-nowrap">Expiry</th>
+                            <th class="px-4 py-3 font-medium whitespace-nowrap">Status</th>
+                            <th class="px-4 py-3 font-medium text-right whitespace-nowrap">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @forelse($inventories as $inventory)
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-3 font-medium text-gray-800 max-w-[220px] truncate" title="{{ $inventory->product->name }}">
+                                    {{ $inventory->product->name }}
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <span class="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full text-white"
+                                          style="background-color: {{ $inventory->product->category->icon_color ?? '#6b7280' }};">
+                                        {{ $inventory->product->category->icon ?? '' }} {{ $inventory->product->category->name ?? '—' }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-right font-semibold text-gray-900 whitespace-nowrap">
+                                    {{ rtrim(rtrim(number_format($inventory->remaining_quantity, 2), '0'), '.') }}
+                                    <span class="text-gray-400 font-normal">{{ $inventory->product->unit->abbreviation ?? '' }}</span>
+                                </td>
+                                <td class="px-4 py-3 text-gray-400 font-mono text-xs whitespace-nowrap">{{ $inventory->batch_number }}</td>
+                                <td class="px-4 py-3 text-gray-500 whitespace-nowrap">{{ $inventory->location }}</td>
+                                <td class="px-4 py-3 whitespace-nowrap {{ $inventory->expiry_display['class'] }}">
+                                    {{ $inventory->expiry_display['label'] }}
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <span class="text-xs font-medium px-2.5 py-1 rounded-full {{ $inventory->stock_status['class'] }}">
+                                        {{ $inventory->stock_status['label'] }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <div class="flex items-center justify-end gap-0.5">
+                                        <button @click="openEdit(@js([
+                                                    'id' => $inventory->id,
+                                                    'product_id' => $inventory->product_id,
+                                                    'remaining_quantity' => $inventory->remaining_quantity,
+                                                    'batch_number' => $inventory->batch_number,
+                                                    'expiry_date' => $inventory->expiry_date?->format('Y-m-d'),
+                                                    'location' => $inventory->location,
+                                                    'notes' => $inventory->notes,
+                                                ]))"
+                                                title="Edit stock entry"
+                                                class="text-gray-400 hover:text-green-700 p-1 rounded-md hover:bg-gray-100">
+                                            <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8" class="px-5 py-14 text-center">
+                                    <i data-lucide="package" class="w-8 h-8 text-gray-300 mx-auto mb-2"></i>
+                                    <p class="text-gray-500 text-sm">No stock records found.</p>
+                                    <p class="text-gray-400 text-xs mt-1">Record your first Stock In to get started.</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        @if($inventories->hasPages())
+            <div class="mt-6">
+                {{ $inventories->links() }}
+            </div>
+        @endif
+
+        <!-- Edit Stock Modal -->
+        <div x-show="showEditModal"
+             x-transition:enter="transition-opacity ease-out duration-200"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition-opacity ease-in duration-150"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+             style="display: none;"
+             x-cloak>
+            <div @click.outside="closeEdit()"
+                 x-show="showEditModal"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                 class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden max-h-[90vh] flex flex-col">
+
+                <template x-if="editForm">
+                    <form method="POST" :action="'/inventories/' + editForm.id" class="flex flex-col overflow-hidden">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="id" :value="editForm.id">
+
+                        <!-- Header -->
+                        <div class="flex items-start justify-between px-6 pt-6 pb-5 shrink-0">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center shrink-0">
+                                    <i data-lucide="pencil" class="w-4.5 h-4.5"></i>
+                                </div>
+                                <div>
+                                    <h2 class="font-semibold text-gray-800 text-base leading-tight">Edit stock entry</h2>
+                                    <p class="text-xs text-gray-400 mt-0.5">Update batch details or correct an entry error</p>
+                                </div>
+                            </div>
+                            <button type="button" @click="closeEdit()"
+                                    class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 -mt-1 -mr-1 transition-colors">
+                                <i data-lucide="x" class="w-4.5 h-4.5"></i>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="px-6 pb-6 space-y-4 overflow-y-auto">
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Product</label>
+                                <select name="product_id" x-model.number="editForm.product_id"
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors"
+                                        :class="editErrors.product_id ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                    @foreach($products as $product)
+                                        <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                    @endforeach
+                                </select>
+                                <template x-if="editErrors.product_id">
+                                    <p class="text-xs text-red-600 mt-1.5"><span x-text="editErrors.product_id?.[0]"></span></p>
+                                </template>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                                        Quantity <span class="text-xs text-gray-400" x-text="selectedProduct?.unit_abbr ? '(' + selectedProduct.unit_abbr + ')' : ''"></span>
+                                    </label>
+                                    <input type="number" step="0.01" name="quantity" x-model="editForm.quantity"
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
+                                        :class="editErrors.quantity ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                    <template x-if="editErrors.quantity">
+                                        <p class="text-xs text-red-600 mt-1.5"><span x-text="editErrors.quantity?.[0]"></span></p>
+                                    </template>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                                        Batch / Lot Number <span class="text-gray-400 font-normal">(optional)</span>
+                                    </label>
+                                    <input type="text" name="batch_number" x-model="editForm.batch_number"
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
+                                        :class="editErrors.batch_number ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                    <template x-if="editErrors.batch_number">
+                                        <p class="text-xs text-red-600 mt-1.5"><span x-text="editErrors.batch_number?.[0]"></span></p>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <div x-show="showExpiry" x-collapse>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Expiry Date</label>
+                                <input type="date" name="expiry_date" x-model="editForm.expiry_date"
+                                    class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
+                                    :class="editErrors.expiry_date ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                <template x-if="editErrors.expiry_date">
+                                    <p class="text-xs text-red-600 mt-1.5"><span x-text="editErrors.expiry_date?.[0]"></span></p>
+                                </template>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Storage Location</label>
+                                <select name="location" x-model="editForm.location"
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors"
+                                        :class="editErrors.location ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                    @foreach(['Main Warehouse', 'Storage Room A', 'Storage Room B', 'Field Storage'] as $loc)
+                                        <option value="{{ $loc }}">{{ $loc }}</option>
+                                    @endforeach
+                                </select>
+                                <template x-if="editErrors.location">
+                                    <p class="text-xs text-red-600 mt-1.5"><span x-text="editErrors.location?.[0]"></span></p>
+                                </template>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Note</label>
+                                <input type="text" name="notes" x-model="editForm.notes"
+                                    class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                            </div>
+
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="flex items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100 shrink-0">
+                            <button type="button" @click="closeEdit()"
+                                    class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                    class="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                                Save changes
+                            </button>
+                        </div>
+                    </form>
+                </template>
+            </div>
+        </div>
+
+    </div>
+</x-app-layout>

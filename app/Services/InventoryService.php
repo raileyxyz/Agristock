@@ -15,9 +15,18 @@ class InventoryService
         return Inventory::query()
             ->with(['product.category', 'product.unit'])
             ->search($filters['search'] ?? null)
+            ->filterCategory($filters['category_id'] ?? null)
             ->latest()
-            ->paginate(10)
+            ->paginate(15)
             ->withQueryString();
+    }
+
+    public function getSummary(): array
+    {
+        return [
+            'total_items' => Inventory::count(),
+            'total_locations' => Inventory::distinct('location')->count('location'),
+        ];
     }
 
     public function create(array $data): Inventory
