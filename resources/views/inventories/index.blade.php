@@ -14,6 +14,8 @@
         x-data='{
             products: @json($productsForJs),
             showEditModal: false,
+            showErrorModal: false,
+            errorMessage: "{{ addslashes(session('error', '')) }}",
             editForm: null,
             editErrors: {},
 
@@ -28,15 +30,19 @@
             },
 
             openEdit(inventory) {
+                const formattedQty = parseFloat(inventory.remaining_quantity).toString();
+
                 this.editForm = {
                     id: inventory.id,
                     product_id: inventory.product_id,
-                    quantity: inventory.remaining_quantity,
+                    quantity: formattedQty,
                     batch_number: inventory.batch_number,
                     expiry_date: inventory.expiry_date,
                     location: inventory.location,
-                    notes: inventory.notes
+                    notes: inventory.notes,
+                    has_movement: inventory.quantity != inventory.remaining_quantity
                 };
+                this.originalForm = { ...this.editForm };
                 this.editErrors = {};
                 this.showEditModal = true;
                 this.$nextTick(() => lucide.createIcons());
@@ -45,10 +51,19 @@
             closeEdit() {
                 this.showEditModal = false;
                 this.editForm = null;
+                this.originalForm = null;
                 this.editErrors = {};
+            },
+
+            hasChanges() {
+                if (!this.editForm || !this.originalForm) return false;
+                return JSON.stringify(this.editForm) !== JSON.stringify(this.originalForm);
             }
         }'
         x-init="
+            @if(session('error'))
+                showErrorModal = true;
+            @endif
             @if($errors->any() && old('id'))
                 editForm = {
                     id: '{{ old('id') }}',
@@ -156,6 +171,7 @@
                                         <button @click="openEdit(@js([
                                                     'id' => $inventory->id,
                                                     'product_id' => $inventory->product_id,
+                                                    'quantity' => $inventory->quantity,
                                                     'remaining_quantity' => $inventory->remaining_quantity,
                                                     'batch_number' => $inventory->batch_number,
                                                     'expiry_date' => $inventory->expiry_date?->format('Y-m-d'),
@@ -235,13 +251,23 @@
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Product</label>
-                                <select name="product_id" x-model.number="editForm.product_id"
-                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors"
-                                        :class="editErrors.product_id ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                <select name="product_id" x-model.number="editForm.product_id" :disabled="editForm.has_movement"
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
+                                        :class="editForm.has_movement ? 'bg-gray-50 text-gray-400 cursor-not-allowed border-gray-200' : (editErrors.product_id ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'bg-white border-gray-300 focus:ring-green-500/40 focus:border-green-500')">
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}">{{ $product->name }}</option>
                                     @endforeach
                                 </select>
+
+                                <template x-if="editForm.has_movement">
+                                    <input type="hidden" name="product_id" :value="editForm.product_id">
+                                </template>
+
+                                <template x-if="editForm.has_movement">
+                                    <p class="text-xs text-gray-400 mt-1.5 flex items-center gap-1">
+                                        <i data-lucide="lock" class="w-3 h-3"></i> Product can't be changed — this batch already has stock movements.
+                                    </p>
+                                </template>
                                 <template x-if="editErrors.product_id">
                                     <p class="text-xs text-red-600 mt-1.5"><span x-text="editErrors.product_id?.[0]"></span></p>
                                 </template>
@@ -311,12 +337,49 @@
                                 Cancel
                             </button>
                             <button type="submit"
-                                    class="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                                    :disabled="!hasChanges()"
+                                    :class="hasChanges() ? 'bg-green-700 hover:bg-green-800 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
+                                    class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                                 Save changes
                             </button>
                         </div>
                     </form>
                 </template>
+            </div>
+        </div>
+
+        <!-- Error Modal -->
+        <div x-show="showErrorModal"
+            x-transition:enter="transition-opacity ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-150"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            style="display: none;"
+            x-cloak>
+            <div @click.outside="showErrorModal = false"
+                x-show="showErrorModal"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+
+                <div class="px-6 pt-6 pb-5 text-center">
+                    <div class="w-12 h-12 rounded-full bg-red-50 text-red-600 flex items-center justify-center mb-4 mx-auto">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </div>
+                    <h2 class="font-semibold text-gray-800 text-base mb-1.5">Cannot update</h2>
+                    <p class="text-sm text-gray-500" x-text="errorMessage"></p>
+                </div>
+
+                <div class="flex items-center justify-center px-6 py-4 bg-gray-50 border-t border-gray-100">
+                    <button @click="showErrorModal = false"
+                            class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                        Got it
+                    </button>
+                </div>
             </div>
         </div>
 

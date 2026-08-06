@@ -51,11 +51,18 @@ class InventoryController extends Controller
 
     public function update(UpdateInventoryRequest $request, Inventory $inventory)
     {
-        $this->inventoryService->update($inventory, $request->validated());
+        try {
+            $this->inventoryService->update($inventory, $request->validated());
 
-        return redirect()
-            ->route('inventories.index')
-            ->with('success', 'Stock updated successfully.');
+            return redirect()
+                ->route('inventories.index')
+                ->with('success', 'Stock updated successfully.');
+
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('inventories.index')
+                ->with('error', $e->getMessage());
+        }
     }
 
     public function destroy(Inventory $inventory)

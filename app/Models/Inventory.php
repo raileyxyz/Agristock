@@ -54,6 +54,15 @@ class Inventory extends Model
         });
     }
 
+    public function getFormattedQuantityAttribute(): string
+    {
+        $qty = $this->remaining_quantity;
+
+        return $qty == floor($qty)
+            ? number_format($qty, 0)
+            : number_format($qty, 2);
+    }
+
     public function getStockStatusAttribute(): array
     {
         $remaining = $this->remaining_quantity;
@@ -87,12 +96,16 @@ class Inventory extends Model
             return ['label' => 'Expired', 'class' => 'text-red-600 font-semibold'];
         }
 
+        if ($daysLeft == 0) {
+            return ['label' => '0d', 'class' => 'text-red-600 font-semibold'];
+        }
+
         if ($daysLeft <= 30) {
-            return ['label' => $daysLeft . 'd', 'class' => 'text-orange-500 font-medium'];
+            return ['label' => $daysLeft . 'd', 'class' => 'text-yellow-500 font-medium'];
         }
 
         if ($daysLeft <= 60) {
-            return ['label' => $daysLeft . 'd', 'class' => 'text-yellow-600 font-medium'];
+            return ['label' => $daysLeft . 'd', 'class' => 'text-green-600 font-medium'];
         }
 
         return ['label' => $this->expiry_date->format('M d, Y'), 'class' => 'text-gray-500'];

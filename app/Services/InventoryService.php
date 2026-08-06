@@ -42,6 +42,12 @@ class InventoryService
 
     public function update(Inventory $inventory, array $data): Inventory
     {
+        $hasMovement = $inventory->quantity != $inventory->remaining_quantity;
+
+        if ($hasMovement && $data['product_id'] != $inventory->product_id) {
+            throw new \Exception('Cannot change product — this batch already has stock movements.');
+        }
+
         $inventory->update($data);
 
         return $inventory;

@@ -22,9 +22,9 @@ return new class extends Migration
             $table->unsignedBigInteger('supplier_id')
                 ->nullable();
 
-            $table->integer('quantity');
+            $table->decimal('quantity', 10, 2);
 
-            $table->integer('remaining_quantity');
+            $table->decimal('remaining_quantity', 10, 2);
 
             $table->string('batch_number')->unique();
 

@@ -34,6 +34,7 @@ class StoreInventoryRequest extends FormRequest
                 'required',
                 'numeric',
                 'min:0.01',
+                'regex:/^\d+(\.\d{1,2})?$/',
             ],
 
             'batch_number' => [
@@ -55,13 +56,13 @@ class StoreInventoryRequest extends FormRequest
 
             'location' => [
                 'required',
-                'string',
-                'max:100',
+                Rule::in(['Main Warehouse', 'Storage Room A', 'Storage Room B', 'Field Storage']),
             ],
 
             'notes' => [
                 'nullable',
                 'string',
+                'max:100',
             ],
         ];
     }
@@ -73,6 +74,7 @@ class StoreInventoryRequest extends FormRequest
             'quantity.min' => 'Quantity must be greater than zero.',
             'expiry_date.required' => 'Expiry date is required for this product.',
             'expiry_date.after' => 'Expiry date must be a future date.',
+            'quantity.regex' => 'Quantity can only have up to 2 decimal places.',
         ];
     }
 }

@@ -23,6 +23,12 @@ class UpdateInventoryRequest extends FormRequest
             'product_id' => [
                 'required',
                 Rule::exists('products', 'id'),
+                function ($attribute, $value, $fail) {
+                    $inventory = $this->route('inventory');
+                    if ($inventory && $inventory->quantity != $inventory->remaining_quantity && $value != $inventory->product_id) {
+                        $fail('Product cannot be changed once this batch has stock movements.');
+                    }
+                },
             ],
 
             'supplier_id' => [
@@ -34,6 +40,16 @@ class UpdateInventoryRequest extends FormRequest
                 'required',
                 'numeric',
                 'min:0.01',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                function ($attribute, $value, $fail) {
+                    $inventory = $this->route('inventory');
+                    if ($inventory) {
+                        $consumed = $inventory->quantity - $inventory->remaining_quantity;
+                        if ($value < $consumed) {
+                            $fail("Quantity cannot be less than {$consumed} (already consumed).");
+                        }
+                    }
+                },
             ],
 
             'batch_number' => [
@@ -50,17 +66,18 @@ class UpdateInventoryRequest extends FormRequest
                 }),
                 'nullable',
                 'date',
+                'after:today',
             ],
 
             'location' => [
                 'required',
-                'string',
-                'max:100',
+                Rule::in(['Main Warehouse', 'Storage Room A', 'Storage Room B', 'Field Storage']),
             ],
 
             'notes' => [
                 'nullable',
                 'string',
+                'max:100',
             ],
         ];
     }
@@ -71,6 +88,7 @@ class UpdateInventoryRequest extends FormRequest
             'product_id.exists' => 'Selected product is invalid.',
             'quantity.min' => 'Quantity must be greater than zero.',
             'expiry_date.required' => 'Expiry date is required for this product.',
+            'quantity.regex' => 'Quantity can only have up to 2 decimal places.',
         ];
     }
 }
