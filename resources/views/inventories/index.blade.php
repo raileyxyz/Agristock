@@ -30,7 +30,7 @@
             },
 
             openEdit(inventory) {
-                const formattedQty = parseFloat(inventory.remaining_quantity).toString();
+                const formattedQty = parseFloat(inventory.remaining_quantity).toFixed(2);
 
                 this.editForm = {
                     id: inventory.id,
@@ -107,7 +107,7 @@
             <div class="relative flex-1">
                 <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
                 <input type="text" name="search" x-model="search" placeholder="Search products..."
-                       class="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    class="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
             </div>
 
             <div class="relative">
@@ -148,15 +148,15 @@
                                 </td>
                                 <td class="px-4 py-3 whitespace-nowrap">
                                     <span class="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full text-white"
-                                          style="background-color: {{ $inventory->product->category->icon_color ?? '#6b7280' }};">
+                                        style="background-color: {{ $inventory->product->category->icon_color ?? '#6b7280' }};">
                                         {{ $inventory->product->category->icon ?? '' }} {{ $inventory->product->category->name ?? '—' }}
                                     </span>
                                 </td>
                                 <td class="px-4 py-3 text-right font-semibold text-gray-900 whitespace-nowrap">
-                                    {{ rtrim(rtrim(number_format($inventory->remaining_quantity, 2), '0'), '.') }}
+                                    {{ $inventory->formatted_quantity }}
                                     <span class="text-gray-400 font-normal">{{ $inventory->product->unit->abbreviation ?? '' }}</span>
                                 </td>
-                                <td class="px-4 py-3 text-gray-400 font-mono text-xs whitespace-nowrap">{{ $inventory->batch_number }}</td>
+                                <td class="px-4 py-3 text-gray-400 font-mono whitespace-nowrap">{{ $inventory->batch_number }}</td>
                                 <td class="px-4 py-3 text-gray-500 whitespace-nowrap">{{ $inventory->location }}</td>
                                 <td class="px-4 py-3 whitespace-nowrap {{ $inventory->expiry_display['class'] }}">
                                     {{ $inventory->expiry_display['label'] }}
@@ -279,6 +279,7 @@
                                         Quantity <span class="text-xs text-gray-400" x-text="selectedProduct?.unit_abbr ? '(' + selectedProduct.unit_abbr + ')' : ''"></span>
                                     </label>
                                     <input type="number" step="0.01" name="quantity" x-model="editForm.quantity"
+                                        @blur="editForm.quantity = editForm.quantity !== '' && !isNaN(editForm.quantity) ? parseFloat(editForm.quantity).toFixed(2) : editForm.quantity"
                                         class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
                                         :class="editErrors.quantity ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
                                     <template x-if="editErrors.quantity">

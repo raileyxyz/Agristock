@@ -53,7 +53,7 @@ class UpdateInventoryRequest extends FormRequest
             ],
 
             'batch_number' => [
-                'nullable',
+                'required',
                 'string',
                 'max:50',
                 Rule::unique('inventories', 'batch_number')->ignore($this->inventory),
