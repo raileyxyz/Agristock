@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\StorageLocation;
 use App\Models\Inventory;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,9 +25,6 @@ class StoreStockOutRequest extends FormRequest
      */
     public function rules(): array
     {
-        $locations = ['Main Warehouse', 'Storage Room A', 'Storage Room B', 'Field Storage'];
-        $reasons = ['Sale', 'Damaged', 'Expired', 'Transfer', 'Adjustment', 'Return to Supplier', 'Other'];
-
         return [
             'product_id' => [
                 'required',
@@ -35,36 +33,39 @@ class StoreStockOutRequest extends FormRequest
 
             'location' => [
                 'required',
-                Rule::in($locations),
+                Rule::in(StorageLocation::values()),
             ],
 
             'quantity' => [
                 'required',
                 'numeric',
                 'min:0.01',
-                function ($attribute, $value, $fail) {
-                    $available = Inventory::where('product_id', $this->product_id)
-                        ->where('location', $this->location)
-                        ->sum('remaining_quantity');
-
-                    if ($value > $available) {
-                        $fail("Quantity exceeds available stock ({$available}).");
-                    }
-                },
             ],
 
             'reason' => [
                 'required',
-                Rule::in($reasons),
+                Rule::in([
+                    'Sale',
+                    'Damaged',
+                    'Expired',
+                    'Transfer',
+                    'Adjustment',
+                    'Return to Supplier',
+                    'Other',
+                ]),
             ],
 
             'transfer_to' => [
-                Rule::requiredIf(fn() => $this->reason === 'Transfer'),
+                Rule::requiredIf(
+                    fn () => $this->reason === 'Transfer'
+                ),
                 'nullable',
-                Rule::in($locations),
+                Rule::in(StorageLocation::values()),
                 function ($attribute, $value, $fail) {
                     if ($value && $value === $this->location) {
-                        $fail('Transfer destination must be different from the current location.');
+                        $fail(
+                            'Transfer destination must be different from the current location.'
+                        );
                     }
                 },
             ],

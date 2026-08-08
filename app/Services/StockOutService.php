@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\StockOut;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class StockOutService
@@ -15,7 +16,8 @@ class StockOutService
 
     public function getAvailableStock(int $productId, string $location): float
     {
-        return (float) Inventory::where('product_id', $productId)
+        return (float) Inventory::query()
+            ->where('product_id', $productId)
             ->where('location', $location)
             ->sum('remaining_quantity');
     }
@@ -25,9 +27,17 @@ class StockOutService
         return DB::transaction(function () use ($data) {
             $product = Product::findOrFail($data['product_id']);
 
-            $this->stockDeduction->deduct($product, $data['location'], $data['quantity']);
+            $this->stockDeduction->deduct($product, $data['location'], (float) $data['quantity']);
 
-            return StockOut::create($data);
+            return StockOut::create([
+                'user_id' => Auth::id(),
+                'product_id' => $product->id,
+                'location' => $data['location'],
+                'quantity' => $data['quantity'],
+                'reason' => $data['reason'],
+                'transfer_to' => $data['transfer_to'] ?? null,
+                'notes' => $data['notes'] ?? null,
+            ]);
         });
     }
 }

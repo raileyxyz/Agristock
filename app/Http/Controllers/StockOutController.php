@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\StorageLocation;
 use App\Models\Product;
+use App\Models\Inventory;
 use App\Services\StockOutService;
 use App\Http\Requests\StoreStockOutRequest;
 use Illuminate\Http\Request;
 
 class StockOutController extends Controller
 {
-    private array $locations = ['Main Warehouse', 'Storage Room A', 'Storage Room B', 'Field Storage'];
-
     public function __construct(
         private StockOutService $stockOutService
     ) {}
@@ -28,14 +28,33 @@ class StockOutController extends Controller
      */
     public function create()
     {
-        $products = Product::active()
-            ->with('unit')
-            ->orderBy('name')
-            ->get();
+        $products = Product::active()->with('unit')->orderBy('name')->get();
+        $locations = StorageLocation::values();
 
-        $locations = $this->locations;
+        $inventories = Inventory::whereIn('product_id', $products->pluck('id'))
+            ->where('remaining_quantity', '>', 0)
+            ->get()
+            ->groupBy(['product_id', 'location']);
 
-        return view('stock-outs.create', compact('products', 'locations'));
+        $stockData = [];
+        foreach ($products as $product) {
+            foreach ($locations as $location) {
+                $batches = $inventories->get($product->id, collect())->get($location, collect());
+
+                if ($batches->isEmpty()) continue;
+
+                $sorted = $product->expiry_track
+                    ? $batches->sortBy('expiry_date')
+                    : $batches->sortBy('created_at');
+
+                $stockData[$product->id][$location] = [
+                    'available' => (float) $sorted->sum('remaining_quantity'),
+                    'batch' => $sorted->first()->batch_number,
+                ];
+            }
+        }
+
+        return view('stock-outs.create', compact('products', 'stockData', 'locations'));
     }
 
     /**
@@ -43,18 +62,11 @@ class StockOutController extends Controller
      */
     public function store(StoreStockOutRequest $request)
     {
-        try {
-            $this->stockOutService->create($request->validated());
+        $this->stockOutService->create($request->validated());
 
-            return redirect()
-                ->route('inventories.index')
-                ->with('success', 'Stock out recorded successfully.');
-
-        } catch (\Exception $e) {
-            return redirect()
-                ->route('stock-outs.create')
-                ->with('error', $e->getMessage());
-        }
+        return redirect()
+            ->route('inventories.index')
+            ->with('success', 'Stock out recorded successfully.');
     }
 
     /**

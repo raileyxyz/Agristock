@@ -29,7 +29,7 @@
     <nav class="flex-1 px-3 py-4 overflow-y-auto"
         x-data="{
             open: '{{ request()->routeIs('products.*','categories.*','units.*') ? 'products'
-                    : (request()->routeIs('inventories.*') ? 'inventory'
+                    : (request()->routeIs('inventories.*', 'stock-outs.*') ? 'inventory'
                     : (request()->routeIs('suppliers.*') ? 'suppliers'
                     : (request()->routeIs('purchase-orders.*') ? 'orders'
                     : (request()->routeIs('reports.*') ? 'reports'
@@ -80,7 +80,7 @@
             <div>
                 <button @click="open = (open === 'inventory' ? '' : 'inventory')"
                         class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                        {{ request()->routeIs('inventories.*') ? 'text-green-700 bg-green-100 font-bold' : 'text-gray-700 hover:bg-gray-100' }}">
+                        {{ request()->routeIs('inventories.*', 'stock-outs.*') ? 'text-green-700 bg-green-100 font-bold' : 'text-gray-700 hover:bg-gray-100' }}">
                     <span class="flex items-center gap-3">
                         <i data-lucide="warehouse" class="w-4 h-4"></i>
                         Inventory Management
@@ -100,7 +100,7 @@
                     <a href="{{ route('inventories.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('inventories.create') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
                         <i data-lucide="arrow-down-to-line" class="w-3.5 h-3.5"></i> Stock In
                     </a>
-                    <a href="" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('inventory.stock-out') ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('stock-outs.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('stock-outs.create') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
                         <i data-lucide="arrow-up-from-line" class="w-3.5 h-3.5"></i> Stock Out
                     </a>
                     <a href="" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('inventory.adjustment') ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">

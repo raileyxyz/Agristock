@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\StockOutController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -29,5 +30,6 @@ Route::resource('categories', CategoryController::class);
 Route::resource('units', UnitController::class);
 Route::resource('products', ProductController::class);
 Route::resource('inventories', InventoryController::class);
+Route::resource('stock-outs', StockOutController::class)->only(['create', 'store']);
 
 require __DIR__.'/auth.php';

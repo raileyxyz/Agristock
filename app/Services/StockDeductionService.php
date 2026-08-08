@@ -4,19 +4,21 @@ namespace App\Services;
 
 use App\Models\Inventory;
 use App\Models\Product;
+use RuntimeException;
 
 class StockDeductionService
 {
     public function deduct(Product $product, string $location, float $quantity): void
     {
-        $batches = Inventory::where('product_id', $product->id)
+        $batches = Inventory::query()
+            ->where('product_id', $product->id)
             ->where('location', $location)
             ->where('remaining_quantity', '>', 0)
-            ->when($product->expiry_track, function ($query) {
-                $query->orderBy('expiry_date', 'asc');
-            }, function ($query) {
-                $query->orderBy('created_at', 'asc');
-            })
+            ->when(
+                $product->expiry_track,
+                fn ($query) => $query->orderBy('expiry_date'),
+                fn ($query) => $query->orderBy('created_at')
+            )
             ->lockForUpdate()
             ->get();
 
@@ -27,16 +29,17 @@ class StockDeductionService
                 break;
             }
 
-            $deductFromThisBatch = min($batch->remaining_quantity, $remaining);
+            $deductAmount = min((float) $batch->remaining_quantity, $remaining);
 
-            $batch->remaining_quantity -= $deductFromThisBatch;
-            $batch->save();
+            $batch->decrement('remaining_quantity', $deductAmount);
 
-            $remaining -= $deductFromThisBatch;
+            $remaining -= $deductAmount;
         }
 
         if ($remaining > 0) {
-            throw new \Exception('Insufficient stock available to complete this deduction.');
+            throw new RuntimeException(
+                'Insufficient stock available to complete this deduction.'
+            );
         }
     }
 }
