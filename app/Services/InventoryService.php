@@ -42,10 +42,17 @@ class InventoryService
 
     public function update(Inventory $inventory, array $data): Inventory
     {
-        $hasMovement = $inventory->quantity != $inventory->remaining_quantity;
+        if ($inventory->has_movement) {
+            unset($data['product_id'], $data['quantity'], $data['location']);
+        } else {
+            // Walang stock out pa — kung binabago ang quantity, dapat kasabay na-sync ang remaining_quantity
+            if (isset($data['quantity'])) {
+                $data['remaining_quantity'] = $data['quantity'];
+            }
+        }
 
-        if ($hasMovement && $data['product_id'] != $inventory->product_id) {
-            throw new \Exception('Cannot change product — this batch already has stock movements.');
+        if (empty($data['batch_number'])) {
+            $data['batch_number'] = $this->batchNumberGenerator->generate();
         }
 
         $inventory->update($data);
@@ -57,4 +64,5 @@ class InventoryService
     {
         $inventory->update(['status' => 'Archived']);
     }
+
 }

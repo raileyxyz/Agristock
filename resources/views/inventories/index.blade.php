@@ -15,7 +15,9 @@
             products: @json($productsForJs),
             showEditModal: false,
             showErrorModal: false,
+            showSuccessModal: false,
             errorMessage: "{{ addslashes(session('error', '')) }}",
+            successMessage: "{{ addslashes(session('success', '')) }}",
             editForm: null,
             editErrors: {},
 
@@ -35,12 +37,12 @@
                 this.editForm = {
                     id: inventory.id,
                     product_id: inventory.product_id,
-                    quantity: formattedQty,
+                    quantity: parseFloat(inventory.quantity).toString(),
                     batch_number: inventory.batch_number,
                     expiry_date: inventory.expiry_date,
                     location: inventory.location,
                     notes: inventory.notes,
-                    has_movement: inventory.quantity != inventory.remaining_quantity
+                    has_movement: inventory.has_movement
                 };
                 this.originalForm = { ...this.editForm };
                 this.editErrors = {};
@@ -63,6 +65,10 @@
         x-init="
             @if(session('error'))
                 showErrorModal = true;
+            @endif
+            @if(session('success'))
+                showSuccessModal = true;
+                $nextTick(() => lucide.createIcons());
             @endif
             @if($errors->any() && old('id'))
                 editForm = {
@@ -177,6 +183,7 @@
                                                     'expiry_date' => $inventory->expiry_date?->format('Y-m-d'),
                                                     'location' => $inventory->location,
                                                     'notes' => $inventory->notes,
+                                                    'has_movement' => $inventory->has_movement,
                                                 ]))"
                                                 title="Edit stock entry"
                                                 class="text-gray-400 hover:text-green-700 p-1 rounded-md hover:bg-gray-100">
@@ -249,6 +256,13 @@
                         <!-- Body -->
                         <div class="px-6 pb-6 space-y-4 overflow-y-auto">
 
+                            <template x-if="editForm.has_movement">
+                                <div class="flex items-center gap-2.5 bg-amber-50 border border-amber-200 text-amber-700 text-sm rounded-lg px-4 py-3 mb-4">
+                                    <i data-lucide="lock" class="w-4 h-4 shrink-0"></i>
+                                    This batch already has stock movements. Product, Quantity, and Location can no longer be changed.
+                                </div>
+                            </template>
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Product</label>
                                 <select name="product_id" x-model.number="editForm.product_id" :disabled="editForm.has_movement"
@@ -258,7 +272,6 @@
                                         <option value="{{ $product->id }}">{{ $product->name }}</option>
                                     @endforeach
                                 </select>
-
                                 <template x-if="editForm.has_movement">
                                     <input type="hidden" name="product_id" :value="editForm.product_id">
                                 </template>
@@ -278,12 +291,11 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
                                         Quantity <span class="text-xs text-gray-400" x-text="selectedProduct?.unit_abbr ? '(' + selectedProduct.unit_abbr + ')' : ''"></span>
                                     </label>
-                                    <input type="number" step="0.01" name="quantity" x-model="editForm.quantity"
-                                        @blur="editForm.quantity = editForm.quantity !== '' && !isNaN(editForm.quantity) ? parseFloat(editForm.quantity).toFixed(2) : editForm.quantity"
+                                    <input type="number" step="0.01" name="quantity" x-model="editForm.quantity" :disabled="editForm.has_movement"
                                         class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
-                                        :class="editErrors.quantity ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
-                                    <template x-if="editErrors.quantity">
-                                        <p class="text-xs text-red-600 mt-1.5"><span x-text="editErrors.quantity?.[0]"></span></p>
+                                        :class="editForm.has_movement ? 'bg-gray-50 text-gray-400 cursor-not-allowed border-gray-200' : (editErrors.quantity ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500')">
+                                    <template x-if="editForm.has_movement">
+                                        <input type="hidden" name="quantity" :value="editForm.quantity">
                                     </template>
                                 </div>
                                 <div>
@@ -311,15 +323,15 @@
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Storage Location</label>
-                                <select name="location" x-model="editForm.location"
+                                <select name="location" x-model="editForm.location" :disabled="editForm.has_movement"
                                         class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors"
-                                        :class="editErrors.location ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
-                                    @foreach(['Main Warehouse', 'Storage Room A', 'Storage Room B', 'Field Storage'] as $loc)
+                                        :class="editForm.has_movement ? 'bg-gray-50 text-gray-400 cursor-not-allowed border-gray-200' : (editErrors.location ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'bg-white border-gray-300 focus:ring-green-500/40 focus:border-green-500')">
+                                    @foreach(['Main Warehouse', 'Warehouse A', 'Warehouse B', 'Warehouse C'] as $loc)
                                         <option value="{{ $loc }}">{{ $loc }}</option>
                                     @endforeach
                                 </select>
-                                <template x-if="editErrors.location">
-                                    <p class="text-xs text-red-600 mt-1.5"><span x-text="editErrors.location?.[0]"></span></p>
+                                <template x-if="editForm.has_movement">
+                                    <input type="hidden" name="location" :value="editForm.location">
                                 </template>
                             </div>
 
@@ -346,6 +358,41 @@
                         </div>
                     </form>
                 </template>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div x-show="showSuccessModal"
+            x-transition:enter="transition-opacity ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-150"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            style="display: none;"
+            x-cloak>
+            <div @click.outside="showSuccessModal = false"
+                x-show="showSuccessModal"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+
+                <div class="px-6 pt-6 pb-5 text-center">
+                    <div class="w-12 h-12 rounded-full bg-green-50 text-green-600 flex items-center justify-center mb-4 mx-auto">
+                        <i data-lucide="check" class="w-6 h-6"></i>
+                    </div>
+                    <h2 class="font-semibold text-gray-800 text-base mb-1.5">Changes saved</h2>
+                    <p class="text-sm text-gray-500" x-text="successMessage || 'Stock entry has been updated successfully.'"></p>
+                </div>
+
+                <div class="flex items-center justify-center px-6 py-4 bg-gray-50 border-t border-gray-100">
+                    <button @click="showSuccessModal = false"
+                            class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                        Got it
+                    </button>
+                </div>
             </div>
         </div>
 

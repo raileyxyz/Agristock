@@ -110,4 +110,9 @@ class Inventory extends Model
 
         return ['label' => $this->expiry_date->format('M d, Y'), 'class' => 'text-gray-500'];
     }
+
+    public function getHasMovementAttribute(): bool
+    {
+        return bccomp((string) $this->quantity, (string) $this->remaining_quantity, 2) !== 0;
+    }
 }
