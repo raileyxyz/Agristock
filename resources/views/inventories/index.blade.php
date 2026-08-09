@@ -291,12 +291,11 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
                                         Quantity <span class="text-xs text-gray-400" x-text="selectedProduct?.unit_abbr ? '(' + selectedProduct.unit_abbr + ')' : ''"></span>
                                     </label>
-                                    <input type="number" step="0.01" name="quantity" x-model="editForm.quantity" :disabled="editForm.has_movement"
-                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
-                                        :class="editForm.has_movement ? 'bg-gray-50 text-gray-400 cursor-not-allowed border-gray-200' : (editErrors.quantity ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500')">
-                                    <template x-if="editForm.has_movement">
-                                        <input type="hidden" name="quantity" :value="editForm.quantity">
-                                    </template>
+                                    <input type="number" step="0.01" x-model="editForm.quantity" disabled
+                                        class="w-full border border-gray-200 rounded-lg px-3.5 py-2.5 text-sm bg-gray-50 text-gray-400 cursor-not-allowed">
+                                    <p class="text-xs text-gray-400 mt-1.5 flex items-center gap-1">
+                                        <i data-lucide="info" class="w-3 h-3"></i> Use Stock Adjustment to change quantity.
+                                    </p>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">

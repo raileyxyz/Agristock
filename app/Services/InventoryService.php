@@ -42,13 +42,10 @@ class InventoryService
 
     public function update(Inventory $inventory, array $data): Inventory
     {
+        unset($data['quantity'], $data['remaining_quantity']);
+
         if ($inventory->has_movement) {
-            unset($data['product_id'], $data['quantity'], $data['location']);
-        } else {
-            // Walang stock out pa — kung binabago ang quantity, dapat kasabay na-sync ang remaining_quantity
-            if (isset($data['quantity'])) {
-                $data['remaining_quantity'] = $data['quantity'];
-            }
+            unset($data['product_id'], $data['location']);
         }
 
         if (empty($data['batch_number'])) {

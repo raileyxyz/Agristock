@@ -36,22 +36,6 @@ class UpdateInventoryRequest extends FormRequest
                 'integer',
             ],
 
-            'quantity' => [
-                'required',
-                'numeric',
-                'min:0.01',
-                'regex:/^\d+(\.\d{1,2})?$/',
-                function ($attribute, $value, $fail) {
-                    $inventory = $this->route('inventory');
-                    if ($inventory) {
-                        $consumed = $inventory->quantity - $inventory->remaining_quantity;
-                        if ($value < $consumed) {
-                            $fail("Quantity cannot be less than {$consumed} (already consumed).");
-                        }
-                    }
-                },
-            ],
-
             'batch_number' => [
                 'required',
                 'string',

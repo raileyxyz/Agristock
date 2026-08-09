@@ -4,42 +4,50 @@ namespace App\Services;
 
 use App\Models\Inventory;
 use App\Models\Product;
-use RuntimeException;
 
 class StockDeductionService
 {
-    public function deduct(Product $product, string $location, float $quantity): void
+    /**
+     * Deducts stock and returns the list of batches consumed,
+     * so callers (e.g. Transfer) can mirror the movement elsewhere.
+     */
+    public function deduct(Product $product, string $location, float $quantity): array
     {
-        $batches = Inventory::query()
-            ->where('product_id', $product->id)
+        $batches = Inventory::where('product_id', $product->id)
             ->where('location', $location)
             ->where('remaining_quantity', '>', 0)
-            ->when(
-                $product->expiry_track,
-                fn ($query) => $query->orderBy('expiry_date'),
-                fn ($query) => $query->orderBy('created_at')
+            ->when($product->expiry_track,
+                fn($q) => $q->orderBy('expiry_date', 'asc'),
+                fn($q) => $q->orderBy('created_at', 'asc')
             )
-            ->lockForUpdate()
             ->get();
 
         $remaining = $quantity;
+        $consumed = [];
 
         foreach ($batches as $batch) {
             if ($remaining <= 0) {
                 break;
             }
 
-            $deductAmount = min((float) $batch->remaining_quantity, $remaining);
+            $deductFromThisBatch = min($batch->remaining_quantity, $remaining);
 
-            $batch->decrement('remaining_quantity', $deductAmount);
+            $batch->remaining_quantity -= $deductFromThisBatch;
+            $batch->save();
 
-            $remaining -= $deductAmount;
+            $consumed[] = [
+                'batch_number' => $batch->batch_number,
+                'quantity' => $deductFromThisBatch,
+                'expiry_date' => $batch->expiry_date,
+            ];
+
+            $remaining -= $deductFromThisBatch;
         }
 
         if ($remaining > 0) {
-            throw new RuntimeException(
-                'Insufficient stock available to complete this deduction.'
-            );
+            throw new \Exception('Insufficient stock available to complete this deduction.');
         }
+
+        return $consumed;
     }
 }

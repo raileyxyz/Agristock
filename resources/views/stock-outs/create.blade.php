@@ -160,7 +160,7 @@
                             class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors
                             {{ $errors->has('reason') ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500' }}">
                         <option value="">Select reason...</option>
-                        @foreach(['Sale', 'Damaged', 'Expired', 'Transfer', 'Adjustment', 'Return to Supplier', 'Other'] as $reason)
+                        @foreach(['Sale', 'Damaged', 'Expired', 'Transfer', 'Return to Supplier', 'Other'] as $reason)
                             <option value="{{ $reason }}" {{ old('reason') === $reason ? 'selected' : '' }}>{{ $reason }}</option>
                         @endforeach
                     </select>

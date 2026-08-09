@@ -11,13 +11,13 @@ use Illuminate\Support\Facades\DB;
 class StockOutService
 {
     public function __construct(
-        private StockDeductionService $stockDeduction
+        private StockDeductionService $stockDeduction,
+        private BatchNumberGeneratorService $batchNumberGenerator
     ) {}
 
     public function getAvailableStock(int $productId, string $location): float
     {
-        return (float) Inventory::query()
-            ->where('product_id', $productId)
+        return (float) Inventory::where('product_id', $productId)
             ->where('location', $location)
             ->sum('remaining_quantity');
     }
@@ -27,17 +27,58 @@ class StockOutService
         return DB::transaction(function () use ($data) {
             $product = Product::findOrFail($data['product_id']);
 
-            $this->stockDeduction->deduct($product, $data['location'], (float) $data['quantity']);
+            $consumedBatches = $this->stockDeduction->deduct(
+                $product,
+                $data['location'],
+                $data['quantity']
+            );
 
-            return StockOut::create([
-                'user_id' => Auth::id(),
-                'product_id' => $product->id,
-                'location' => $data['location'],
-                'quantity' => $data['quantity'],
-                'reason' => $data['reason'],
-                'transfer_to' => $data['transfer_to'] ?? null,
-                'notes' => $data['notes'] ?? null,
-            ]);
+            if ($data['reason'] === 'Transfer' && ! empty($data['transfer_to'])) {
+                $this->mirrorTransferAtDestination($product, $data, $consumedBatches);
+            }
+
+            $data['user_id'] = Auth::id();
+
+            return StockOut::create($data);
         });
+    }
+
+    private function mirrorTransferAtDestination(Product $product, array $data, array $consumedBatches): void
+    {
+        foreach ($consumedBatches as $batch) {
+            $existing = Inventory::where('product_id', $product->id)
+                ->where('location', $data['transfer_to'])
+                ->where(function ($query) use ($batch) {
+                    if ($batch['expiry_date']) {
+                        $query->whereDate('expiry_date', $batch['expiry_date']);
+                    } else {
+                        $query->whereNull('expiry_date');
+                    }
+                })
+                ->where('remaining_quantity', '>', 0)
+                ->first();
+
+            if ($existing) {
+                $existing->quantity += $batch['quantity'];
+                $existing->remaining_quantity += $batch['quantity'];
+                $existing->notes = trim(
+                    ($existing->notes ? $existing->notes . ' | ' : '') .
+                    "Received {$batch['quantity']} from {$data['location']} (origin batch: {$batch['batch_number']})"
+                );
+                $existing->save();
+
+                continue;
+            }
+
+            Inventory::create([
+                'product_id' => $product->id,
+                'quantity' => $batch['quantity'],
+                'remaining_quantity' => $batch['quantity'],
+                'batch_number' => $this->batchNumberGenerator->generate(),
+                'expiry_date' => $batch['expiry_date'],
+                'location' => $data['transfer_to'],
+                'notes' => "Transferred from {$data['location']} (origin batch: {$batch['batch_number']})",
+            ]);
+        }
     }
 }
