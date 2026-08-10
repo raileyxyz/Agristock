@@ -15,6 +15,11 @@ class Category extends Model
         'status',
     ];
 
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
     public function scopeSearch($query,$search)
     {
         return $query->when($search,function($query) use($search){
@@ -33,11 +38,6 @@ class Category extends Model
             fn($query)=>$query->where('status',$status)
         );
 
-    }
-
-    public function products()
-    {
-        return $this->hasMany(Product::class);
     }
 
 }

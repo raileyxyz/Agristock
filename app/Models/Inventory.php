@@ -54,6 +54,14 @@ class Inventory extends Model
         });
     }
 
+    public function scopeFilterLocation($query, $location)
+    {
+        return $query->when(
+            $location,
+            fn($query) => $query->where('location', $location)
+        );
+    }
+
     public function getFormattedQuantityAttribute(): string
     {
         $qty = $this->remaining_quantity;

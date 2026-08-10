@@ -16,6 +16,7 @@ class InventoryService
             ->with(['product.category', 'product.unit'])
             ->search($filters['search'] ?? null)
             ->filterCategory($filters['category_id'] ?? null)
+            ->filterLocation($filters['location'] ?? null)
             ->latest()
             ->paginate(15)
             ->withQueryString();

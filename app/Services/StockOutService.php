@@ -48,6 +48,7 @@ class StockOutService
         foreach ($consumedBatches as $batch) {
             $existing = Inventory::where('product_id', $product->id)
                 ->where('location', $data['transfer_to'])
+                ->where('status', '!=', 'Archived')
                 ->where(function ($query) use ($batch) {
                     if ($batch['expiry_date']) {
                         $query->whereDate('expiry_date', $batch['expiry_date']);

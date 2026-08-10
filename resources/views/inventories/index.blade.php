@@ -128,6 +128,19 @@
                 </select>
                 <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
             </div>
+
+            <div class="relative">
+                <select name="location" onchange="this.form.submit()"
+                        class="appearance-none border border-gray-300 rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    <option value="">All Locations</option>
+                    @foreach(['Main Warehouse', 'Storage Room A', 'Storage Room B', 'Field Storage'] as $loc)
+                        <option value="{{ $loc }}" {{ request('location') == $loc ? 'selected' : '' }}>
+                            {{ $loc }}
+                        </option>
+                    @endforeach
+                </select>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            </div>
         </form>
 
         <!-- Inventory table -->
