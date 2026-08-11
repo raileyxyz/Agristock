@@ -26,10 +26,18 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('categories', CategoryController::class);
-Route::resource('units', UnitController::class);
-Route::resource('products', ProductController::class);
-Route::resource('inventories', InventoryController::class);
+Route::resource('categories', CategoryController::class)
+    ->only(['index', 'store', 'update', 'destroy']);
+
+Route::resource('units', UnitController::class)
+    ->only(['index', 'store', 'update', 'destroy']);
+
+Route::resource('products', ProductController::class)
+    ->only(['index', 'create', 'store', 'update', 'destroy']);
+
+Route::resource('inventories', InventoryController::class)
+    ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+
 Route::resource('stock-outs', StockOutController::class)->only(['create', 'store']);
 
 require __DIR__.'/auth.php';
