@@ -32,12 +32,10 @@
             },
 
             openEdit(inventory) {
-                const formattedQty = parseFloat(inventory.remaining_quantity).toFixed(2);
-
                 this.editForm = {
                     id: inventory.id,
                     product_id: inventory.product_id,
-                    quantity: parseFloat(inventory.quantity).toString(),
+                    quantity: parseFloat(inventory.remaining_quantity).toFixed(2),
                     batch_number: inventory.batch_number,
                     expiry_date: inventory.expiry_date,
                     location: inventory.location,

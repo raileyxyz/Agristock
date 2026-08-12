@@ -29,6 +29,11 @@ class Inventory extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function adjustments()
+    {
+        return $this->hasMany(StockAdjustment::class);
+    }
+
     // Uncomment once the Supplier model/table exists:
     // public function supplier()
     // {

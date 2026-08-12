@@ -9,14 +9,11 @@ class UnitService
     public function getUnits($search = null)
     {
         return Unit::query()
-
+            ->withCount('products')
             ->when($search, function($query) use ($search){
-
                 $query->where('name','like',"%{$search}%")
                     ->orWhere('abbreviation','like',"%{$search}%");
-
             })
-
             ->get();
     }
 
@@ -34,6 +31,10 @@ class UnitService
 
     public function delete(Unit $unit)
     {
+        if ($unit->products()->exists()) {
+            throw new \Exception("Cannot delete \"{$unit->name}\" — it is still used by one or more products.");
+        }
+
         return $unit->delete();
     }
 }

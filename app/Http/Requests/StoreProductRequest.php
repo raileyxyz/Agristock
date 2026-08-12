@@ -79,6 +79,7 @@ class StoreProductRequest extends FormRequest
             'description' => [
                 'nullable',
                 'string',
+                'max:100',
             ],
 
             'status' => [

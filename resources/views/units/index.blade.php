@@ -3,11 +3,12 @@
             showModal: false,
             editingId: null,
             showDeleteModal: false,
+            showCannotDeleteModal: false,
             showSuccessModal: false,
             successMessage: '{{ addslashes(session('success', '')) }}',
             search: '{{ addslashes(request('search')) }}',
             unitForm: { id: null, name: '', abbreviation: '' },
-            deleteTarget: { id: null, name: '' },
+            deleteTarget: { id: null, name: '', productsCount: 0 },
             formErrors: {},
             originalUnitForm: null,
 
@@ -40,9 +41,13 @@
                 return JSON.stringify(this.unitForm) !== JSON.stringify(this.originalUnitForm);
             },
 
-            openDelete(id, name) {
-                this.deleteTarget = { id, name };
-                this.showDeleteModal = true;
+            openDelete(id, name, productsCount) {
+                this.deleteTarget = { id, name, productsCount };
+                if (productsCount > 0) {
+                    this.showCannotDeleteModal = true;
+                } else {
+                    this.showDeleteModal = true;
+                }
             }
         }"
         x-init="
@@ -113,8 +118,17 @@
                                         {{ $unit->abbreviation }}
                                     </span>
                                 </td>
-                                <td class="px-5 py-3.5 text-gray-500">
-                                    {{ $unit->products_count }} {{ Str::plural('product', $unit->products_count) }}
+                                <td class="px-5 py-3.5">
+                                    @if($unit->products_count > 0)
+                                        <span class="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-blue-50 text-blue-700">
+                                            <i data-lucide="package" class="w-3 h-3"></i>
+                                            {{ $unit->products_count }} {{ Str::plural('product', $unit->products_count) }}
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 text-gray-400">
+                                            Not used yet
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="px-5 py-3.5">
                                     <div class="flex items-center justify-end gap-1">
@@ -123,7 +137,7 @@
                                                 class="text-gray-400 hover:text-green-700 p-1.5 rounded-md hover:bg-gray-100">
                                             <i data-lucide="pencil" class="w-4 h-4"></i>
                                         </button>
-                                        <button @click="openDelete({{ $unit->id }}, '{{ addslashes($unit->name) }}')"
+                                        <button @click="openDelete({{ $unit->id }}, '{{ addslashes($unit->name) }}', {{ $unit->products_count }})"
                                                 title="Delete unit"
                                                 class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-gray-100">
                                             <i data-lucide="trash-2" class="w-4 h-4"></i>
@@ -310,6 +324,49 @@
                 <div class="flex items-center justify-center px-6 py-4 bg-gray-50 border-t border-gray-100">
                     <button @click="showSuccessModal = false"
                             class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                        Got it
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cannot Delete Modal -->
+        <div x-show="showCannotDeleteModal"
+            x-transition:enter="transition-opacity ease-out duration-200"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-150"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            style="display: none;">
+            <div @click.outside="showCannotDeleteModal = false"
+                x-show="showCannotDeleteModal"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-95"
+                class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+
+                <div class="px-6 pt-6 pb-5 text-center">
+                    <div class="w-12 h-12 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mb-4 mx-auto">
+                        <i data-lucide="triangle-alert" class="w-6 h-6"></i>
+                    </div>
+                    <h2 class="font-semibold text-gray-800 text-base mb-1.5">Cannot delete unit</h2>
+                    <p class="text-sm text-gray-500 leading-relaxed">
+                        <span class="font-medium text-gray-700" x-text="deleteTarget.name"></span>
+                        is currently used by
+                        <span class="font-medium text-gray-700" x-text="deleteTarget.productsCount"></span>
+                        <span x-text="deleteTarget.productsCount == 1 ? 'product' : 'products'"></span>.
+                        Remove or reassign those products first before deleting this unit.
+                    </p>
+                </div>
+
+                <div class="flex items-center justify-center px-6 py-4 bg-gray-50 border-t border-gray-100">
+                    <button @click="showCannotDeleteModal = false"
+                            class="bg-amber-600 hover:bg-amber-800 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                         Got it
                     </button>
                 </div>
