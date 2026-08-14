@@ -29,7 +29,7 @@
     <nav class="flex-1 px-3 py-4 overflow-y-auto"
         x-data="{
             open: '{{ request()->routeIs('products.*','categories.*','units.*') ? 'products'
-                    : (request()->routeIs('inventories.*', 'stock-outs.*', 'stock-adjustments.*') ? 'inventory'
+                    : (request()->routeIs('inventories.*', 'stock-outs.*', 'stock-adjustments.*', 'inventory-history.*') ? 'inventory'
                     : (request()->routeIs('suppliers.*') ? 'suppliers'
                     : (request()->routeIs('purchase-orders.*') ? 'orders'
                     : (request()->routeIs('reports.*') ? 'reports'
@@ -80,7 +80,7 @@
             <div>
                 <button @click="open = (open === 'inventory' ? '' : 'inventory')"
                         class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                        {{ request()->routeIs('inventories.*', 'stock-outs.*', 'stock-adjustments.*') ? 'text-green-700 bg-green-100 font-bold' : 'text-gray-700 hover:bg-gray-100' }}">
+                        {{ request()->routeIs('inventories.*', 'stock-outs.*', 'stock-adjustments.*', 'inventory-history.*') ? 'text-green-700 bg-green-100 font-bold' : 'text-gray-700 hover:bg-gray-100' }}">
                     <span class="flex items-center gap-3">
                         <i data-lucide="warehouse" class="w-4 h-4"></i>
                         Inventory Management
@@ -106,7 +106,7 @@
                     <a href="{{ route('stock-adjustments.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('stock-adjustments.create') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
                         <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i> Stock Adjustment
                     </a>
-                    <a href="{{ route('stock-adjustments.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('stock-adjustments.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('inventory-history.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('inventory-history.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
                         <i data-lucide="history" class="w-3.5 h-3.5"></i> Inventory History
                     </a>
                     <a href="" class="flex items-center justify-between px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('inventory.low-stock') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">

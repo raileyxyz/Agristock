@@ -13,7 +13,7 @@
 
                         request()->routeIs('products.*', 'categories.*', 'units.*') => 'Product Management',
 
-                        request()->routeIs('inventory.*') => 'Inventory Management',
+                        request()->routeIs('inventories.*', 'stock-outs.*', 'stock-adjustments.*', 'inventory-history.*') => 'Inventory Management',
 
                         request()->routeIs('suppliers.*') => 'Suppliers',
                         request()->routeIs('purchase-orders.*') => 'Purchase Orders',

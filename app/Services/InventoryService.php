@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Inventory;
+use Illuminate\Support\Facades\Auth;
 
 class InventoryService
 {
@@ -37,6 +38,7 @@ class InventoryService
         }
 
         $data['remaining_quantity'] = $data['quantity'];
+        $data['user_id'] = Auth::id();
 
         return Inventory::create($data);
     }

@@ -8,6 +8,7 @@ class Inventory extends Model
 {
     protected $fillable = [
         'product_id',
+        'user_id',
         'supplier_id',
         'quantity',
         'remaining_quantity',
@@ -27,6 +28,11 @@ class Inventory extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function adjustments()

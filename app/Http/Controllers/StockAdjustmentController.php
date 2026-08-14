@@ -14,13 +14,6 @@ class StockAdjustmentController extends Controller
         private StockAdjustmentService $stockAdjustmentService
     ) {}
 
-    public function index(Request $request)
-    {
-        $adjustments = $this->stockAdjustmentService->getAdjustments($request->all());
-
-        return view('stock-adjustments.index', compact('adjustments'));
-    }
-
     public function create()
     {
         abort_unless(Auth::user()?->role === 'Admin', 403);
