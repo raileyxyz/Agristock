@@ -33,6 +33,10 @@ class StockOutService
                 $data['quantity']
             );
 
+            $data['batch_numbers'] = collect($consumedBatches)
+                ->pluck('batch_number')
+                ->implode(', ');
+
             if ($data['reason'] === 'Transfer' && ! empty($data['transfer_to'])) {
                 $this->mirrorTransferAtDestination($product, $data, $consumedBatches);
             }

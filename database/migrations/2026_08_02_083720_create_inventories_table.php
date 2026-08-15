@@ -13,27 +13,14 @@ return new class extends Migration
     {
         Schema::create('inventories', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('product_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->restrictOnDelete();
-
-            $table->unsignedBigInteger('supplier_id')
-                ->nullable();
-
+            $table->foreignId('product_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            $table->unsignedBigInteger('supplier_id')->nullable();
             $table->decimal('quantity', 10, 2);
-
             $table->decimal('remaining_quantity', 10, 2);
-
             $table->string('batch_number')->unique();
-
             $table->date('expiry_date')->nullable();
-
             $table->string('location', 100);
-
             $table->text('notes')->nullable();
-
             $table->timestamps();
         });
     }

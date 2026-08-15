@@ -10,15 +10,8 @@ return new class extends Migration
     {
         Schema::create('stock_adjustments', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('inventory_id')
-                ->constrained()
-                ->cascadeOnDelete();
-
-            $table->foreignId('user_id')
-                ->constrained()
-                ->cascadeOnDelete();
-
+            $table->foreignId('inventory_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->decimal('system_quantity', 10, 2);
             $table->decimal('actual_quantity', 10, 2);
             $table->string('reason');

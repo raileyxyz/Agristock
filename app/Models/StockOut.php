@@ -11,6 +11,7 @@ class StockOut extends Model
         'product_id',
         'location',
         'quantity',
+        'batch_numbers',
         'reason',
         'transfer_to',
         'notes',

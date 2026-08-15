@@ -88,7 +88,7 @@ class InventoryHistoryService
                     'product_name' => $out->product->name ?? '—',
                     'type' => $isTransfer ? 'Transfer Out' : 'Stock Out',
                     'type_class' => $isTransfer ? 'bg-blue-50 text-blue-700' : 'bg-red-50 text-red-700',
-                    'batch_number' => '—',
+                    'batch_number' => $out->batch_numbers ?: '—',
                     'location' => $out->location,
                     'quantity' => -1 * (float) $out->quantity,
                     'unit_abbr' => $out->product->unit->abbreviation ?? '',

@@ -13,38 +13,17 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('category_id')
-                ->constrained()
-                ->cascadeOnDelete()
-                ->restrictOnDelete();
-
-            $table->foreignId('unit_id')
-                ->constrained()
-                ->cascadeOnDelete()
-                ->restrictOnDelete();
-
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete()->restrictOnDelete();
+            $table->foreignId('unit_id')->constrained()->cascadeOnDelete()->restrictOnDelete();
             $table->string('name');
-
             $table->string('sku')->unique();
-
             $table->unsignedInteger('minimum_stock')->default(0);
-
             $table->unsignedInteger('reorder_point')->default(0);
-
             $table->decimal('cost_price', 10, 2);
-
             $table->decimal('selling_price', 10, 2);
-
             $table->text('description')->nullable();
-
-            $table->enum('status', [
-                'Active',
-                'Archived'
-            ])->default('Active');
-
+            $table->enum('status', ['Active', 'Archived'])->default('Active');
             $table->boolean('expiry_track')->default(false);
-
             $table->timestamps();
         });
     }
