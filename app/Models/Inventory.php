@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Product;
 
 class Inventory extends Model
 {
@@ -67,10 +68,7 @@ class Inventory extends Model
 
     public function scopeFilterLocation($query, $location)
     {
-        return $query->when(
-            $location,
-            fn($query) => $query->where('location', $location)
-        );
+        return $query->when($location, fn($query) => $query->where('location', $location));
     }
 
     public function getFormattedQuantityAttribute(): string

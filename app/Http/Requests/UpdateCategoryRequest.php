@@ -28,8 +28,7 @@ class UpdateCategoryRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('categories', 'name')
-                    ->ignore($this->category->id),
+                Rule::unique('categories', 'name')->ignore($this->category->id),
             ],
 
             'description' => [
@@ -50,10 +49,7 @@ class UpdateCategoryRequest extends FormRequest
 
             'status' => [
                 'required',
-                Rule::in([
-                    'Active',
-                    'Archived'
-                ])
+                Rule::in(['Active', 'Archived'])
             ],
         ];
     }

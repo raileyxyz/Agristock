@@ -31,14 +31,10 @@ class StockAdjustmentController extends Controller
         try {
             $this->stockAdjustmentService->create($request->validated());
 
-            return redirect()
-                ->route('stock-adjustments.create')
-                ->with('success', 'Stock adjustment recorded successfully.');
+            return redirect()->route('stock-adjustments.create')->with('success', 'Stock adjustment recorded successfully.');
 
         } catch (\Exception $e) {
-            return redirect()
-                ->route('stock-adjustments.create')
-                ->with('error', $e->getMessage());
+            return redirect()->route('stock-adjustments.create')->with('error', $e->getMessage());
         }
     }
 }

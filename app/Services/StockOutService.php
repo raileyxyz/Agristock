@@ -17,9 +17,7 @@ class StockOutService
 
     public function getAvailableStock(int $productId, string $location): float
     {
-        return (float) Inventory::where('product_id', $productId)
-            ->where('location', $location)
-            ->sum('remaining_quantity');
+        return (float) Inventory::where('product_id', $productId)->where('location', $location)->sum('remaining_quantity');
     }
 
     public function create(array $data): StockOut

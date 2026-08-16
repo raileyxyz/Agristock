@@ -24,20 +24,14 @@ class Category extends Model
     {
         return $query->when($search,function($query) use($search){
 
-            $query->where('name','like',"%{$search}%")
-                  ->orWhere('description','like',"%{$search}%");
+            $query->where('name','like',"%{$search}%")->orWhere('description','like',"%{$search}%");
 
         });
     }
 
     public function scopeFilterStatus($query,$status)
     {
-
-        return $query->when(
-            $status && $status !== 'all',
-            fn($query)=>$query->where('status',$status)
-        );
-
+        return $query->when($status && $status !== 'all', fn($query)=>$query->where('status',$status));
     }
 
 }

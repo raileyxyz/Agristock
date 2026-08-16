@@ -22,12 +22,10 @@ class UnitService
         return Unit::create($data);
     }
 
-
     public function update(Unit $unit, array $data)
     {
         return $unit->update($data);
     }
-
 
     public function delete(Unit $unit)
     {

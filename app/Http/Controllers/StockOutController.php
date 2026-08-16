@@ -64,9 +64,7 @@ class StockOutController extends Controller
     {
         $this->stockOutService->create($request->validated());
 
-        return redirect()
-            ->route('stock-outs.create')
-            ->with('success', 'Stock out recorded successfully.');
+        return redirect()->route('stock-outs.create')->with('success', 'Stock out recorded successfully.');
     }
 
     /**

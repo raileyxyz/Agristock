@@ -21,14 +21,12 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = $this->productService
-            ->getProducts($request->all());
+        $products = $this->productService->getProducts($request->all());
 
         $categories = Category::all();
         $units = Unit::all();
 
-        $statistics = $this->productService
-            ->getStatistics();
+        $statistics = $this->productService->getStatistics();
 
         return view('products.index', compact('products', 'categories', 'units', 'statistics'));
     }
@@ -49,12 +47,9 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        $this->productService
-            ->create($request->validated());
+        $this->productService->create($request->validated());
 
-        return redirect()
-            ->route('products.create')
-            ->with('success', 'Product created successfully.');
+        return redirect()->route('products.create')->with('success', 'Product created successfully.');
     }
 
     /**
@@ -78,12 +73,9 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $this->productService
-            ->update($product, $request->validated());
+        $this->productService->update($product, $request->validated());
 
-        return redirect()
-            ->route('products.index')
-            ->with('success', "\"{$product->name}\" has been updated.");
+        return redirect()->route('products.index')->with('success', "\"{$product->name}\" has been updated.");
     }
 
     /**
@@ -91,11 +83,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $this->productService
-            ->archive($product);
+        $this->productService->archive($product);
 
-        return redirect()
-            ->route('products.index')
-            ->with('success', "\"{$product->name}\" has been archived.");
+        return redirect()->route('products.index')->with('success', "\"{$product->name}\" has been archived.");
     }
 }

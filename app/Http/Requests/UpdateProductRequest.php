@@ -29,6 +29,7 @@ class UpdateProductRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
+                Rule::unique('products', 'name'),
             ],
 
             'category_id' => [
@@ -45,8 +46,7 @@ class UpdateProductRequest extends FormRequest
                 'required',
                 'string',
                 'max:100',
-                Rule::unique('products', 'sku')
-                    ->ignore($this->product),
+                Rule::unique('products', 'sku')->ignore($this->product),
             ],
 
             'cost_price' => [
@@ -82,10 +82,7 @@ class UpdateProductRequest extends FormRequest
 
             'status' => [
                 'required',
-                Rule::in([
-                    'Active',
-                    'Archived',
-                ]),
+                Rule::in(['Active', 'Archived',]),
             ],
 
             'expiry_track' => [

@@ -11,36 +11,22 @@ use App\Http\Requests\UpdateCategoryRequest;
 
 class CategoryController extends Controller
 {
-
     public function __construct(
         private CategoryService $categoryService
     ) {}
 
     public function index(Request $request)
     {
-        $categories = $this->categoryService
-            ->getCategories(
-                $request->all()
-            );
+        $categories = $this->categoryService->getCategories($request->all());
 
-        return view(
-            'categories.index',
-            compact('categories')
-        );
+        return view('categories.index', compact('categories'));
     }
 
     public function store(StoreCategoryRequest $request)
     {
-        $this->categoryService
-            ->create($request->validated());
+        $this->categoryService->create($request->validated());
 
-
-        return redirect()
-            ->route('categories.index')
-            ->with(
-                'success',
-                'Category added successfully.'
-            );
+        return redirect()->route('categories.index')->with('success', 'Category added successfully.');
     }
 
     public function update(UpdateCategoryRequest $request, Category $category)
@@ -48,14 +34,10 @@ class CategoryController extends Controller
         try {
             $this->categoryService->update($category, $request->validated());
 
-            return redirect()
-                ->route('categories.index')
-                ->with('success', "{$category->name} updated successfully.");
+            return redirect()->route('categories.index')->with('success', "{$category->name} updated successfully.");
 
         } catch (\Exception $e) {
-            return redirect()
-                ->route('categories.index')
-                ->with('error', $e->getMessage());
+            return redirect()->route('categories.index')->with('error', $e->getMessage());
         }
     }
 
@@ -64,14 +46,10 @@ class CategoryController extends Controller
         try {
             $this->categoryService->archive($category);
 
-            return redirect()
-                ->route('categories.index')
-                ->with('success', "{$category->name} archived successfully.");
+            return redirect()->route('categories.index')->with('success', "{$category->name} archived successfully.");
 
         } catch (\Exception $e) {
-            return redirect()
-                ->route('categories.index')
-                ->with('error', $e->getMessage());
+            return redirect()->route('categories.index')->with('error', $e->getMessage());
         }
     }
 

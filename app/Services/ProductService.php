@@ -15,23 +15,10 @@ class ProductService
     {
         return Product::query()
             ->with(['category', 'unit'])
+            ->withSum('inventories as current_stock', 'remaining_quantity')
             ->search($filters['search'] ?? null)
-            ->filterStatus($filters['status'] ?? 'Active')
-            ->filterCategories($filters['category_id'] ?? null)
-            ->select([
-                'id',
-                'category_id',
-                'unit_id',
-                'name',
-                'sku',
-                'minimum_stock',
-                'reorder_point',
-                'cost_price',
-                'selling_price',
-                'description',
-                'status',
-                'expiry_track',
-            ])
+            ->filterStatus($filters['status'] ?? null)
+            ->filterCategories($filters['category'] ?? null)
             ->latest()
             ->paginate(15)
             ->withQueryString();
@@ -57,9 +44,7 @@ class ProductService
 
     public function archive(Product $product): void
     {
-        $product->update([
-            'status' => 'Archived',
-        ]);
+        $product->update(['status' => 'Archived',]);
     }
 
     public function getStatistics(): array

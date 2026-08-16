@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Inventory;
 
 class Product extends Model
 {
@@ -49,27 +50,17 @@ class Product extends Model
     public function scopeSearch($query, $search)
     {
         return $query->when($search, function ($query) use ($search) {
-
-            $query->where('name', 'like', "%{$search}%")
-                ->orWhere('sku', 'like', "%{$search}%");
-
+            $query->where('name', 'like', "%{$search}%")->orWhere('sku', 'like', "%{$search}%");
         });
     }
 
     public function scopeFilterStatus($query, $status)
     {
-        return $query->when(
-            $status && $status !== 'all',
-            fn ($query) => $query->where('status', $status)
-        );
+        return $query->when($status && $status !== 'all', fn ($query) => $query->where('status', $status));
     }
 
     public function scopeFilterCategories($query, $categoryId)
     {
-        return $query->when(
-            $categoryId,
-            fn ($query) => $query->where('category_id', $categoryId)
-        );
+        return $query->when($categoryId, fn ($query) => $query->where('category_id', $categoryId));
     }
-
 }

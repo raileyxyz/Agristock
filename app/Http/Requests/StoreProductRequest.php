@@ -32,7 +32,6 @@ class StoreProductRequest extends FormRequest
                 'max:255',
                 Rule::unique('products', 'name'),
             ],
-
             'category_id' => [
                 'required',
                 Rule::exists('categories', 'id'),

@@ -37,9 +37,7 @@ class InventoryController extends Controller
     {
         $this->inventoryService->create($request->validated());
 
-        return redirect()
-            ->route('inventories.create')
-            ->with('success', 'Stock added successfully.');
+        return redirect()->route('inventories.create')->with('success', 'Stock added successfully.');
     }
 
     public function edit(Inventory $inventory)
@@ -54,14 +52,10 @@ class InventoryController extends Controller
         try {
             $this->inventoryService->update($inventory, $request->validated());
 
-            return redirect()
-                ->route('inventories.index')
-                ->with('success', 'Stock updated successfully.');
+            return redirect()->route('inventories.index')->with('success', 'Stock updated successfully.');
 
         } catch (\Exception $e) {
-            return redirect()
-                ->route('inventories.index')
-                ->with('error', $e->getMessage());
+            return redirect()->route('inventories.index')->with('error', $e->getMessage());
         }
     }
 
@@ -69,9 +63,7 @@ class InventoryController extends Controller
     {
         $this->inventoryService->archive($inventory);
 
-        return redirect()
-            ->route('inventories.index')
-            ->with('success', 'Stock archived successfully.');
+        return redirect()->route('inventories.index')->with('success', 'Stock archived successfully.');
     }
 
     private function getActiveProducts()

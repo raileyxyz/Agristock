@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreCategoryRequest extends FormRequest
 {
@@ -23,11 +24,35 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:categories,name',
-            'description' => 'nullable|string',
-            'icon' => 'nullable|string|max:10',
-            'icon_color' => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/|max:20',
-            'status' => 'nullable|string|in:Active,Archived',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('categories', 'name'),
+            ],
+
+            'description' => [
+                'nullable',
+                'string',
+            ],
+
+            'icon' => [
+                'nullable',
+                'string',
+                'max:10',
+            ],
+
+            'icon_color' => [
+                'nullable',
+                'regex:/^#[0-9A-Fa-f]{6}$/',
+                'max:20',
+            ],
+
+            'status' => [
+                'nullable',
+                'string',
+                Rule::in(['Active', 'Archived']),
+            ],
         ];
     }
 

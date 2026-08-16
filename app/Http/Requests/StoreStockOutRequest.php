@@ -63,9 +63,7 @@ class StoreStockOutRequest extends FormRequest
                 Rule::in(StorageLocation::values()),
                 function ($attribute, $value, $fail) {
                     if ($value && $value === $this->location) {
-                        $fail(
-                            'Transfer destination must be different from the current location.'
-                        );
+                        $fail('Transfer destination must be different from the current location.');
                     }
                 },
             ],
