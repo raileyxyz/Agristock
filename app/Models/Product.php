@@ -63,4 +63,13 @@ class Product extends Model
     {
         return $query->when($categoryId, fn ($query) => $query->where('category_id', $categoryId));
     }
+
+    public function scopeNeedsReorder($query)
+    {
+        return $query->where('status', 'Active')
+            ->withSum(['inventories' => function ($q) {
+                $q->where('status', '!=', 'Archived');
+            }], 'remaining_quantity')
+            ->havingRaw('COALESCE(inventories_sum_remaining_quantity, 0) <= reorder_point');
+    }
 }

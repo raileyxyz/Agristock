@@ -6,6 +6,7 @@ use App\Http\Controllers\UnitController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\InventoryHistoryController;
+use App\Http\Controllers\LowStockController;
 use App\Http\Controllers\StockOutController;
 use App\Http\Controllers\StockAdjustmentController;
 use Illuminate\Support\Facades\Route;
@@ -45,5 +46,7 @@ Route::resource('stock-outs', StockOutController::class)->only(['create', 'store
 Route::resource('stock-adjustments', StockAdjustmentController::class)->only(['create', 'store']);
 
 Route::get('/inventory-history', [InventoryHistoryController::class, 'index'])->name('inventory-history.index');
+
+Route::get('/low-stock', [LowStockController::class, 'index'])->name('low-stock.index');
 
 require __DIR__.'/auth.php';

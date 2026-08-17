@@ -7,7 +7,7 @@
     x-transition:leave-start="translate-x-0"
     x-transition:leave-end="-translate-x-full"
     @click.outside="sidebarOpen = false"
-    class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200 flex flex-col h-screen transform lg:translate-x-0 shrink-0">
+    class="fixed lg:static inset-y-0 left-0 z-40 w-66 bg-white border-r border-gray-200 flex flex-col h-screen transform lg:translate-x-0 shrink-0">
 
     <!-- Logo -->
     <div class="h-20 px-6 flex items-center justify-between border-b border-gray-100 shrink-0">
@@ -29,7 +29,7 @@
     <nav class="flex-1 px-3 py-4 overflow-y-auto"
         x-data="{
             open: '{{ request()->routeIs('products.*','categories.*','units.*') ? 'products'
-                    : (request()->routeIs('inventories.*', 'stock-outs.*', 'stock-adjustments.*', 'inventory-history.*') ? 'inventory'
+                    : (request()->routeIs('inventories.*', 'stock-outs.*', 'stock-adjustments.*', 'inventory-history.*', 'low-stock.*') ? 'inventory'
                     : (request()->routeIs('suppliers.*') ? 'suppliers'
                     : (request()->routeIs('purchase-orders.*') ? 'orders'
                     : (request()->routeIs('reports.*') ? 'reports'
@@ -80,16 +80,22 @@
             <div>
                 <button @click="open = (open === 'inventory' ? '' : 'inventory')"
                         class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                        {{ request()->routeIs('inventories.*', 'stock-outs.*', 'stock-adjustments.*', 'inventory-history.*') ? 'text-green-700 bg-green-100 font-bold' : 'text-gray-700 hover:bg-gray-100' }}">
-                    <span class="flex items-center gap-3">
-                        <i data-lucide="warehouse" class="w-4 h-4"></i>
-                        Inventory Management
+                        {{ request()->routeIs('inventories.*', 'stock-outs.*', 'stock-adjustments.*', 'inventory-history.*', 'low-stock.*')
+                            ? 'text-green-700 bg-green-50 font-semibold'
+                            : 'text-gray-600 hover:bg-gray-50' }}">
+                    <span class="flex items-center gap-3 flex-1 min-w-0">
+                        <i data-lucide="warehouse" class="w-4 h-4 shrink-0"></i>
+                        <span class="truncate">Inventory Management</span>
                     </span>
-                    <span class="flex items-center gap-1.5">
+                    <span class="flex items-center gap-2 shrink-0 pl-3">
                         @if(isset($lowStockCount) && $lowStockCount > 0)
-                            <span class="bg-red-100 text-red-600 text-[10px] font-semibold px-1.5 py-0.5 rounded-full">{{ $lowStockCount }}</span>
+                            <span class="bg-red-600 text-red-100 text-[8px] font-semibold min-w-[14px] h-[14px] px-1 flex items-center justify-center rounded-full">
+                                {{ $lowStockCount }}
+                            </span>
                         @endif
-                        <i data-lucide="chevron-right" class="w-4 h-4 transition-transform duration-200" :class="open === 'inventory' && 'rotate-90'"></i>
+                        <i data-lucide="chevron-right"
+                        class="w-3.5 h-3.5 text-gray-400 transition-transform"
+                        :class="open === 'inventory' && 'rotate-90'"></i>
                     </span>
                 </button>
 
@@ -109,7 +115,7 @@
                     <a href="{{ route('inventory-history.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('inventory-history.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
                         <i data-lucide="history" class="w-3.5 h-3.5"></i> Inventory History
                     </a>
-                    <a href="" class="flex items-center justify-between px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('inventory.low-stock') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('low-stock.index') }}" class="flex items-center justify-between px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('low-stock.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
                         <span class="flex items-center gap-2.5">
                             <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Low Stock Monitoring
                         </span>
