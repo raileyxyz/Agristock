@@ -68,19 +68,19 @@
             @endif
         ">
 
-        <div class="flex items-center justify-between mb-1">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-800">All Products</h1>
+        <div class="flex items-center justify-between gap-3 mb-1">
+            <div class="min-w-0">
+                <h1 class="text-xl sm:text-2xl font-bold text-gray-800">All Products</h1>
 
-                <p class="mt-1 text-sm text-gray-500">
-                    {{ $statistics['total'] }} Products
-                    <span class="mx-2">•</span>
+                <p class="mt-1 text-xs sm:text-sm text-gray-500 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                    <span>{{ $statistics['total'] }} Products</span>
+                    <span class="text-gray-300">•</span>
 
                     <span class="text-green-600 font-medium">
                         {{ $statistics['active'] }} Active
                     </span>
 
-                    <span class="mx-2 text-gray-400">•</span>
+                    <span class="text-gray-300">•</span>
 
                     <span>
                         {{ $statistics['archived'] }} Archived
@@ -89,8 +89,8 @@
 
             </div>
             <a href="{{ route('products.create') }}"
-            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
-                <i data-lucide="plus" class="w-4 h-4"></i>
+            class="bg-green-600 hover:bg-green-700 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                 Add Product
             </a>
         </div>
@@ -102,17 +102,17 @@
                 clearTimeout(window._productSearchDebounce);
                 window._productSearchDebounce = setTimeout(() => $el.submit(), 500);
             })"
-            class="flex flex-col sm:flex-row gap-3 mt-6">
+            class="flex flex-col sm:flex-row sm:flex-wrap gap-3 mt-6">
 
-            <div class="relative flex-1">
+            <div class="relative flex-1 min-w-0 sm:min-w-[200px]">
                 <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
                 <input type="text" name="search" x-model="search" placeholder="Search by product name or SKU"
                     class="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
             </div>
 
-            <div class="relative">
+            <div class="relative w-full sm:w-auto">
                 <select name="category_id" onchange="this.form.submit()"
-                        class="appearance-none border border-gray-300 rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        class="w-full sm:w-auto appearance-none border border-gray-300 rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                     <option value="">All Categories</option>
                     @foreach($categories ?? [] as $category)
                         <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
@@ -123,9 +123,9 @@
                 <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
             </div>
 
-            <div class="relative">
+            <div class="relative w-full sm:w-auto">
                 <select name="status" onchange="this.form.submit()"
-                        class="appearance-none border border-gray-300 rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        class="w-full sm:w-auto appearance-none border border-gray-300 rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                     <option value="Active" {{ request('status', 'Active') === 'Active' ? 'selected' : '' }}>Active</option>
                     <option value="Archived" {{ request('status') === 'Archived' ? 'selected' : '' }}>Archived</option>
                     <option value="all" {{ request('status') === 'all' ? 'selected' : '' }}>All</option>
@@ -263,24 +263,24 @@
                         <input type="hidden" name="id" :value="editForm.id">
 
                         <!-- Header -->
-                        <div class="flex items-start justify-between px-6 pt-6 pb-5 shrink-0">
-                            <div class="flex items-center gap-3">
+                        <div class="flex items-start justify-between px-4 sm:px-6 pt-6 pb-5 shrink-0">
+                            <div class="flex items-center gap-3 min-w-0">
                                 <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center shrink-0">
                                     <i data-lucide="pencil" class="w-4.5 h-4.5"></i>
                                 </div>
-                                <div>
+                                <div class="min-w-0">
                                     <h2 class="font-semibold text-gray-800 text-base leading-tight">Edit product</h2>
                                     <p class="text-xs text-gray-400 mt-0.5">Update this product's details</p>
                                 </div>
                             </div>
                             <button type="button" @click="closeEdit()"
-                                    class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 -mt-1 -mr-1 transition-colors">
+                                    class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 -mt-1 -mr-1 transition-colors shrink-0">
                                 <i data-lucide="x" class="w-4.5 h-4.5"></i>
                             </button>
                         </div>
 
                         <!-- Body -->
-                        <div class="px-6 pb-6 space-y-4 overflow-y-auto">
+                        <div class="px-4 sm:px-6 pb-6 space-y-4 overflow-y-auto">
 
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div class="sm:col-span-2">
@@ -307,7 +307,7 @@
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Category</label>
                                     <select name="category_id" x-model.number="editForm.category_id"
@@ -340,7 +340,7 @@
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Cost Price</label>
                                     <input type="number" step="0.01" name="cost_price" x-model="editForm.cost_price"
@@ -365,7 +365,7 @@
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Minimum Stock</label>
                                     <input type="number" name="minimum_stock" x-model="editForm.minimum_stock"
@@ -427,15 +427,15 @@
                         </div>
 
                         <!-- Footer -->
-                        <div class="flex items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100 shrink-0">
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-4 sm:px-6 py-4 bg-gray-50 border-t border-gray-100 shrink-0">
                             <button type="button" @click="closeEdit()"
-                                    class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                    class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
                                 Cancel
                             </button>
                             <button type="submit"
                                     :disabled="!hasChanges()"
                                     :class="hasChanges() ? 'bg-green-600 hover:bg-green-700 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
-                                    class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                                    class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm order-1 sm:order-2">
                                 Save changes
                             </button>
                         </div>
@@ -472,15 +472,15 @@
                 </div>
 
                 <form method="POST" :action="`/products/${archiveTarget.id}`"
-                    class="flex items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100">
+                    class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100">
                     @csrf
                     @method('DELETE')
                     <button type="button" @click="showArchiveModal = false"
-                            class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
                         Cancel
                     </button>
                     <button type="submit"
-                            class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                            class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm order-1 sm:order-2">
                         Archive
                     </button>
                 </form>
@@ -543,25 +543,25 @@
                     <div class="flex flex-col overflow-hidden">
 
                         <!-- Header -->
-                        <div class="flex items-start justify-between px-6 pt-6 pb-5 shrink-0">
-                            <div class="flex items-center gap-3">
+                        <div class="flex items-start justify-between px-4 sm:px-6 pt-6 pb-5 shrink-0">
+                            <div class="flex items-center gap-3 min-w-0">
                                 <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
                                     <i data-lucide="package" class="w-4.5 h-4.5"></i>
                                 </div>
-                                <div>
-                                    <h2 class="font-semibold text-gray-800 text-base leading-tight" x-text="viewTarget.name"></h2>
+                                <div class="min-w-0">
+                                    <h2 class="font-semibold text-gray-800 text-base leading-tight truncate" x-text="viewTarget.name"></h2>
                                     <p class="text-xs text-gray-400 mt-0.5" x-text="'SKU: ' + (viewTarget.sku || '—')"></p>
                                 </div>
                             </div>
                             <button type="button" @click="showViewModal = false"
-                                    class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 -mt-1 -mr-1 transition-colors">
+                                    class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 -mt-1 -mr-1 transition-colors shrink-0">
                                 <i data-lucide="x" class="w-4.5 h-4.5"></i>
                             </button>
                         </div>
 
                         <!-- Body -->
-                        <div class="px-6 pb-6 overflow-y-auto">
-                            <div class="grid grid-cols-2 gap-4">
+                        <div class="px-4 sm:px-6 pb-6 overflow-y-auto">
+                            <div class="grid grid-cols-2 sm:grid-cols-2 gap-4">
                                 <div>
                                     <p class="text-xs text-gray-400 mb-1">Category</p>
                                     <p class="text-sm font-medium text-gray-800" x-text="viewTarget.category?.name || '—'"></p>
@@ -607,14 +607,14 @@
                         </div>
 
                         <!-- Footer -->
-                        <div class="flex items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100 shrink-0">
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-4 sm:px-6 py-4 bg-gray-50 border-t border-gray-100 shrink-0">
                             <button type="button" @click="showViewModal = false"
-                                    class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                    class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
                                 Close
                             </button>
                             <button type="button"
                                     @click="showViewModal = false; openEdit(viewTarget)"
-                                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm order-1 sm:order-2">
                                 Edit Product
                             </button>
                         </div>

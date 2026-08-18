@@ -72,20 +72,20 @@
         "
         data-page>
 
-        <div class="flex items-center justify-between mb-1">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-800">Units of Measurement</h1>
-                <p class="text-gray-500 mt-1">{{ $units->count() }} {{ Str::plural('unit', $units->count()) }}</p>
+        <div class="flex items-center justify-between gap-3 mb-1">
+            <div class="min-w-0">
+                <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Units of Measurement</h1>
+                <p class="text-gray-500 mt-1 text-xs sm:text-sm truncate">{{ $units->count() }} {{ Str::plural('unit', $units->count()) }}</p>
             </div>
             <button @click="openCreate()"
-                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
-                <i data-lucide="plus" class="w-4 h-4"></i>
+                    class="bg-green-600 hover:bg-green-700 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                 Add Unit
             </button>
         </div>
 
         <!-- Search -->
-        <form method="GET" data-search-form class="relative max-w-sm mt-6">
+        <form method="GET" data-search-form class="relative w-full sm:max-w-sm mt-6">
             <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
             <input type="text" name="search" x-model="search" placeholder="Search units by name or abbreviation"
                 class="w-full border border-gray-300 rounded-lg pl-9 pr-9 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
@@ -188,24 +188,24 @@
                     <input type="hidden" name="id" :value="editingId">
 
                     <!-- Header -->
-                    <div class="flex items-start justify-between px-6 pt-6 pb-5">
-                        <div class="flex items-center gap-3">
+                    <div class="flex items-start justify-between px-4 sm:px-6 pt-6 pb-5">
+                        <div class="flex items-center gap-3 min-w-0">
                             <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center shrink-0">
                                 <i data-lucide="ruler" class="w-4.5 h-4.5"></i>
                             </div>
-                            <div>
+                            <div class="min-w-0">
                                 <h2 class="font-semibold text-gray-800 text-base leading-tight" x-text="editingId ? 'Edit unit' : 'New unit'">New unit</h2>
                                 <p class="text-xs text-gray-400 mt-0.5" x-text="editingId ? 'Update the name or abbreviation' : 'Add a new unit of measurement'"></p>
                             </div>
                         </div>
                         <button type="button" @click="closeModal()"
-                                class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 -mt-1 -mr-1 transition-colors">
+                                class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 -mt-1 -mr-1 transition-colors shrink-0">
                             <i data-lucide="x" class="w-4.5 h-4.5"></i>
                         </button>
                     </div>
 
                     <!-- Body -->
-                    <div class="px-6 pb-6 space-y-4">
+                    <div class="px-4 sm:px-6 pb-6 space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1.5">Unit name</label>
                             <input type="text" name="name" x-model="unitForm.name" placeholder="Full name (e.g. Kilogram)"
@@ -233,15 +233,15 @@
                     </div>
 
                     <!-- Footer -->
-                    <div class="flex items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100">
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-4 sm:px-6 py-4 bg-gray-50 border-t border-gray-100">
                         <button type="button" @click="closeModal()"
-                                class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
                             Cancel
                         </button>
                         <button type="submit"
                                 :disabled="!hasUnitChanges()"
                                 :class="hasUnitChanges() ? 'bg-green-600 hover:bg-green-700 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
-                                class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                                class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm order-1 sm:order-2">
                             <span x-text="editingId ? 'Save changes' : 'Create unit'"></span>
                         </button>
                     </div>
@@ -281,15 +281,15 @@
                 </div>
 
                 <form method="POST" :action="`/units/${deleteTarget.id}`"
-                    class="flex items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100">
+                    class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100">
                     @csrf
                     @method('DELETE')
                     <button type="button" @click="showDeleteModal = false"
-                            class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
                         Cancel
                     </button>
                     <button type="submit"
-                            class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                            class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm order-1 sm:order-2">
                         Delete
                     </button>
                 </form>

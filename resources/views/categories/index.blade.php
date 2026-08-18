@@ -79,16 +79,16 @@
             @endif
         ">
 
-        <div class="flex items-center justify-between mb-1">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-800">Manage Categories</h1>
-                <p class="text-gray-500 mt-1">{{ $categories->total() }} categories</p>
+        <div class="flex items-center justify-between gap-3 mb-1">
+            <div class="min-w-0">
+                <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Manage Categories</h1>
+                <p class="text-gray-500 mt-1 text-xs sm:text-sm truncate">{{ $categories->total() }} categories</p>
             </div>
 
             <button
                 @click="openCreate()"
-                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
-                <i data-lucide="plus" class="w-4 h-4"></i>
+                class="bg-green-600 hover:bg-green-700 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                 Add Category
             </button>
         </div>
@@ -100,9 +100,9 @@
                 clearTimeout(window._searchDebounce);
                 window._searchDebounce = setTimeout(() => $el.submit(), 500);
             })"
-            class="flex flex-col sm:flex-row sm:items-center gap-3 mt-6">
+            class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 mt-6">
 
-            <div class="relative flex-1 max-w-sm">
+            <div class="relative flex-1 min-w-0 sm:min-w-[200px] sm:max-w-sm">
                 <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
                 <input type="text" name="search" x-model="search" placeholder="Search by name or description"
                     class="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
@@ -110,17 +110,17 @@
 
             <input type="hidden" name="status" value="{{ request('status', 'all') }}">
 
-            <div class="flex items-center gap-1.5 bg-gray-100 p-1 rounded-lg w-fit">
+            <div class="flex items-center gap-1.5 bg-gray-100 p-1 rounded-lg w-full sm:w-fit overflow-x-auto">
                 <a href="{{ request()->fullUrlWithQuery(['status' => 'all', 'page' => null]) }}"
-                class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors {{ request('status', 'all') === 'all' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
+                class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap shrink-0 {{ request('status', 'all') === 'all' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
                     All
                 </a>
                 <a href="{{ request()->fullUrlWithQuery(['status' => 'Active', 'page' => null]) }}"
-                class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors {{ request('status') === 'Active' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
+                class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap shrink-0 {{ request('status') === 'Active' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
                     Active
                 </a>
                 <a href="{{ request()->fullUrlWithQuery(['status' => 'Archived', 'page' => null]) }}"
-                class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors {{ request('status') === 'Archived' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
+                class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap shrink-0 {{ request('status') === 'Archived' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
                     Archived
                 </a>
             </div>
@@ -212,24 +212,24 @@
                     <input type="hidden" name="id" :value="editingId">
 
                     <!-- Header -->
-                    <div class="flex items-start justify-between px-6 pt-6 pb-5 shrink-0">
-                        <div class="flex items-center gap-3">
+                    <div class="flex items-start justify-between px-4 sm:px-6 pt-6 pb-5 shrink-0">
+                        <div class="flex items-center gap-3 min-w-0">
                             <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center shrink-0">
                                 <i data-lucide="tags" class="w-4.5 h-4.5"></i>
                             </div>
-                            <div>
+                            <div class="min-w-0">
                                 <h2 class="font-semibold text-gray-800 text-base leading-tight" x-text="editingId ? 'Edit category' : 'New category'">New category</h2>
                                 <p class="text-xs text-gray-400 mt-0.5" x-text="editingId ? 'Update this category\'s details' : 'Create a category for your products'"></p>
                             </div>
                         </div>
                         <button type="button" @click="closeModal()"
-                                class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 -mt-1 -mr-1 transition-colors">
+                                class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 -mt-1 -mr-1 transition-colors shrink-0">
                             <i data-lucide="x" class="w-4.5 h-4.5"></i>
                         </button>
                     </div>
 
                     <!-- Body -->
-                    <div class="px-6 pb-6 space-y-4 overflow-y-auto">
+                    <div class="px-4 sm:px-6 pb-6 space-y-4 overflow-y-auto">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1.5">Category name</label>
                             <input
@@ -324,15 +324,15 @@
                     </div>
 
                     <!-- Footer -->
-                    <div class="flex items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100 shrink-0">
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-4 sm:px-6 py-4 bg-gray-50 border-t border-gray-100 shrink-0">
                         <button type="button" @click="closeModal()"
-                                class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
                             Cancel
                         </button>
                         <button type="submit"
                                 :disabled="!hasCategoryChanges()"
                                 :class="hasCategoryChanges() ? 'bg-green-600 hover:bg-green-700 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
-                                class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                                class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm order-1 sm:order-2">
                             <span x-text="editingId ? 'Save changes' : 'Create category'"></span>
                         </button>
                     </div>
@@ -371,15 +371,15 @@
                 </div>
 
                 <form method="POST" :action="`/categories/${archiveTarget.id}`"
-                    class="flex items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100">
+                    class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100">
                     @csrf
                     @method('DELETE')
                     <button type="button" @click="showArchiveModal = false"
-                            class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
                         Cancel
                     </button>
                     <button type="submit"
-                            class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                            class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm order-1 sm:order-2">
                         Archive
                     </button>
                 </form>

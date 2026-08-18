@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Inventory;
 use App\Models\Product;
+use Illuminate\Validation\ValidationException;
 
 class StockDeductionService
 {
@@ -45,7 +46,9 @@ class StockDeductionService
         }
 
         if ($remaining > 0) {
-            throw new \Exception('Insufficient stock available to complete this deduction.');
+            throw ValidationException::withMessages([
+                'quantity' => 'The requested quantity exceeds the available stock.',
+            ]);
         }
 
         return $consumed;

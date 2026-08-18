@@ -1,13 +1,13 @@
 <x-app-layout>
     <div class="flex items-center justify-between mb-1">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Inventory History</h1>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Inventory History</h1>
             <p class="text-gray-400 text-sm mt-1">{{ $movements->total() }} total movement records</p>
         </div>
     </div>
 
     <!-- Type filter tabs -->
-    <div class="flex items-center gap-1.5 bg-gray-100 p-1 rounded-lg w-fit mt-6">
+    <div class="flex items-center gap-1.5 bg-gray-100 p-1 rounded-lg w-full sm:w-fit mt-6 overflow-x-auto">
         @php
             $tabs = [
                 'all' => 'All',
@@ -19,7 +19,7 @@
         @endphp
         @foreach($tabs as $value => $label)
             <a href="{{ request()->fullUrlWithQuery(['type' => $value, 'page' => null]) }}"
-               class="px-3.5 py-1.5 rounded-md text-sm font-medium transition-colors
+               class="px-3.5 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap shrink-0
                {{ request('type', 'all') === $value ? 'bg-green-600 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
                 {{ $label }}
             </a>
@@ -35,7 +35,7 @@
           })"
           class="mt-4">
         <input type="hidden" name="type" value="{{ request('type', 'all') }}">
-        <div class="relative max-w-sm">
+        <div class="relative w-full sm:max-w-sm">
             <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
             <input type="text" name="search" x-model="search" placeholder="Search by product..."
                    class="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
@@ -44,7 +44,7 @@
 
     <!-- Table -->
     <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mt-4">
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto -webkit-overflow-scrolling-touch">
             <table class="w-full text-sm min-w-[1000px]">
                 <thead>
                     <tr class="bg-gray-50 border-b border-gray-200 text-left text-gray-500">

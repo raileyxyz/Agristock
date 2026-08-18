@@ -45,7 +45,7 @@
 
         <div class="flex items-center justify-between mb-1">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900">Stock In</h1>
+                <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Stock In</h1>
                 <p class="text-gray-400 text-sm mt-1">Record incoming inventory — deliveries, transfers, or opening stock.</p>
             </div>
         </div>
@@ -55,7 +55,7 @@
                 <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0">
                     <i data-lucide="alert-triangle" class="w-4 h-4"></i>
                 </div>
-                <div>
+                <div class="min-w-0">
                     <p class="text-sm font-semibold text-red-700">
                         {{ $errors->count() === 1 ? 'There is 1 problem with this form' : "There are {$errors->count()} problems with this form" }}
                     </p>
@@ -68,7 +68,7 @@
             </div>
         @endif
 
-        <div class="bg-white border border-gray-200 rounded-xl p-6 mt-6">
+        <div class="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 mt-6">
 
             <div class="flex items-center gap-2.5 bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg px-4 py-3 mb-6">
                 <i data-lucide="arrow-down-to-line" class="w-4 h-4 shrink-0"></i>
@@ -97,7 +97,7 @@
                 </div>
 
                 <!-- Quantity + Batch/Lot Number -->
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
                             Quantity <span class="text-xs text-gray-400" x-text="selectedUnitAbbr ? '(' + selectedUnitAbbr + ')' : ''"></span>
@@ -137,7 +137,7 @@
                 </div>
 
                 <!-- Storage Location + Supplier -->
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
                             Storage Location <span class="text-red-500">*</span>
@@ -171,7 +171,7 @@
                         class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
                 </div>
 
-                <div class="flex items-center gap-3 pt-2">
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
                     <button type="submit"
                             class="bg-green-700 hover:bg-green-800 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors">
                         Record Stock In

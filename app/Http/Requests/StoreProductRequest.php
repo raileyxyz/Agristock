@@ -32,6 +32,7 @@ class StoreProductRequest extends FormRequest
                 'max:255',
                 Rule::unique('products', 'name'),
             ],
+
             'category_id' => [
                 'required',
                 Rule::exists('categories', 'id'),
@@ -102,7 +103,6 @@ class StoreProductRequest extends FormRequest
         return [
             'name.unique' => 'Product already exists.',
             'sku.unique' => 'SKU already exists.',
-            'selling_price.gte' => 'Selling price must be greater than or equal to the cost price.',
             'selling_price.gte' => 'Selling price must not be lower than the cost price.',
             'reorder_point.gte' => 'Reorder point must not be lower than the minimum stock level.',
         ];
