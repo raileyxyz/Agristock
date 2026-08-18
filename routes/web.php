@@ -9,6 +9,7 @@ use App\Http\Controllers\InventoryHistoryController;
 use App\Http\Controllers\LowStockController;
 use App\Http\Controllers\StockOutController;
 use App\Http\Controllers\StockAdjustmentController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -48,5 +49,8 @@ Route::resource('stock-adjustments', StockAdjustmentController::class)->only(['c
 Route::get('/inventory-history', [InventoryHistoryController::class, 'index'])->name('inventory-history.index');
 
 Route::get('/low-stock', [LowStockController::class, 'index'])->name('low-stock.index');
+
+Route::resource('suppliers', SupplierController::class)
+    ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 
 require __DIR__.'/auth.php';

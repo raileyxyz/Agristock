@@ -20,6 +20,11 @@ class Category extends Model
         return $this->hasMany(Product::class);
     }
 
+    public function suppliers()
+    {
+        return $this->belongsToMany(Supplier::class);
+    }
+
     public function scopeSearch($query,$search)
     {
         return $query->when($search,function($query) use($search){

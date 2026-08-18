@@ -1,0 +1,87 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Category;
+use App\Models\Supplier;
+use Illuminate\Http\Request;
+use App\Services\SupplierService;
+use App\Http\Requests\StoreSupplierRequest;
+use App\Http\Requests\UpdateSupplierRequest;
+
+class SupplierController extends Controller
+{
+    public function __construct(
+        private SupplierService $supplierService
+    ) {}
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        $suppliers = $this->supplierService->getSuppliers($request->all());
+        $categories = Category::where('status', 'Active')->orderBy('name')->get();
+
+        return view('suppliers.index', compact('suppliers', 'categories'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $categories = Category::where('status', 'Active')->orderBy('name')->get();
+
+        return view('suppliers.create', compact('categories'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreSupplierRequest $request)
+    {
+        $this->supplierService->create($request->validated());
+
+        return redirect()->route('suppliers.index')->with('success', 'Supplier added successfully.');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Supplier $supplier)
+    {
+        $categories = Category::where('status', 'Active')->orderBy('name')->get();
+        $supplier->load('categories');
+
+        return view('suppliers.edit', compact('supplier', 'categories'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateSupplierRequest $request, Supplier $supplier)
+    {
+        $this->supplierService->update($supplier, $request->validated());
+
+        return redirect()->route('suppliers.index')->with('success', 'Supplier updated successfully.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Supplier $supplier)
+    {
+        $this->supplierService->archive($supplier);
+
+        return redirect()->route('suppliers.index')->with('success', 'Supplier archived successfully.');
+    }
+}
