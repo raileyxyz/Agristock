@@ -25,7 +25,6 @@ class ProductController extends Controller
 
         $categories = Category::all();
         $units = Unit::all();
-
         $statistics = $this->productService->getStatistics();
 
         return view('products.index', compact('products', 'categories', 'units', 'statistics'));

@@ -18,6 +18,15 @@ class SupplierService
             ->withQueryString();
     }
 
+    public function getStatistics(): array
+    {
+        return [
+            'total' => Supplier::count(),
+            'active' => Supplier::where('status', 'Active')->count(),
+            'archived' => Supplier::where('status', 'Archived')->count(),
+        ];
+    }
+
     public function create(array $data): Supplier
     {
         $categoryIds = $data['supply_categories'] ?? [];

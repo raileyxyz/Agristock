@@ -24,6 +24,15 @@ class ProductService
             ->withQueryString();
     }
 
+    public function getStatistics(): array
+    {
+        return [
+            'total' => Product::count(),
+            'active' => Product::where('status', 'Active')->count(),
+            'archived' => Product::where('status', 'Archived')->count(),
+        ];
+    }
+
     public function create(array $data): Product
     {
         if(empty($data['sku'])){
@@ -45,14 +54,5 @@ class ProductService
     public function archive(Product $product): void
     {
         $product->update(['status' => 'Archived',]);
-    }
-
-    public function getStatistics(): array
-    {
-        return [
-            'total' => Product::count(),
-            'active' => Product::where('status', 'Active')->count(),
-            'archived' => Product::where('status', 'Archived')->count(),
-        ];
     }
 }

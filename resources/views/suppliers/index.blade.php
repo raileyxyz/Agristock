@@ -1,10 +1,39 @@
 <x-app-layout>
     <div
         x-data="{
+            showEditModal: false,
+            editForm: null,
+            originalForm: null,
+            editErrors: {},
             showArchiveModal: false,
             archiveTarget: { id: null, name: '' },
             showSuccessModal: false,
             successMessage: '{{ addslashes(session('success', '')) }}',
+
+            openEdit(supplier) {
+                this.editForm = { ...supplier };
+                this.originalForm = { ...supplier, category_ids: [...supplier.category_ids] };
+                this.editErrors = {};
+                this.showEditModal = true;
+                this.$nextTick(() => lucide.createIcons());
+            },
+
+            closeEdit() {
+                this.showEditModal = false;
+                this.editForm = null;
+                this.originalForm = null;
+                this.editErrors = {};
+            },
+
+            hasChanges() {
+                if (!this.editForm || !this.originalForm) return false;
+                return JSON.stringify(this.editForm) !== JSON.stringify(this.originalForm);
+            },
+
+            toggleCategory(id) {
+                const idx = this.editForm.category_ids.indexOf(id);
+                idx === -1 ? this.editForm.category_ids.push(id) : this.editForm.category_ids.splice(idx, 1);
+            },
 
             openArchive(id, name) {
                 this.archiveTarget = { id, name };
@@ -20,7 +49,21 @@
         <div class="flex items-center justify-between mb-1">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">All Suppliers</h1>
-                <p class="text-gray-400 text-sm mt-1">{{ $suppliers->total() }} suppliers</p>
+                <p class="mt-1 text-xs sm:text-sm text-gray-500 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                    <span>{{ $statistics['total'] }} Suppliers</span>
+
+                    <span class="text-gray-300">•</span>
+
+                    <span class="text-green-600 font-medium">
+                        {{ $statistics['active'] }} Active
+                    </span>
+
+                    <span class="text-gray-300">•</span>
+
+                    <span>
+                        {{ $statistics['archived'] }} Inactive
+                    </span>
+                </p>
             </div>
             <a href="{{ route('suppliers.create') }}"
                class="bg-green-700 hover:bg-green-800 text-white px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
@@ -29,7 +72,7 @@
             </a>
         </div>
 
-        <!-- Search + Category + Status filters -->
+        <!-- Search + Status filter -->
         <form method="GET"
               x-data="{ search: '{{ addslashes(request('search')) }}' }"
               x-init="$watch('search', value => {
@@ -40,71 +83,109 @@
 
             <div class="relative flex-1">
                 <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
-                <input type="text" name="search" x-model="search" placeholder="Search by company or contact person..."
+                <input type="text" name="search" x-model="search" placeholder="Search suppliers..."
                        class="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
             </div>
 
             <div class="relative">
-                <select name="category_id" onchange="this.form.submit()"
+                <select name="status" onchange="this.form.submit()"
                         class="appearance-none border border-gray-300 rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                    <option value="">All Categories</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
-                            {{ $category->name }}
-                        </option>
-                    @endforeach
+                    <option value="Active" {{ request('status', 'Active') === 'Active' ? 'selected' : '' }}>Active</option>
+                    <option value="Archived" {{ request('status') === 'Archived' ? 'selected' : '' }}>Archived</option>
+                    <option value="all" {{ request('status') === 'all' ? 'selected' : '' }}>All</option>
                 </select>
                 <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-            </div>
-
-            <div class="flex items-center gap-1.5 bg-gray-100 p-1 rounded-lg w-fit">
-                <a href="{{ request()->fullUrlWithQuery(['status' => 'Active', 'page' => null]) }}"
-                   class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors {{ request('status', 'Active') === 'Active' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
-                    Active
-                </a>
-                <a href="{{ request()->fullUrlWithQuery(['status' => 'Archived', 'page' => null]) }}"
-                   class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors {{ request('status') === 'Archived' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
-                    Archived
-                </a>
             </div>
         </form>
 
         <!-- Supplier cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 mt-4">
             @forelse($suppliers as $supplier)
                 <div class="bg-white border border-gray-200 rounded-xl p-4">
                     <div class="flex items-start justify-between gap-2 mb-2">
-                        <p class="font-semibold text-gray-800">{{ $supplier->company_name }}</p>
-                        @if($supplier->status === 'Archived')
-                            <span class="text-[10px] font-medium text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded shrink-0">Archived</span>
+                        <div class="flex items-center gap-2 min-w-0">
+                            <p class="text-md font-semibold text-gray-800 truncate">
+                                {{ $supplier->company_name }}
+                            </p>
+
+                            <span class="text-[10px] font-medium px-2 py-0.5 rounded-full shrink-0
+                                {{ $supplier->status === 'Active'
+                                    ? 'bg-green-100 text-green-800'
+                                    : 'bg-gray-100 text-gray-600' }}">
+                                {{ $supplier->status }}
+                            </span>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex items-center gap-2 shrink-0">
+
+                            <!-- Edit -->
+                            <button
+                                @click="openEdit(@js([
+                                    'id' => $supplier->id,
+                                    'company_name' => $supplier->company_name,
+                                    'contact_person' => $supplier->contact_person,
+                                    'phone' => $supplier->phone,
+                                    'email' => $supplier->email,
+                                    'address' => $supplier->address,
+                                    'notes' => $supplier->notes,
+                                    'category_ids' => $supplier->categories->pluck('id'),
+                                ]))"
+                                title="Edit supplier"
+                                class="text-gray-400 hover:text-green-700 transition-colors">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
+                            </button>
+
+                            <!-- Archive -->
+                            <button
+                                @if($supplier->status === 'Active')
+                                    @click="openArchive(
+                                        {{ $supplier->id }},
+                                        '{{ addslashes($supplier->company_name) }}'
+                                    )"
+                                @endif
+                                title="{{ $supplier->status === 'Active' ? 'Archive supplier' : 'Supplier already archived' }}"
+                                class="shrink-0 transition-colors
+                                    {{ $supplier->status === 'Active'
+                                        ? 'text-gray-400 hover:text-red-600 cursor-pointer'
+                                        : 'text-gray-200 cursor-not-allowed'
+                                    }}"
+                                {{ $supplier->status === 'Archived' ? 'disabled' : '' }}
+                            >
+                                <i data-lucide="archive" class="w-4 h-4"></i>
+                            </button>
+
+                        </div>
+                    </div>
+
+                    <p class="text-sm text-gray-500 mb-2">Contact: <span class="font-medium text-gray-700">{{ $supplier->contact_person }}</span></p>
+
+                    <div class="space-y-1.5 text-xs text-gray-500">
+                        @if($supplier->email)
+                            <p class="flex items-center gap-2 truncate">
+                                <i data-lucide="mail" class="w-3.5 h-3.5 text-gray-400 shrink-0"></i> {{ $supplier->email }}
+                            </p>
+                        @endif
+                        <p class="flex items-center gap-2">
+                            <i data-lucide="phone" class="w-3.5 h-3.5 text-gray-400 shrink-0"></i> {{ $supplier->phone }}
+                        </p>
+                        @if($supplier->address)
+                            <p class="flex items-center gap-2">
+                                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gray-400 shrink-0"></i> {{ $supplier->address }}
+                            </p>
                         @endif
                     </div>
-                    <p class="text-sm text-gray-500">{{ $supplier->contact_person }}</p>
-                    <p class="text-sm text-gray-400">{{ $supplier->phone }}</p>
-                    @if($supplier->email)
-                        <p class="text-sm text-gray-400 truncate">{{ $supplier->email }}</p>
-                    @endif
 
-                    <div class="flex flex-wrap gap-1.5 mt-3">
-                        @foreach($supplier->categories as $category)
-                            <span class="text-[11px] font-medium px-2 py-0.5 rounded-full text-white"
+                    <div class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-gray-100">
+                        @forelse($supplier->categories as $category)
+                            <span class="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full text-white"
                                   style="background-color: {{ $category->icon_color }};">
                                 {{ $category->icon }} {{ $category->name }}
                             </span>
-                        @endforeach
-                    </div>
+                        @empty
+                            <span class="text-xs text-gray-300">No categories assigned</span>
+                        @endforelse
 
-                    <div class="flex items-center justify-end gap-1 mt-3 pt-3 border-t border-gray-100">
-                        <a href="{{ route('suppliers.edit', $supplier) }}"
-                           class="text-gray-400 hover:text-green-700 p-1.5 rounded-md hover:bg-gray-100">
-                            <i data-lucide="pencil" class="w-4 h-4"></i>
-                        </a>
-                        @if($supplier->status === 'Active')
-                            <button @click="openArchive({{ $supplier->id }}, '{{ addslashes($supplier->company_name) }}')"
-                                    class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-gray-100">
-                                <i data-lucide="archive" class="w-4 h-4"></i>
-                            </button>
-                        @endif
                     </div>
                 </div>
             @empty
@@ -115,6 +196,133 @@
         @if($suppliers->hasPages())
             <div class="mt-6">{{ $suppliers->links() }}</div>
         @endif
+
+        <!-- Edit Supplier Modal -->
+        <div x-show="showEditModal"
+             x-transition:enter="transition-opacity ease-out duration-200"
+             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+             x-transition:leave="transition-opacity ease-in duration-150"
+             x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+             class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+             style="display: none;" x-cloak>
+            <div @click.outside="closeEdit()"
+                 x-show="showEditModal"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                 class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden max-h-[90vh] flex flex-col">
+
+                <template x-if="editForm">
+                    <form method="POST" :action="'/suppliers/' + editForm.id" class="flex flex-col overflow-hidden">
+                        @csrf
+                        @method('PUT')
+
+                        <!-- Header -->
+                        <div class="flex items-start justify-between px-6 pt-6 pb-5 shrink-0">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center shrink-0">
+                                    <i data-lucide="truck" class="w-4.5 h-4.5"></i>
+                                </div>
+                                <div>
+                                    <h2 class="font-semibold text-gray-800 text-base leading-tight">Edit supplier</h2>
+                                    <p class="text-xs text-gray-400 mt-0.5">Update this supplier's details</p>
+                                </div>
+                            </div>
+                            <button type="button" @click="closeEdit()"
+                                    class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 -mt-1 -mr-1 transition-colors">
+                                <i data-lucide="x" class="w-4.5 h-4.5"></i>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="px-6 pb-6 space-y-4 overflow-y-auto">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Company / Supplier Name</label>
+                                <input type="text" name="company_name" x-model="editForm.company_name"
+                                    class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
+                                    :class="editErrors.company_name ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                <template x-if="editErrors.company_name">
+                                    <p class="text-xs text-red-600 mt-1.5" x-text="editErrors.company_name?.[0]"></p>
+                                </template>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Contact Person</label>
+                                    <input type="text" name="contact_person" x-model="editForm.contact_person"
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
+                                        :class="editErrors.contact_person ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                    <template x-if="editErrors.contact_person">
+                                        <p class="text-xs text-red-600 mt-1.5" x-text="editErrors.contact_person?.[0]"></p>
+                                    </template>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Phone Number</label>
+                                    <input type="text" name="phone" x-model="editForm.phone"
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
+                                        :class="editErrors.phone ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                    <template x-if="editErrors.phone">
+                                        <p class="text-xs text-red-600 mt-1.5" x-text="editErrors.phone?.[0]"></p>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Email Address</label>
+                                <input type="email" name="email" x-model="editForm.email"
+                                    class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
+                                    :class="editErrors.email ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                <template x-if="editErrors.email">
+                                    <p class="text-xs text-red-600 mt-1.5" x-text="editErrors.email?.[0]"></p>
+                                </template>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Address</label>
+                                <textarea name="address" x-model="editForm.address" rows="2"
+                                    class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors resize-none"></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Supply Categories</label>
+                                <div class="flex flex-wrap gap-2">
+                                    @foreach($categories as $category)
+                                        <button type="button" @click="toggleCategory({{ $category->id }})"
+                                                :class="editForm.category_ids.includes({{ $category->id }}) ? 'bg-green-600 text-white border-green-600' : 'bg-gray-100 text-gray-700 border-gray-200'"
+                                                class="inline-flex items-center gap-1.5 text-sm px-3.5 py-2 rounded-lg border transition-colors">
+                                            {{ $category->icon }} {{ $category->name }}
+                                        </button>
+                                        <template x-if="editForm.category_ids.includes({{ $category->id }})">
+                                            <input type="hidden" name="supply_categories[]" value="{{ $category->id }}">
+                                        </template>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Notes</label>
+                                <textarea name="notes" x-model="editForm.notes" rows="2"
+                                    class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors resize-none"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="flex items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100 shrink-0">
+                            <button type="button" @click="closeEdit()"
+                                    class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                    :disabled="!hasChanges()"
+                                    :class="hasChanges() ? 'bg-green-700 hover:bg-green-800 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
+                                    class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                                Save changes
+                            </button>
+                        </div>
+                    </form>
+                </template>
+            </div>
+        </div>
 
         <!-- Archive Confirmation Modal -->
         <div x-show="showArchiveModal"
