@@ -26,11 +26,6 @@
                 <h1 class="text-2xl font-bold text-gray-900">Add Supplier</h1>
                 <p class="text-gray-400 text-sm mt-1">Register a new supplier in your network.</p>
             </div>
-            <a href="{{ route('suppliers.index') }}"
-               class="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1.5">
-                <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                Back
-            </a>
         </div>
 
         @if($errors->any())
@@ -83,7 +78,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
                             Phone Number <span class="text-red-500">*</span>
                         </label>
-                        <input type="text" name="phone" value="{{ old('phone') }}" placeholder="+63 9XX XXX XXXX"
+                        <input type="text" name="phone" value="{{ old('phone') }}" placeholder="+63 9XXXXXXXXX"
                                class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors
                                {{ $errors->has('phone') ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500' }}">
                         @error('phone')
@@ -121,6 +116,9 @@
                                 </span>
                             </label>
                         @endforeach
+                            @error('supply_categories')
+                            <p class="text-xs text-red-600 mt-1.5">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
