@@ -18,6 +18,15 @@ class SupplierService
             ->withQueryString();
     }
 
+    public function getDirectory()
+    {
+        return Supplier::with('categories')
+            ->orderByRaw("FIELD(status, 'Active', 'Archived')")
+            ->orderBy('company_name')
+            ->paginate(15)
+            ->withQueryString();
+    }
+
     public function getStatistics(): array
     {
         return [

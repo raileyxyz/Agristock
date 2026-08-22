@@ -145,7 +145,7 @@
                     <a href="{{ route('suppliers.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('suppliers.create') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
                         <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Add Supplier
                     </a>
-                    <a href="" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('suppliers.directory') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('suppliers.directory') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('suppliers.directory') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
                         <i data-lucide="book-user" class="w-3.5 h-3.5"></i> Contact Directory
                     </a>
                 </div>

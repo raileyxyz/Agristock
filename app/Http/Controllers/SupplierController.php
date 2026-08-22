@@ -85,4 +85,11 @@ class SupplierController extends Controller
 
         return redirect()->route('suppliers.index')->with('success', 'Supplier archived successfully.');
     }
+
+    public function directory()
+    {
+        $suppliers = $this->supplierService->getDirectory();
+
+        return view('suppliers.directory', compact('suppliers'));
+    }
 }

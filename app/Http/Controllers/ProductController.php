@@ -35,8 +35,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-        $units = Unit::all();
+        $categories = Category::where('status', 'Active')->orderBy('name')->get();
+        $units = Unit::orderBy('name')->get();
 
         return view('products.create', compact('categories', 'units'));
     }

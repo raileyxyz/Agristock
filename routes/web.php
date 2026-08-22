@@ -53,4 +53,6 @@ Route::get('/low-stock', [LowStockController::class, 'index'])->name('low-stock.
 Route::resource('suppliers', SupplierController::class)
     ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 
+Route::get('/suppliers-directory', [SupplierController::class, 'directory'])->name('suppliers.directory');
+
 require __DIR__.'/auth.php';
