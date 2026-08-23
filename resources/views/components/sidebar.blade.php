@@ -208,7 +208,7 @@
             <div>
                 <button @click="open = (open === 'users' ? '' : 'users')"
                         class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                        {{ request()->routeIs('users.*') ? 'text-green-700' : 'text-gray-700 hover:bg-gray-100' }}">
+                        {{ request()->routeIs('users.*') ? 'text-green-700 bg-green-100 font-bold' : 'text-gray-700 hover:bg-gray-100' }}">
                     <span class="flex items-center gap-3">
                         <i data-lucide="users" class="w-4 h-4"></i>
                         User Management
@@ -217,13 +217,13 @@
                 </button>
 
                 <div x-show="open === 'users'" x-collapse class="mt-0.5 ml-[1.15rem] pl-4 border-l border-gray-150 space-y-0.5">
-                    <a href="" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('users.index') ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('users.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('users.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
                         <i data-lucide="users" class="w-3.5 h-3.5"></i> All Users
                     </a>
-                    <a href="" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('users.create') ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('users.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('users.create') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
                         <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Add User
                     </a>
-                    <a href="" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('users.roles') ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('users.roles') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('users.roles') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
                         <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Roles &amp; Permissions
                     </a>
                 </div>

@@ -10,6 +10,7 @@ use App\Http\Controllers\LowStockController;
 use App\Http\Controllers\StockOutController;
 use App\Http\Controllers\StockAdjustmentController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -54,5 +55,13 @@ Route::resource('suppliers', SupplierController::class)
     ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 
 Route::get('/suppliers-directory', [SupplierController::class, 'directory'])->name('suppliers.directory');
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('users', UserController::class)
+        ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+
+    Route::get('/users-roles-permissions', [UserController::class, 'rolesPermissions'])
+        ->name('users.roles');
+});
 
 require __DIR__.'/auth.php';

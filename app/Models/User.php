@@ -2,19 +2,27 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    public const ROLE_ADMIN = 'Admin';
-    public const ROLE_STAFF = 'Staff';
-
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    public const ROLE_ADMIN = 'Admin';
+    public const ROLE_MANAGER = 'Manager';
+    public const ROLE_STAFF = 'Staff';
+
+    const ROLES = [
+        self::ROLE_ADMIN,
+        self::ROLE_MANAGER,
+        self::ROLE_STAFF,
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -56,8 +64,28 @@ class User extends Authenticatable
         return $this->role === self::ROLE_ADMIN;
     }
 
+    public function isManager(): bool
+    {
+        return $this->role === self::ROLE_MANAGER;
+    }
+
     public function isStaff(): bool
     {
         return $this->role === self::ROLE_STAFF;
+    }
+
+    public function scopeRole(Builder $query, ?string $role): Builder
+    {
+        return $query->when($role, fn (Builder $q) => $q->where('role', $role));
+    }
+
+    public function scopeSearch(Builder $query, ?string $term): Builder
+    {
+        return $query->when($term, function (Builder $q) use ($term) {
+            $q->where(function (Builder $inner) use ($term) {
+                $inner->where('name', 'like', "%{$term}%")
+                      ->orWhere('email', 'like', "%{$term}%");
+            });
+        });
     }
 }

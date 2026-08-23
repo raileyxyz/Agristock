@@ -45,7 +45,7 @@
                             <td class="px-4 py-3 whitespace-nowrap">
                                 <span class="text-xs font-medium px-2.5 py-1 rounded-full
                                     {{ $supplier->status === 'Active' ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500' }}">
-                                    {{ strtolower($supplier->status) }}
+                                    {{ ($supplier->status) }}
                                 </span>
                             </td>
                         </tr>
