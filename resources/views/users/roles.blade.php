@@ -20,7 +20,7 @@
                         <i data-lucide="shield" class="w-5 h-5"></i>
                     </div>
                     <div>
-                        <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full {{ $roleStyles[$role]['badge'] ?? 'bg-gray-100 text-gray-700' }}">
+                        <span class="inline-block text-xs font-bold px-2.5 py-1 rounded-full {{ $roleStyles[$role]['badge'] ?? 'bg-gray-100 text-gray-700' }}">
                             {{ $role }}
                         </span>
                         <p class="text-xs text-gray-400 mt-1">

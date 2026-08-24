@@ -50,6 +50,11 @@ class UpdateUserRequest extends FormRequest
                 'string',
                 'min:8'
             ],
+
+            'status' => [
+                'required',
+                Rule::in(['Active', 'Archived'])
+            ],
         ];
     }
 

@@ -28,10 +28,12 @@ class UserController extends Controller
             role: $request->query('role'),
         );
 
+        $summary = $this->userManagementService->getSummary();
+
         return view('users.index', [
             'users' => $users,
+            'summary' => $summary,
             'roles' => User::ROLES,
-            'permissions' => config('permissions'),
         ]);
     }
 
@@ -99,7 +101,7 @@ class UserController extends Controller
     {
         $this->authorize('delete', $user);
 
-        $this->userManagementService->delete($user);
+        $this->userManagementService->archive($user);
 
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }

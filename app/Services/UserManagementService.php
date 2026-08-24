@@ -15,12 +15,20 @@ class UserManagementService
     public function list(?string $search, ?string $role, int $perPage = 10): LengthAwarePaginator
     {
         return User::query()
-            ->select(['id', 'name', 'email', 'role', 'created_at'])
+            ->select(['id', 'name', 'email', 'role', 'status', 'last_login_at', 'created_at'])
             ->search($search)
             ->role($role)
             ->latest()
             ->paginate($perPage)
             ->withQueryString();
+    }
+
+    public function getSummary(): array
+    {
+        return [
+            'active' => User::where('status', 'Active')->count(),
+            'inactive' => User::where('status', 'Archived')->count(),
+        ];
     }
 
     public function create(array $data): User
@@ -31,6 +39,7 @@ class UserManagementService
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
                 'role' => $data['role'],
+                'status' => 'Active',
             ]);
         });
     }
@@ -44,6 +53,10 @@ class UserManagementService
                 'role' => $data['role'],
             ];
 
+            if (isset($data['status'])) {
+                $payload['status'] = $data['status'];
+            }
+
             if (! empty($data['password'])) {
                 $payload['password'] = Hash::make($data['password']);
             }
@@ -54,8 +67,8 @@ class UserManagementService
         });
     }
 
-    public function delete(User $user): void
+    public function archive(User $user): void
     {
-        $user->delete();
+        $user->update(['status' => 'Archived']);
     }
 }
