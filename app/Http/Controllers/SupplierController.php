@@ -20,6 +20,8 @@ class SupplierController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('suppliers.view');
+
         $suppliers = $this->supplierService->getSuppliers($request->all());
         $statistics = $this->supplierService->getStatistics();
         $categories = Category::where('status', 'Active')->orderBy('name')->get();
@@ -32,6 +34,8 @@ class SupplierController extends Controller
      */
     public function create()
     {
+        $this->authorize('suppliers.create');
+
         $categories = Category::where('status', 'Active')->orderBy('name')->get();
 
         return view('suppliers.create', compact('categories'));
@@ -42,6 +46,8 @@ class SupplierController extends Controller
      */
     public function store(StoreSupplierRequest $request)
     {
+        $this->authorize('suppliers.create');
+
         $this->supplierService->create($request->validated());
 
         return redirect()->route('suppliers.create')->with('success', 'Supplier added successfully.');
@@ -60,6 +66,8 @@ class SupplierController extends Controller
      */
     public function edit(Supplier $supplier)
     {
+        $this->authorize('suppliers.update');
+
         $categories = Category::where('status', 'Active')->orderBy('name')->get();
         $supplier->load('categories');
 
@@ -71,6 +79,8 @@ class SupplierController extends Controller
      */
     public function update(UpdateSupplierRequest $request, Supplier $supplier)
     {
+        $this->authorize('suppliers.update');
+
         $this->supplierService->update($supplier, $request->validated());
 
         return redirect()->route('suppliers.index')->with('success', 'Supplier updated successfully.');
@@ -81,6 +91,8 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
+        $this->authorize('suppliers.delete');
+
         $this->supplierService->archive($supplier);
 
         return redirect()->route('suppliers.index')->with('success', 'Supplier archived successfully.');
@@ -88,6 +100,8 @@ class SupplierController extends Controller
 
     public function directory()
     {
+        $this->authorize('suppliers.view');
+
         $suppliers = $this->supplierService->getDirectory();
 
         return view('suppliers.directory', compact('suppliers'));

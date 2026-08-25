@@ -28,6 +28,8 @@ class StockOutController extends Controller
      */
     public function create()
     {
+        $this->authorize('inventory.stock-out');
+
         $products = Product::active()->with('unit')->orderBy('name')->get();
         $locations = StorageLocation::values();
 
@@ -62,6 +64,8 @@ class StockOutController extends Controller
      */
     public function store(StoreStockOutRequest $request)
     {
+        $this->authorize('inventory.stock-out');
+
         $this->stockOutService->create($request->validated());
 
         return redirect()->route('stock-outs.create')->with('success', 'Stock out recorded successfully.');

@@ -18,6 +18,8 @@ class InventoryController extends Controller
 
     public function index(Request $request)
     {
+        $this->authorize('inventory.view');
+
         $inventories = $this->inventoryService->getInventories($request->all());
         $summary = $this->inventoryService->getSummary();
         $categories = Category::where('status', 'Active')->orderBy('name')->get();
@@ -28,6 +30,8 @@ class InventoryController extends Controller
 
     public function create()
     {
+        $this->authorize('inventory.stock-in');
+
         $products = $this->getActiveProducts();
 
         return view('inventories.create', compact('products'));
@@ -35,6 +39,8 @@ class InventoryController extends Controller
 
     public function store(StoreInventoryRequest $request)
     {
+        $this->authorize('inventory.stock-in');
+
         $this->inventoryService->create($request->validated());
 
         return redirect()->route('inventories.create')->with('success', 'Stock added successfully.');
@@ -42,6 +48,8 @@ class InventoryController extends Controller
 
     public function edit(Inventory $inventory)
     {
+        $this->authorize('inventory.manage');
+
         $products = $this->getActiveProducts();
 
         return view('inventories.edit', compact('inventory', 'products'));
@@ -49,6 +57,8 @@ class InventoryController extends Controller
 
     public function update(UpdateInventoryRequest $request, Inventory $inventory)
     {
+        $this->authorize('inventory.manage');
+
         try {
             $this->inventoryService->update($inventory, $request->validated());
 
@@ -61,6 +71,8 @@ class InventoryController extends Controller
 
     public function destroy(Inventory $inventory)
     {
+        $this->authorize('inventory.manage');
+
         $this->inventoryService->archive($inventory);
 
         return redirect()->route('inventories.index')->with('success', 'Stock archived successfully.');

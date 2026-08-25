@@ -17,6 +17,8 @@ class UnitController extends Controller
 
     public function index(Request $request)
     {
+        $this->authorize('products.view');
+
         $units = $this->unitService->getUnits($request->search);
 
         return view('units.index', compact('units'));
@@ -24,8 +26,9 @@ class UnitController extends Controller
 
     public function store(StoreUnitRequest $request)
     {
-        $this->unitService->create($request->validated());
+        $this->authorize('products.create');
 
+        $this->unitService->create($request->validated());
 
         return redirect()->route('units.index')->with('success','Unit created successfully.');
 
@@ -33,14 +36,17 @@ class UnitController extends Controller
 
     public function update(UpdateUnitRequest $request, Unit $unit)
     {
-        $this->unitService->update($unit, $request->validated());
+        $this->authorize('products.update');
 
+        $this->unitService->update($unit, $request->validated());
 
         return redirect()->route('units.index')->with('success',"{$unit->name} updated successfully.");
     }
 
     public function destroy(Unit $unit)
     {
+        $this->authorize('products.delete');
+
         try {
             $this->unitService->delete($unit);
         } catch (\Exception $e) {

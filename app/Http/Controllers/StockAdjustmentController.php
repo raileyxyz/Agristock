@@ -16,7 +16,7 @@ class StockAdjustmentController extends Controller
 
     public function create()
     {
-        abort_unless(Auth::user()?->role === 'Admin', 403);
+        $this->authorize('inventory.manage');
 
         $products = Product::active()->with('unit')->orderBy('name')->get();
         $stockData = $this->stockAdjustmentService->getStockData();
@@ -26,7 +26,7 @@ class StockAdjustmentController extends Controller
 
     public function store(StoreStockAdjustmentRequest $request)
     {
-        abort_unless(Auth::user()?->role === 'Admin', 403);
+        $this->authorize('inventory.manage');
 
         try {
             $this->stockAdjustmentService->create($request->validated());

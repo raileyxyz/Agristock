@@ -14,6 +14,8 @@ class LowStockController extends Controller
 
     public function index(Request $request)
     {
+        $this->authorize('inventory.view');
+
         $products = $this->lowStockService->getLowStockProducts($request->all());
         $totalCount = $this->lowStockService->getSummary();
         $categories = Category::where('status', 'Active')->orderBy('name')->get();
