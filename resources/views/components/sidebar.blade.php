@@ -12,7 +12,7 @@
     <!-- Logo -->
     <div class="h-20 px-6 flex items-center justify-between border-b border-gray-100 shrink-0">
         <div class="flex items-center">
-            <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center shadow-sm">
+            <div class="w-10 h-10 bg-gradient-to-br from-green-600 to-green-700 rounded-xl flex items-center justify-center shadow-sm">
                 <i data-lucide="leaf" class="w-5 h-5 text-white"></i>
             </div>
             <div class="ml-3">

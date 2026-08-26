@@ -14,7 +14,7 @@ class CategoryService
             ->withCount(['products' => function ($query) {
                 $query->where('status', 'Active');
             }])
-            ->paginate(12)
+            ->paginate(15)
             ->withQueryString();
     }
 

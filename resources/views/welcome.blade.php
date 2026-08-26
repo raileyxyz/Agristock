@@ -26,7 +26,7 @@
         <header class="border-b border-gray-100 sticky top-0 bg-white/90 backdrop-blur-sm z-40">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 h-16 sm:h-20 flex items-center justify-between">
                 <a href="#top" class="group flex items-center gap-2.5">
-                    <div class="w-8 h-8 sm:w-9 sm:h-9 bg-green-700 rounded-lg flex items-center justify-center transition-all duration-300 ease-out group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-md group-hover:shadow-green-700/30">
+                    <div class="w-8 h-8 sm:w-9 sm:h-9 bg-green-600 rounded-lg flex items-center justify-center transition-all duration-300 ease-out group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-md group-hover:shadow-green-700/30">
                         <i data-lucide="leaf" class="w-4.5 h-4.5 sm:w-5 sm:h-5 text-white"></i>
                     </div>
                     <span class="font-display font-bold text-base sm:text-lg text-gray-900 transition-colors duration-300 group-hover:text-green-700">AgriStock</span>
@@ -40,7 +40,7 @@
 
                 <div class="flex items-center gap-2">
                     <a href="{{ route('login') }}"
-                        class="hidden md:flex bg-green-700 hover:bg-green-800 text-white px-5 py-2.5 rounded-lg text-sm font-semibold items-center gap-2 transition-all duration-300 ease-out transform hover:-translate-y-0.5 hover:shadow-lg">
+                        class="hidden md:flex bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold items-center gap-2 transition-all duration-300 ease-out transform hover:-translate-y-0.5 hover:shadow-lg">
                         Open System
                         <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </a>
@@ -113,7 +113,7 @@
                 <!-- CTA footer -->
                 <div class="p-4 border-t border-gray-100 shrink-0">
                     <a href="{{ route('login') }}"
-                       class="bg-green-700 hover:bg-green-800 text-white px-5 py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-colors w-full">
+                       class="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-colors w-full">
                         Open System
                         <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </a>
@@ -150,7 +150,7 @@
 
                 <div class="flex flex-col sm:flex-row gap-3 mb-6 sm:mb-8">
                     <a href="{{ route('login') }}"
-                        class="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white px-6 py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg">
+                        class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg">
                         <span>Launch Dashboard</span>
                         <i data-lucide="arrow-right" class="w-4 h-4 shrink-0"></i>
                     </a>

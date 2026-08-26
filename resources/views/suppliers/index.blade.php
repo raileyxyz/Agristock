@@ -81,11 +81,13 @@
                     </span>
                 </p>
             </div>
-            <a href="{{ route('suppliers.create') }}"
-               class="bg-green-700 hover:bg-green-800 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
-                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-                Add Supplier
-            </a>
+            @can('suppliers.create')
+                <a href="{{ route('suppliers.create') }}"
+                class="bg-green-600 hover:bg-green-600 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                    Add Supplier
+                </a>
+            @endcan
         </div>
 
         <!-- Search + Status filter -->
@@ -148,42 +150,44 @@
                         <!-- Actions -->
                         <div class="flex items-center gap-2 shrink-0">
 
-                            <!-- Edit -->
-                            <button
-                                @click="openEdit(@js([
-                                    'id' => $supplier->id,
-                                    'company_name' => $supplier->company_name,
-                                    'contact_person' => $supplier->contact_person,
-                                    'phone' => $supplier->phone,
-                                    'email' => $supplier->email,
-                                    'address' => $supplier->address,
-                                    'notes' => $supplier->notes,
-                                    'status' => $supplier->status,
-                                    'category_ids' => $supplier->categories->pluck('id'),
-                                ]))"
-                                title="Edit supplier"
-                                class="text-gray-400 hover:text-green-700 transition-colors">
-                                <i data-lucide="pencil" class="w-4 h-4"></i>
-                            </button>
+                            @can('suppliers.update')
+                                <button
+                                    @click="openEdit(@js([
+                                        'id' => $supplier->id,
+                                        'company_name' => $supplier->company_name,
+                                        'contact_person' => $supplier->contact_person,
+                                        'phone' => $supplier->phone,
+                                        'email' => $supplier->email,
+                                        'address' => $supplier->address,
+                                        'notes' => $supplier->notes,
+                                        'status' => $supplier->status,
+                                        'category_ids' => $supplier->categories->pluck('id'),
+                                    ]))"
+                                    title="Edit supplier"
+                                    class="text-gray-400 hover:text-green-700 transition-colors">
+                                    <i data-lucide="pencil" class="w-4 h-4"></i>
+                                </button>
+                            @endcan
 
-                            <!-- Archive -->
-                            <button
-                                @if($supplier->status === 'Active')
-                                    @click="openArchive(
-                                        {{ $supplier->id }},
-                                        '{{ addslashes($supplier->company_name) }}'
-                                    )"
-                                @endif
-                                title="{{ $supplier->status === 'Active' ? 'Archive supplier' : 'Supplier already archived' }}"
-                                class="shrink-0 transition-colors
-                                    {{ $supplier->status === 'Active'
-                                        ? 'text-gray-400 hover:text-red-600 cursor-pointer'
-                                        : 'text-gray-200 cursor-not-allowed'
-                                    }}"
-                                {{ $supplier->status === 'Archived' ? 'disabled' : '' }}
-                            >
-                                <i data-lucide="archive" class="w-4 h-4"></i>
-                            </button>
+                            @can('suppliers.delete')
+                                <button
+                                    @if($supplier->status === 'Active')
+                                        @click="openArchive(
+                                            {{ $supplier->id }},
+                                            '{{ addslashes($supplier->company_name) }}'
+                                        )"
+                                    @endif
+                                    title="{{ $supplier->status === 'Active' ? 'Archive supplier' : 'Supplier already archived' }}"
+                                    class="shrink-0 transition-colors
+                                        {{ $supplier->status === 'Active'
+                                            ? 'text-gray-400 hover:text-red-600 cursor-pointer'
+                                            : 'text-gray-200 cursor-not-allowed'
+                                        }}"
+                                    {{ $supplier->status === 'Archived' ? 'disabled' : '' }}
+                                >
+                                    <i data-lucide="archive" class="w-4 h-4"></i>
+                                </button>
+                            @endcan
 
                         </div>
                     </div>

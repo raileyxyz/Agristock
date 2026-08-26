@@ -6,9 +6,11 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use App\Services\ProductService;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+
 
 class ProductController extends Controller
 {
@@ -25,7 +27,7 @@ class ProductController extends Controller
 
         $products = $this->productService->getProducts($request->all());
 
-        $categories = Category::all();
+        $categories = Category::where('status', 'Active')->orderBy('name')->get();
         $units = Unit::all();
         $statistics = $this->productService->getStatistics();
 
@@ -79,6 +81,12 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product)
     {
         $this->authorize('products.update');
+
+        $data = $request->validated();
+
+        if (! Gate::allows('products.delete')) {
+            unset($data['status']);
+        }
 
         $this->productService->update($product, $request->validated());
 

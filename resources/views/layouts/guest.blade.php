@@ -20,37 +20,37 @@
 
     <div class="min-h-screen grid lg:grid-cols-2">
 
-    <!-- Left panel -->
-    <div class="relative hidden lg:flex flex-col p-10 overflow-hidden bg-cover bg-center"
-        style="background-image: url('{{ asset('images/hero-farm.jpg') }}');">
+        <!-- Left panel -->
+        <div class="relative hidden lg:flex flex-col p-10 overflow-hidden bg-cover bg-center"
+            style="background-image: url('{{ asset('images/hero-farm.jpg') }}');">
 
-        <!-- Darker overlay -->
-        <div class="absolute inset-0 bg-gradient-to-br from-green-950/85 via-green-900/80 to-green-950/75"></div>
+            <!-- Darker overlay -->
+            <div class="absolute inset-0 bg-gradient-to-br from-green-950/85 via-green-900/80 to-green-950/75"></div>
 
-        <a href="{{ route('landing') }}" class="group relative flex items-center gap-3">
-            <div class="w-11 h-11 bg-green-600 rounded-xl flex items-center justify-center shadow-lg transition-all duration-300 ease-out group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-green-400/40">
-                <i data-lucide="leaf" class="w-6 h-6 text-white"></i>
-            </div>
-            <div>
-                <p class="font-display font-bold text-xl text-white leading-tight transition-colors duration-300 group-hover:text-green-300">{{ config('app.name', 'AgriStock') }}</p>
-                <p class="text-green-300 text-xs transition-colors duration-300 group-hover:text-green-200">Farm Inventory System</p>
-            </div>
-        </a>
+            <a href="{{ route('landing') }}" class="group relative flex items-center gap-3">
+                <div class="w-11 h-11 bg-green-600 rounded-xl flex items-center justify-center shadow-lg transition-all duration-300 ease-out group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-green-400/40">
+                    <i data-lucide="leaf" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <p class="font-display font-bold text-xl text-white leading-tight transition-colors duration-300 group-hover:text-green-300">{{ config('app.name', 'AgriStock') }}</p>
+                    <p class="text-green-300 text-xs transition-colors duration-300 group-hover:text-green-200">Farm Inventory System</p>
+                </div>
+            </a>
 
-        <!-- Pushes everything below to the bottom -->
-        <div class="relative mt-auto">
-            <p class="font-display text-2xl lg:text-2xl font-bold text-white leading-snug mb-4">
-                "Smarter stock management means more time in the field."
-            </p>
-            <p class="text-green-400 mb-6">Track every seed, fertilizer, and input across your farm — in real time.</p>
+            <!-- Pushes everything below to the bottom -->
+            <div class="relative mt-auto">
+                <p class="font-display text-2xl lg:text-2xl font-bold text-white leading-snug mb-4">
+                    "Smarter stock management means more time in the field."
+                </p>
+                <p class="text-green-400 mb-6">Track every seed, fertilizer, and input across your farm — in real time.</p>
 
-            <div class="flex flex-wrap gap-2">
-                @foreach(['Low Stock Alerts', 'Expiry Monitoring', 'Purchase Orders', 'Inventory History', 'Multi-user Access'] as $pill)
-                    <span class="text-xs text-green-100 bg-white/10 border border-white/10 px-3 py-1.5 rounded-full">{{ $pill }}</span>
-                @endforeach
+                <div class="flex flex-wrap gap-2">
+                    @foreach(['Low Stock Alerts', 'Expiry Monitoring', 'Purchase Orders', 'Inventory History', 'Multi-user Access'] as $pill)
+                        <span class="text-xs text-green-100 bg-white/10 border border-white/10 px-3 py-1.5 rounded-full">{{ $pill }}</span>
+                    @endforeach
+                </div>
             </div>
         </div>
-    </div>
 
         <!-- Right panel -->
         <div class="flex items-center justify-center p-6 sm:p-10 bg-green-50/40">
@@ -58,7 +58,7 @@
 
                 <!-- Mobile logo -->
                 <div class="flex lg:hidden items-center gap-2.5 mb-8 justify-center">
-                    <div class="w-9 h-9 bg-green-700 rounded-lg flex items-center justify-center">
+                    <div class="w-9 h-9 bg-green-600 rounded-lg flex items-center justify-center">
                         <i data-lucide="leaf" class="w-5 h-5 text-white"></i>
                     </div>
                     <span class="font-display font-bold text-lg text-gray-900">{{ config('app.name', 'AgriStock') }}</span>

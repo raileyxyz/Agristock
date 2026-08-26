@@ -88,11 +88,13 @@
                 </p>
 
             </div>
-            <a href="{{ route('products.create') }}"
-            class="bg-green-600 hover:bg-green-700 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
-                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-                Add Product
-            </a>
+            @can('products.create')
+                <a href="{{ route('products.create') }}"
+                class="bg-green-600 hover:bg-green-700 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                    Add Product
+                </a>
+            @endcan
         </div>
 
         <!-- Search + Category + Status filters -->
@@ -111,11 +113,11 @@
             </div>
 
             <div class="relative w-full sm:w-auto">
-                <select name="category_id" onchange="this.form.submit()"
+                <select name="category" onchange="this.form.submit()"
                         class="w-full sm:w-auto appearance-none border border-gray-300 rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                     <option value="">All Categories</option>
                     @foreach($categories ?? [] as $category)
-                        <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                        <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
                             {{ $category->name }}
                         </option>
                     @endforeach
@@ -198,23 +200,27 @@
                                             <i data-lucide="eye" class="w-4 h-4"></i>
                                         </button>
 
-                                        <button @click="openEdit(@js($product))"
-                                                title="Edit product"
-                                                class="text-gray-400 hover:text-green-700 p-1 rounded-md hover:bg-gray-100">
-                                            <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
-                                        </button>
-
-                                        @if($product->status === 'Active')
-                                            <button @click="openArchive({{ $product->id }}, '{{ addslashes($product->name) }}')"
-                                                    title="Archive product"
-                                                    class="text-gray-400 hover:text-red-600 p-1 rounded-md hover:bg-gray-100">
-                                                <i data-lucide="archive" class="w-3.5 h-3.5"></i>
+                                        @can('products.update')
+                                            <button @click="openEdit(@js($product))"
+                                                    title="Edit product"
+                                                    class="text-gray-400 hover:text-green-700 p-1 rounded-md hover:bg-gray-100">
+                                                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
                                             </button>
-                                        @else
-                                            <span title="Already archived" class="text-gray-200 p-1 cursor-not-allowed inline-flex">
-                                                <i data-lucide="archive" class="w-3.5 h-3.5"></i>
-                                            </span>
-                                        @endif
+                                        @endcan
+
+                                        @can('products.delete')
+                                            @if($product->status === 'Active')
+                                                <button @click="openArchive({{ $product->id }}, '{{ addslashes($product->name) }}')"
+                                                        title="Archive product"
+                                                        class="text-gray-400 hover:text-red-600 p-1 rounded-md hover:bg-gray-100">
+                                                    <i data-lucide="archive" class="w-3.5 h-3.5"></i>
+                                                </button>
+                                            @else
+                                                <span title="Already archived" class="text-gray-200 p-1 cursor-not-allowed inline-flex">
+                                                    <i data-lucide="archive" class="w-3.5 h-3.5"></i>
+                                                </span>
+                                            @endif
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>
@@ -410,17 +416,25 @@
                                 </label>
 
                                 <div class="sm:w-40">
-                                    <select name="status" x-model="editForm.status"
-                                            class="w-full h-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors"
-                                            :class="editErrors.status ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
-                                        <option value="Active">Active</option>
-                                        <option value="Archived">Archived</option>
-                                    </select>
-                                    <template x-if="editErrors.status">
-                                        <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
-                                            <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="editErrors.status?.[0]"></span>
-                                        </p>
-                                    </template>
+                                    @can('products.delete')
+                                        <select name="status" x-model="editForm.status"
+                                                class="w-full h-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors"
+                                                :class="editErrors.status ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500'">
+                                            <option value="Active">Active</option>
+                                            <option value="Archived">Archived</option>
+                                        </select>
+                                        <template x-if="editErrors.status">
+                                            <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                                                <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="editErrors.status?.[0]"></span>
+                                            </p>
+                                        </template>
+                                    @else
+                                        <input type="hidden" name="status" x-model="editForm.status">
+                                        <div class="w-full h-full border border-gray-200 rounded-lg px-3.5 py-2.5 text-sm bg-gray-50 flex items-center gap-2 text-gray-500">
+                                            <span class="w-2 h-2 rounded-full shrink-0" :class="editForm.status === 'Active' ? 'bg-green-500' : 'bg-gray-400'"></span>
+                                            <span x-text="editForm.status"></span>
+                                        </div>
+                                    @endcan
                                 </div>
                             </div>
 
@@ -612,11 +626,13 @@
                                     class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
                                 Close
                             </button>
-                            <button type="button"
-                                    @click="showViewModal = false; openEdit(viewTarget)"
-                                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm order-1 sm:order-2">
-                                Edit Product
-                            </button>
+                            @can('products.update')
+                                <button type="button"
+                                        @click="showViewModal = false; openEdit(viewTarget)"
+                                        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm order-1 sm:order-2">
+                                    Edit Product
+                                </button>
+                            @endcan
                         </div>
                     </div>
                 </template>

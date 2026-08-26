@@ -77,11 +77,13 @@
                 <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Units of Measurement</h1>
                 <p class="text-gray-500 mt-1 text-xs sm:text-sm truncate">{{ $units->count() }} {{ Str::plural('unit', $units->count()) }}</p>
             </div>
-            <button @click="openCreate()"
-                    class="bg-green-600 hover:bg-green-700 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
-                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-                Add Unit
-            </button>
+            @can('products.create')
+                <button @click="openCreate()"
+                        class="bg-green-600 hover:bg-green-700 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                    Add Unit
+                </button>
+            @endcan
         </div>
 
         <!-- Search -->
@@ -132,16 +134,20 @@
                                 </td>
                                 <td class="px-5 py-3.5">
                                     <div class="flex items-center justify-end gap-1">
-                                        <button @click="openEdit({{ $unit->id }}, '{{ addslashes($unit->name) }}', '{{ addslashes($unit->abbreviation) }}')"
-                                                title="Edit unit"
-                                                class="text-gray-400 hover:text-green-700 p-1.5 rounded-md hover:bg-gray-100">
-                                            <i data-lucide="pencil" class="w-4 h-4"></i>
-                                        </button>
-                                        <button @click="openDelete({{ $unit->id }}, '{{ addslashes($unit->name) }}', {{ $unit->products_count }})"
-                                                title="Delete unit"
-                                                class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-gray-100">
-                                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                        </button>
+                                        @can('products.update')
+                                            <button @click="openEdit({{ $unit->id }}, '{{ addslashes($unit->name) }}', '{{ addslashes($unit->abbreviation) }}')"
+                                                    title="Edit unit"
+                                                    class="text-gray-400 hover:text-green-700 p-1.5 rounded-md hover:bg-gray-100">
+                                                <i data-lucide="pencil" class="w-4 h-4"></i>
+                                            </button>
+                                        @endcan
+                                        @can('products.delete')
+                                            <button @click="openDelete({{ $unit->id }}, '{{ addslashes($unit->name) }}', {{ $unit->products_count }})"
+                                                    title="Delete unit"
+                                                    class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-gray-100">
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>

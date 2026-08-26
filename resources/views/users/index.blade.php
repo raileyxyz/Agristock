@@ -46,11 +46,13 @@
                 <h1 class="text-2xl font-bold text-gray-900">All Users</h1>
                 <p class="text-gray-400 text-sm mt-1">{{ $summary['active'] }} active · {{ $summary['inactive'] }} inactive</p>
             </div>
+            @can('users.create')
             <a href="{{ route('users.create') }}"
-               class="bg-green-700 hover:bg-green-800 text-white px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
+               class="bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
                 <i data-lucide="plus" class="w-4 h-4"></i>
                 Add User
             </a>
+            @endcan
         </div>
 
         <!-- Search + Role filter -->
@@ -137,24 +139,28 @@
                                 <td class="px-4 py-3 whitespace-nowrap">
                                     <div class="flex items-center justify-end gap-1">
                                         @if($user->id !== auth()->id())
-                                            <button @click="openEdit(@js([
-                                                        'id' => $user->id,
-                                                        'name' => $user->name,
-                                                        'email' => $user->email,
-                                                        'role' => $user->role,
-                                                        'status' => $user->status,
-                                                    ]))"
-                                                    title="Edit user"
-                                                    class="text-gray-400 hover:text-green-700 p-1.5 rounded-md hover:bg-gray-100">
-                                                <i data-lucide="pencil" class="w-4 h-4"></i>
-                                            </button>
+                                            @can('users.update')
+                                                <button @click="openEdit(@js([
+                                                            'id' => $user->id,
+                                                            'name' => $user->name,
+                                                            'email' => $user->email,
+                                                            'role' => $user->role,
+                                                            'status' => $user->status,
+                                                        ]))"
+                                                        title="Edit user"
+                                                        class="text-gray-400 hover:text-green-700 p-1.5 rounded-md hover:bg-gray-100">
+                                                    <i data-lucide="pencil" class="w-4 h-4"></i>
+                                                </button>
+                                            @endcan
                                         @endif
                                         @if($user->id !== auth()->id() && $user->status === 'Active')
-                                            <button @click="openArchive({{ $user->id }}, '{{ addslashes($user->name) }}')"
-                                                    title="Archive user"
-                                                    class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-gray-100">
-                                                <i data-lucide="archive" class="w-4 h-4"></i>
-                                            </button>
+                                            @can('suppliers.delete')
+                                                <button @click="openArchive({{ $user->id }}, '{{ addslashes($user->name) }}')"
+                                                        title="Archive user"
+                                                        class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-gray-100">
+                                                    <i data-lucide="archive" class="w-4 h-4"></i>
+                                                </button>
+                                            @endcan
                                         @endif
                                     </div>
                                 </td>

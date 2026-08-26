@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use App\Services\CategoryService;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
@@ -36,6 +37,12 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, Category $category)
     {
         $this->authorize('products.update');
+
+        $data = $request->validated();
+
+        if (! Gate::allows('products.delete')) {
+            unset($data['status']);
+        }
 
         try {
             $this->categoryService->update($category, $request->validated());

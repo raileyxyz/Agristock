@@ -85,12 +85,14 @@
                 <p class="text-gray-500 mt-1 text-xs sm:text-sm truncate">{{ $categories->total() }} categories</p>
             </div>
 
-            <button
-                @click="openCreate()"
-                class="bg-green-600 hover:bg-green-700 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
-                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-                Add Category
-            </button>
+            @can('products.create')
+                <button
+                    @click="openCreate()"
+                    class="bg-green-600 hover:bg-green-700 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                    Add Category
+                </button>
+            @endcan
         </div>
 
         <!-- Search + status filter -->
@@ -134,6 +136,7 @@
                         style="background-color: {{ $category->icon_color }}22;">
                         {{ $category->icon }}
                     </div>
+
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-2">
                             <p class="font-semibold text-gray-800 truncate">{{ $category->name }}</p>
@@ -145,28 +148,31 @@
                         </div>
                         <p class="text-sm text-gray-400">{{ $category->products_count }} active products</p>
                     </div>
+
                     <div class="flex items-center gap-1 shrink-0">
-
-                        <button
-                            @click="editCategory(@js($category))"
-                            title="Edit category"
-                            class="text-gray-400 hover:text-green-700 p-1.5 rounded-md hover:bg-gray-100">
-                            <i data-lucide="pencil" class="w-4 h-4"></i>
-                        </button>
-
-                        @if($category->status === 'Active')
+                        @can('products.update')
                             <button
-                                @click="openArchive({{ $category->id }}, '{{ addslashes($category->name) }}')"
-                                title="Archive category"
-                                class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-gray-100">
-                                <i data-lucide="archive" class="w-4 h-4"></i>
+                                @click="editCategory(@js($category))"
+                                title="Edit category"
+                                class="text-gray-400 hover:text-green-700 p-1.5 rounded-md hover:bg-gray-100">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
                             </button>
-                        @else
-                            <span title="Already archived" class="text-gray-200 p-1.5 cursor-not-allowed">
-                                <i data-lucide="archive" class="w-4 h-4"></i>
-                            </span>
-                        @endif
+                        @endcan
 
+                        @can('products.delete')
+                            @if($category->status === 'Active')
+                                <button
+                                    @click="openArchive({{ $category->id }}, '{{ addslashes($category->name) }}')"
+                                    title="Archive category"
+                                    class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-gray-100">
+                                    <i data-lucide="archive" class="w-4 h-4"></i>
+                                </button>
+                            @else
+                                <span title="Already archived" class="text-gray-200 p-1.5 cursor-not-allowed">
+                                    <i data-lucide="archive" class="w-4 h-4"></i>
+                                </span>
+                            @endif
+                        @endcan
                     </div>
                 </div>
             @empty
@@ -297,19 +303,29 @@
                         <template x-if="editingId">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Status</label>
-                                <div class="flex items-center gap-1.5 bg-gray-50 border border-gray-200 p-1 rounded-lg w-fit">
-                                    <button type="button" @click="selectedCategory.status = 'Active'"
-                                            :class="selectedCategory.status === 'Active' ? 'bg-green-600 text-white' : 'text-gray-500 hover:text-gray-700'"
-                                            class="px-4 py-1.5 rounded-md text-xs font-medium transition-colors">
-                                        Active
-                                    </button>
-                                    <button type="button" @click="selectedCategory.status = 'Archived'"
-                                            :class="selectedCategory.status === 'Archived' ? 'bg-gray-600 text-white' : 'text-gray-500 hover:text-gray-700'"
-                                            class="px-4 py-1.5 rounded-md text-xs font-medium transition-colors">
-                                        Archived
-                                    </button>
-                                </div>
-                                <input type="hidden" name="status" :value="selectedCategory.status">
+
+                                @can('products.delete')
+                                    <div class="flex items-center gap-1.5 bg-gray-50 border border-gray-200 p-1 rounded-lg w-fit">
+                                        <button type="button" @click="selectedCategory.status = 'Active'"
+                                                :class="selectedCategory.status === 'Active' ? 'bg-green-600 text-white' : 'text-gray-500 hover:text-gray-700'"
+                                                class="px-4 py-1.5 rounded-md text-xs font-medium transition-colors">
+                                            Active
+                                        </button>
+                                        <button type="button" @click="selectedCategory.status = 'Archived'"
+                                                :class="selectedCategory.status === 'Archived' ? 'bg-gray-600 text-white' : 'text-gray-500 hover:text-gray-700'"
+                                                class="px-4 py-1.5 rounded-md text-xs font-medium transition-colors">
+                                            Archived
+                                        </button>
+                                    </div>
+                                    <input type="hidden" name="status" :value="selectedCategory.status">
+                                @else
+                                    <div class="inline-flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3.5 py-2 text-sm text-gray-500 w-fit">
+                                        <span class="w-2 h-2 rounded-full shrink-0" :class="selectedCategory.status === 'Active' ? 'bg-green-500' : 'bg-gray-400'"></span>
+                                        <span x-text="selectedCategory.status"></span>
+                                    </div>
+                                    <input type="hidden" name="status" :value="selectedCategory.status">
+                                @endcan
+
                                 <template x-if="formErrors.status">
                                     <p class="text-xs text-red-600 mt-1.5 flex items-center gap-1">
                                         <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="formErrors.status?.[0]"></span>
@@ -318,9 +334,9 @@
                             </div>
                         </template>
 
-                    <template x-if="!editingId">
-                        <input type="hidden" name="status" value="Active">
-                    </template>
+                        <template x-if="!editingId">
+                            <input type="hidden" name="status" value="Active">
+                        </template>
                     </div>
 
                     <!-- Footer -->

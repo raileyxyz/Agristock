@@ -92,11 +92,13 @@
                     {{ $summary['total_items'] }} items tracked across {{ $summary['total_locations'] }} locations
                 </p>
             </div>
+            @can('inventory.stock-in')
             <a href="{{ route('inventories.create') }}"
-               class="bg-green-700 hover:bg-green-800 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
+               class="bg-green-600 hover:bg-green-700 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
                 <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                 Stock In
             </a>
+            @endcan
         </div>
 
         <!-- Search + Category filter -->
@@ -185,21 +187,23 @@
                                 </td>
                                 <td class="px-4 py-3 whitespace-nowrap">
                                     <div class="flex items-center justify-end gap-0.5">
-                                        <button @click="openEdit(@js([
-                                                    'id' => $inventory->id,
-                                                    'product_id' => $inventory->product_id,
-                                                    'quantity' => $inventory->quantity,
-                                                    'remaining_quantity' => $inventory->remaining_quantity,
-                                                    'batch_number' => $inventory->batch_number,
-                                                    'expiry_date' => $inventory->expiry_date?->format('Y-m-d'),
-                                                    'location' => $inventory->location,
-                                                    'notes' => $inventory->notes,
-                                                    'has_movement' => $inventory->has_movement,
-                                                ]))"
-                                                title="Edit stock entry"
-                                                class="text-gray-400 hover:text-green-700 p-1 rounded-md hover:bg-gray-100">
-                                            <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
-                                        </button>
+                                        @can('inventory.manage')
+                                            <button @click="openEdit(@js([
+                                                        'id' => $inventory->id,
+                                                        'product_id' => $inventory->product_id,
+                                                        'quantity' => $inventory->quantity,
+                                                        'remaining_quantity' => $inventory->remaining_quantity,
+                                                        'batch_number' => $inventory->batch_number,
+                                                        'expiry_date' => $inventory->expiry_date?->format('Y-m-d'),
+                                                        'location' => $inventory->location,
+                                                        'notes' => $inventory->notes,
+                                                        'has_movement' => $inventory->has_movement,
+                                                    ]))"
+                                                    title="Edit stock entry"
+                                                    class="text-gray-400 hover:text-green-700 p-1 rounded-md hover:bg-gray-100">
+                                                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                                            </button>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>

@@ -52,7 +52,7 @@
         </label>
 
         <button type="submit"
-                class="w-full bg-green-700 hover:bg-green-800 text-white py-3 rounded-lg font-semibold transition-colors">
+                class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition-colors">
             Sign In
         </button>
     </form>
