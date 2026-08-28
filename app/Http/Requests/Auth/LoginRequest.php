@@ -50,6 +50,14 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        if (Auth::user()->status === 'Archived') {
+            Auth::logout();
+
+            throw ValidationException::withMessages([
+                'email' => 'This account has been archived. Please contact your administrator.',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 
