@@ -28,10 +28,12 @@ class UserController extends Controller
             role: $request->query('role'),
         );
 
+        $statistics = $this->userManagementService->getStatistics();
         $summary = $this->userManagementService->getSummary();
 
         return view('users.index', [
             'users' => $users,
+            'statistics' => $statistics,
             'summary' => $summary,
             'roles' => User::ROLES,
         ]);
@@ -110,6 +112,12 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
 
-        return view('users.roles', ['permissions' => config('permissions'),]);
+        $userCounts = User::query()
+            ->where('status', 'Active')
+            ->selectRaw('role, count(*) as total')
+            ->groupBy('role')
+            ->pluck('total', 'role');
+
+        return view('users.roles', ['permissions' => config('permissions'), 'userCounts' => $userCounts,]);
     }
 }

@@ -43,7 +43,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="sm:col-span-2">
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                            Product Name <span class="text-red-500">*</span>
+                            Product Name
                         </label>
                         <input type="text" name="name" value="{{ old('name') }}" placeholder="e.g. Hybrid Maize Seeds DK-8031"
                             class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors
@@ -73,7 +73,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                            Category <span class="text-red-500">*</span>
+                            Category
                         </label>
                         <select name="category_id"
                                 class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors
@@ -93,7 +93,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                            Unit of Measurement <span class="text-red-500">*</span>
+                            Unit of Measurement
                         </label>
                         <select name="unit_id"
                                 class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors
@@ -130,7 +130,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                            Cost Price <span class="text-red-500">*</span>
+                            Cost Price
                         </label>
                         <div class="relative">
                             <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">₱</span>
@@ -148,7 +148,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                            Selling Price <span class="text-red-500">*</span>
+                            Selling Price
                         </label>
                         <div class="relative">
                             <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">₱</span>
@@ -170,7 +170,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                            Minimum Stock Level <span class="text-red-500">*</span>
+                            Minimum Stock Level
                         </label>
                         <input type="number" name="minimum_stock" value="{{ old('minimum_stock') }}" placeholder="e.g. 50"
                             class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors
@@ -185,7 +185,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                            Reorder Point <span class="text-red-500">*</span>
+                            Reorder Point
                         </label>
                         <input type="number" name="reorder_point" value="{{ old('reorder_point') }}" placeholder="e.g. 70"
                             class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors

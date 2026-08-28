@@ -14,11 +14,6 @@
                 <h1 class="text-2xl font-bold text-gray-900">Add New User</h1>
                 <p class="text-gray-400 text-sm mt-1">Create an account for a farm staff member or manager.</p>
             </div>
-            <a href="{{ route('users.index') }}"
-               class="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1.5">
-                <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                Back
-            </a>
         </div>
 
         @if($errors->any())
@@ -45,7 +40,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                        Full Name <span class="text-red-500">*</span>
+                        Full Name
                     </label>
                     <input type="text" name="name" value="{{ old('name') }}" placeholder="e.g. Juan Dela Cruz"
                            class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors
@@ -57,7 +52,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                        Email Address <span class="text-red-500">*</span>
+                        Email Address
                     </label>
                     <input type="email" name="email" value="{{ old('email') }}" placeholder="user@agristock.ph"
                            class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors
@@ -69,7 +64,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                        Role <span class="text-red-500">*</span>
+                        Role
                     </label>
                     <select name="role" x-model="role"
                             class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors
@@ -99,7 +94,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                        Temporary Password <span class="text-red-500">*</span>
+                        Temporary Password
                     </label>
                     <input type="password" name="password" placeholder="Min 8 characters"
                            class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors
@@ -111,7 +106,7 @@
 
                 <div class="flex items-center gap-3 pt-2">
                     <button type="submit"
-                            class="bg-green-700 hover:bg-green-800 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors">
+                            class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors">
                         Create User
                     </button>
                     <button type="reset"

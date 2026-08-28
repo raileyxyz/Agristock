@@ -40,9 +40,9 @@
 
                 <div class="flex items-center gap-2">
                     <a href="{{ route('login') }}"
-                        class="hidden md:flex bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold items-center gap-2 transition-all duration-300 ease-out transform hover:-translate-y-0.5 hover:shadow-lg">
+                        class="group hidden md:flex bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold items-center gap-2 transition-all duration-300 ease-out transform hover:-translate-y-0.5 hover:shadow-lg">
                         Open System
-                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        <i data-lucide="arrow-right" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"></i>
                     </a>
 
                     <!-- Hamburger toggle -->
@@ -113,9 +113,9 @@
                 <!-- CTA footer -->
                 <div class="p-4 border-t border-gray-100 shrink-0">
                     <a href="{{ route('login') }}"
-                       class="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-colors w-full">
+                    class="group bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-colors w-full">
                         Open System
-                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        <i data-lucide="arrow-right" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"></i>
                     </a>
                 </div>
             </div>
@@ -145,14 +145,14 @@
                 </h1>
 
                 <p class="text-green-100/90 text-sm sm:text-lg leading-relaxed mb-6 sm:mb-8 max-w-lg">
-                    AgriStock gives farm managers full visibility over every input — from seeds to fertilizers to equipment — with real-time alerts, expiration tracking, and supplier management in one clean system.
+                    AgriStock gives farm managers full visibility over every input from seeds to fertilizers to equipment with real-time alerts, expiration tracking, and supplier management in one clean system.
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-3 mb-6 sm:mb-8">
                     <a href="{{ route('login') }}"
-                        class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg">
+                        class="group w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg">
                         <span>Launch Dashboard</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 shrink-0"></i>
+                        <i data-lucide="arrow-right" class="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1"></i>
                     </a>
                     <a href="#features"
                         class="w-full sm:w-auto bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg">
@@ -219,12 +219,12 @@
         <div class="max-w-6xl mx-auto grid sm:grid-cols-2 md:grid-cols-3 gap-5">
             @php
                 $features = [
-                    ['icon' => 'package', 'title' => 'Product Catalog', 'desc' => 'Manage your complete agri-input catalog — seeds, fertilizers, pesticides, equipment, and feed — with categories and units.'],
+                    ['icon' => 'package', 'title' => 'Product Catalog', 'desc' => 'Manage your complete agri-input catalog seeds, fertilizers, pesticides, equipment, and feed with categories and units.'],
                     ['icon' => 'bar-chart-3', 'title' => 'Inventory Tracking', 'desc' => 'Real-time stock monitoring with Stock In, Stock Out, and Adjustment workflows. Every movement is logged with reference and user.'],
                     ['icon' => 'triangle-alert', 'title' => 'Low Stock Alerts', 'desc' => 'Automatic alerts when items drop below reorder points. Never face planting season without critical inputs again.'],
-                    ['icon' => 'clock', 'title' => 'Expiration Monitor', 'desc' => 'Track expiry dates on seeds, pesticides, and biologicals — get ahead of spoilage before it costs you.'],
+                    ['icon' => 'clock', 'title' => 'Expiration Monitor', 'desc' => 'Track expiry dates on seeds, pesticides, and biologicals get ahead of spoilage before it costs you.'],
                     ['icon' => 'shield', 'title' => 'Supplier Management', 'desc' => 'Keep a directory of suppliers, contacts, and purchase history all in one searchable place.'],
-                    ['icon' => 'users', 'title' => 'User and Role Control', 'desc' => 'Give staff the right level of access — admin, manager, or field staff — with clear permission boundaries.'],
+                    ['icon' => 'users', 'title' => 'User and Role Control', 'desc' => 'Give staff the right level of access admin, manager, or field staff with clear permission boundaries.'],
                 ];
             @endphp
 
@@ -250,7 +250,7 @@
         <div class="max-w-6xl mx-auto grid sm:grid-cols-2 md:grid-cols-4 gap-6 relative">
             @php
                 $steps = [
-                    ['num' => '01', 'title' => 'Build Your Catalog', 'desc' => 'Add products with categories, units, and reorder thresholds. No stock quantities here — just your product master list.'],
+                    ['num' => '01', 'title' => 'Build Your Catalog', 'desc' => 'Add products with categories, units, and reorder thresholds. No stock quantities here just your product master list.'],
                     ['num' => '02', 'title' => 'Receive and Move Stock', 'desc' => 'Use Stock In when supplies arrive and Stock Out when used in the field. Every transaction logs user, date, and reference.'],
                     ['num' => '03', 'title' => 'Get Alerts', 'desc' => 'The dashboard flags low stock, critical levels, and items nearing expiry so you always act before there\'s a crisis.'],
                     ['num' => '04', 'title' => 'Order and Analyze', 'desc' => 'Create purchase orders, track supplier deliveries, and review reports to spot trends and optimize spending.'],
@@ -298,9 +298,9 @@
                 Join hundreds of farms across the Philippines using AgriStock to eliminate stockouts, reduce waste, and stay on top of every input.
             </p>
             <a href="{{ route('login') }}"
-                class="inline-flex items-center gap-2 bg-white hover:bg-green-50 text-green-800 px-7 py-3.5 rounded-lg font-semibold transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg">
+                class="group inline-flex items-center gap-2 bg-white hover:bg-green-50 text-green-800 px-7 py-3.5 rounded-lg font-semibold transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg">
                 Open AgriStock Dashboard
-                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                <i data-lucide="arrow-right" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"></i>
             </a>
         </div>
     </section>
@@ -317,7 +317,7 @@
                     <span class="font-display font-bold text-lg text-white">AgriStock</span>
                 </div>
                 <p class="text-green-300 text-sm leading-relaxed max-w-sm">
-                    Full visibility over every farm input — from seeds to fertilizers to equipment — built for Philippine agriculture.
+                    Full visibility over every farm input from seeds to fertilizers to equipment built for Philippine agriculture.
                 </p>
             </div>
 

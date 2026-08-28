@@ -81,7 +81,7 @@
                 <!-- Product -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                        Product <span class="text-red-500">*</span>
+                        Product
                     </label>
                     <select name="product_id" x-model="form.product_id"
                             class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors
@@ -101,7 +101,6 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
                             Quantity <span class="text-xs text-gray-400" x-text="selectedUnitAbbr ? '(' + selectedUnitAbbr + ')' : ''"></span>
-                            <span class="text-red-500">*</span>
                         </label>
                         <input type="number" step="0.01" name="quantity" value="{{ old('quantity') }}" placeholder="0"
                                class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors
@@ -126,7 +125,7 @@
                 <!-- Expiry Date — conditional -->
                 <div x-show="showExpiry" x-collapse>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                        Expiry Date <span class="text-red-500">*</span>
+                        Expiry Date
                     </label>
                     <input type="date" name="expiry_date" value="{{ old('expiry_date') }}"
                         class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors
@@ -140,7 +139,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                            Storage Location <span class="text-red-500">*</span>
+                            Storage Location
                         </label>
                         <select name="location"
                                 class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors
@@ -173,7 +172,7 @@
 
                 <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
                     <button type="submit"
-                            class="bg-green-700 hover:bg-green-800 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors">
+                            class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors">
                         Record Stock In
                     </button>
                     <button type="reset"

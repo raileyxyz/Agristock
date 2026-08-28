@@ -44,7 +44,21 @@
         <div class="flex items-center justify-between mb-1">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">All Users</h1>
-                <p class="text-gray-400 text-sm mt-1">{{ $summary['active'] }} active · {{ $summary['inactive'] }} inactive</p>
+                <p class="mt-1 text-xs sm:text-sm text-gray-500 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                    <span>{{ $statistics['total'] }} Users</span>
+
+                    <span class="text-gray-300">•</span>
+
+                    <span class="text-green-600 font-medium">
+                        {{ $statistics['active'] }} Active
+                    </span>
+
+                    <span class="text-gray-300">•</span>
+
+                    <span>
+                        {{ $statistics['archived'] }} Archived
+                    </span>
+                </p>
             </div>
             @can('users.create')
             <a href="{{ route('users.create') }}"
@@ -87,6 +101,9 @@
         <!-- Users table -->
         <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mt-4">
             <div class="overflow-x-auto">
+                @php
+                    $canManageUnits = Auth::user()->can('suppliers.update') || Auth::user()->can('suppliers.delete');
+                @endphp
                 <table class="w-full text-sm min-w-[850px]">
                     <thead>
                         <tr class="bg-gray-50 border-b border-gray-200 text-left text-gray-500">
@@ -95,7 +112,9 @@
                             <th class="px-4 py-3 font-medium whitespace-nowrap">Role</th>
                             <th class="px-4 py-3 font-medium whitespace-nowrap">Last Login</th>
                             <th class="px-4 py-3 font-medium whitespace-nowrap">Status</th>
-                            <th class="px-4 py-3 font-medium text-right whitespace-nowrap">Actions</th>
+                            @if($canManageUnits)
+                                <th class="px-4 py-3 font-medium text-right whitespace-nowrap">Actions</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -136,34 +155,36 @@
                                         {{ ($user->status) }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 whitespace-nowrap">
-                                    <div class="flex items-center justify-end gap-1">
-                                        @if($user->id !== auth()->id())
-                                            @can('users.update')
-                                                <button @click="openEdit(@js([
-                                                            'id' => $user->id,
-                                                            'name' => $user->name,
-                                                            'email' => $user->email,
-                                                            'role' => $user->role,
-                                                            'status' => $user->status,
-                                                        ]))"
-                                                        title="Edit user"
-                                                        class="text-gray-400 hover:text-green-700 p-1.5 rounded-md hover:bg-gray-100">
-                                                    <i data-lucide="pencil" class="w-4 h-4"></i>
-                                                </button>
-                                            @endcan
-                                        @endif
-                                        @if($user->id !== auth()->id() && $user->status === 'Active')
-                                            @can('suppliers.delete')
-                                                <button @click="openArchive({{ $user->id }}, '{{ addslashes($user->name) }}')"
-                                                        title="Archive user"
-                                                        class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-gray-100">
-                                                    <i data-lucide="archive" class="w-4 h-4"></i>
-                                                </button>
-                                            @endcan
-                                        @endif
-                                    </div>
-                                </td>
+                                @if($canManageUnits)
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="flex items-center justify-end gap-1">
+                                            @if($user->id !== auth()->id())
+                                                @can('users.update')
+                                                    <button @click="openEdit(@js([
+                                                                'id' => $user->id,
+                                                                'name' => $user->name,
+                                                                'email' => $user->email,
+                                                                'role' => $user->role,
+                                                                'status' => $user->status,
+                                                            ]))"
+                                                            title="Edit user"
+                                                            class="text-gray-400 hover:text-green-700 p-1.5 rounded-md hover:bg-gray-100">
+                                                        <i data-lucide="pencil" class="w-4 h-4"></i>
+                                                    </button>
+                                                @endcan
+                                            @endif
+                                            @if($user->id !== auth()->id() && $user->status === 'Active')
+                                                @can('suppliers.delete')
+                                                    <button @click="openArchive({{ $user->id }}, '{{ addslashes($user->name) }}')"
+                                                            title="Archive user"
+                                                            class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-gray-100">
+                                                        <i data-lucide="archive" class="w-4 h-4"></i>
+                                                    </button>
+                                                @endcan
+                                            @endif
+                                        </div>
+                                    </td>
+                                @endif
                             </tr>
                         @empty
                             <tr>
@@ -295,7 +316,7 @@
                             </button>
                             <button type="submit"
                                     :disabled="!hasChanges()"
-                                    :class="hasChanges() ? 'bg-green-700 hover:bg-green-800 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
+                                    :class="hasChanges() ? 'bg-green-600 hover:bg-green-700 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
                                     class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                                 Save changes
                             </button>

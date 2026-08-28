@@ -92,7 +92,7 @@
                 <!-- Product -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                        Product <span class="text-red-500">*</span>
+                        Product
                     </label>
                     <select name="product_id" x-model="form.product_id"
                             class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors
@@ -110,7 +110,7 @@
                 <!-- Location -->
                 <div x-show="form.product_id" x-collapse>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                        Current Location <span class="text-red-500">*</span>
+                        Current Location
                     </label>
                     <select name="location" x-model="form.location"
                             class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors
@@ -141,7 +141,6 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
                         Quantity to Remove <span class="text-xs text-gray-400" x-text="selectedProduct?.unit_abbr ? '(' + selectedProduct.unit_abbr + ')' : ''"></span>
-                        <span class="text-red-500">*</span>
                     </label>
                     <input type="number" step="0.01" name="quantity" value="{{ old('quantity') }}" placeholder="0"
                            class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors
@@ -154,7 +153,7 @@
                 <!-- Reason -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                        Reason <span class="text-red-500">*</span>
+                        Reason
                     </label>
                     <select name="reason" x-model="form.reason"
                             class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors
@@ -172,7 +171,7 @@
                 <!-- Transfer To — conditional -->
                 <div x-show="showTransferTo" x-collapse>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                        Transfer To <span class="text-red-500">*</span>
+                        Transfer To
                     </label>
                     <select name="transfer_to"
                             class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors

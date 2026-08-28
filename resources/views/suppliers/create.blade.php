@@ -52,7 +52,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                        Company / Supplier Name <span class="text-red-500">*</span>
+                        Company / Supplier Name
                     </label>
                     <input type="text" name="company_name" value="{{ old('company_name') }}" placeholder="e.g. Pioneer Seeds Philippines"
                            class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors
@@ -65,7 +65,7 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                            Contact Person <span class="text-red-500">*</span>
+                            Contact Person
                         </label>
                         <input type="text" name="contact_person" value="{{ old('contact_person') }}" placeholder="Full name"
                                class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors
@@ -76,7 +76,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                            Phone Number <span class="text-red-500">*</span>
+                            Phone Number
                         </label>
                         <input type="text" name="phone" value="{{ old('phone') }}" placeholder="+63 9XXXXXXXXX"
                                class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors
@@ -130,7 +130,7 @@
 
                 <div class="flex items-center gap-3 pt-2">
                     <button type="submit"
-                            class="bg-green-700 hover:bg-green-800 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors">
+                            class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors">
                         Save Supplier
                     </button>
                     <button type="reset"

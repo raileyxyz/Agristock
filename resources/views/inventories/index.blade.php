@@ -146,17 +146,22 @@
         <!-- Inventory table -->
         <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mt-4">
             <div class="overflow-x-auto">
+                @php
+                    $canManageUnits = Auth::user()->can('inventory.update') || Auth::user()->can('inventory.delete');
+                @endphp
                 <table class="w-full text-sm min-w-[950px]">
                     <thead>
                         <tr class="bg-gray-50 border-b border-gray-200 text-left text-gray-500">
                             <th class="px-4 py-3 font-medium whitespace-nowrap">Product</th>
                             <th class="px-4 py-3 font-medium whitespace-nowrap">Category</th>
-                            <th class="px-4 py-3 font-medium text-right whitespace-nowrap">Qty</th>
+                            <th class="px-4 py-3 font-medium whitespace-nowrap">Qty</th>
                             <th class="px-4 py-3 font-medium whitespace-nowrap">Batch No.</th>
                             <th class="px-4 py-3 font-medium whitespace-nowrap">Location</th>
                             <th class="px-4 py-3 font-medium whitespace-nowrap">Expiry</th>
                             <th class="px-4 py-3 font-medium whitespace-nowrap">Status</th>
-                            <th class="px-4 py-3 font-medium text-right whitespace-nowrap">Actions</th>
+                            @if($canManageUnits)
+                                <th class="px-4 py-3 font-medium text-right whitespace-nowrap">Actions</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -171,7 +176,7 @@
                                         {{ $inventory->product->category->icon ?? '' }} {{ $inventory->product->category->name ?? '—' }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 text-right font-semibold text-gray-900 whitespace-nowrap">
+                                <td class="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap">
                                     {{ $inventory->formatted_quantity }}
                                     <span class="text-gray-400 font-normal">{{ $inventory->product->unit->abbreviation ?? '' }}</span>
                                 </td>
@@ -185,27 +190,29 @@
                                         {{ $inventory->stock_status['label'] }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 whitespace-nowrap">
-                                    <div class="flex items-center justify-end gap-0.5">
-                                        @can('inventory.manage')
-                                            <button @click="openEdit(@js([
-                                                        'id' => $inventory->id,
-                                                        'product_id' => $inventory->product_id,
-                                                        'quantity' => $inventory->quantity,
-                                                        'remaining_quantity' => $inventory->remaining_quantity,
-                                                        'batch_number' => $inventory->batch_number,
-                                                        'expiry_date' => $inventory->expiry_date?->format('Y-m-d'),
-                                                        'location' => $inventory->location,
-                                                        'notes' => $inventory->notes,
-                                                        'has_movement' => $inventory->has_movement,
-                                                    ]))"
-                                                    title="Edit stock entry"
-                                                    class="text-gray-400 hover:text-green-700 p-1 rounded-md hover:bg-gray-100">
-                                                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
-                                            </button>
-                                        @endcan
-                                    </div>
-                                </td>
+                                @if($canManageUnits)
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="flex items-center justify-end gap-0.5">
+                                            @can('inventory.manage')
+                                                <button @click="openEdit(@js([
+                                                            'id' => $inventory->id,
+                                                            'product_id' => $inventory->product_id,
+                                                            'quantity' => $inventory->quantity,
+                                                            'remaining_quantity' => $inventory->remaining_quantity,
+                                                            'batch_number' => $inventory->batch_number,
+                                                            'expiry_date' => $inventory->expiry_date?->format('Y-m-d'),
+                                                            'location' => $inventory->location,
+                                                            'notes' => $inventory->notes,
+                                                            'has_movement' => $inventory->has_movement,
+                                                        ]))"
+                                                        title="Edit stock entry"
+                                                        class="text-gray-400 hover:text-green-700 p-1 rounded-md hover:bg-gray-100">
+                                                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                                                </button>
+                                            @endcan
+                                        </div>
+                                    </td>
+                                @endif
                             </tr>
                         @empty
                             <tr>
@@ -365,7 +372,7 @@
                             </button>
                             <button type="submit"
                                     :disabled="!hasChanges()"
-                                    :class="hasChanges() ? 'bg-green-700 hover:bg-green-800 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
+                                    :class="hasChanges() ? 'bg-green-600 hover:bg-green-700 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
                                     class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm order-1 sm:order-2">
                                 Save changes
                             </button>

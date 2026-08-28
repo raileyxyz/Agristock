@@ -100,6 +100,9 @@
         <!-- Units table -->
         <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mt-4">
             <div class="overflow-x-auto">
+                @php
+                    $canManageUnits = Auth::user()->can('products.update') || Auth::user()->can('products.delete');
+                @endphp
                 <table class="w-full text-sm min-w-[560px]">
                     <thead>
                         <tr class="bg-gray-50 border-b border-gray-200 text-left text-gray-500">
@@ -107,7 +110,9 @@
                             <th class="px-5 py-3 font-medium">Name</th>
                             <th class="px-5 py-3 font-medium">Abbreviation</th>
                             <th class="px-5 py-3 font-medium">Used in</th>
-                            <th class="px-5 py-3 font-medium text-right">Actions</th>
+                            @if($canManageUnits)
+                                <th class="px-5 py-3 font-medium text-right">Actions</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -132,24 +137,26 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="px-5 py-3.5">
-                                    <div class="flex items-center justify-end gap-1">
-                                        @can('products.update')
-                                            <button @click="openEdit({{ $unit->id }}, '{{ addslashes($unit->name) }}', '{{ addslashes($unit->abbreviation) }}')"
-                                                    title="Edit unit"
-                                                    class="text-gray-400 hover:text-green-700 p-1.5 rounded-md hover:bg-gray-100">
-                                                <i data-lucide="pencil" class="w-4 h-4"></i>
-                                            </button>
-                                        @endcan
-                                        @can('products.delete')
-                                            <button @click="openDelete({{ $unit->id }}, '{{ addslashes($unit->name) }}', {{ $unit->products_count }})"
-                                                    title="Delete unit"
-                                                    class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-gray-100">
-                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                            </button>
-                                        @endcan
-                                    </div>
-                                </td>
+                                @if($canManageUnits)
+                                    <td class="px-5 py-3.5">
+                                        <div class="flex items-center justify-end gap-1">
+                                            @can('products.update')
+                                                <button @click="openEdit({{ $unit->id }}, '{{ addslashes($unit->name) }}', '{{ addslashes($unit->abbreviation) }}')"
+                                                        title="Edit unit"
+                                                        class="text-gray-400 hover:text-green-700 p-1.5 rounded-md hover:bg-gray-100">
+                                                    <i data-lucide="pencil" class="w-4 h-4"></i>
+                                                </button>
+                                            @endcan
+                                            @can('products.delete')
+                                                <button @click="openDelete({{ $unit->id }}, '{{ addslashes($unit->name) }}', {{ $unit->products_count }})"
+                                                        title="Delete unit"
+                                                        class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-gray-100">
+                                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                                </button>
+                                            @endcan
+                                        </div>
+                                    </td>
+                                @endif
                             </tr>
                         @empty
                             <tr>

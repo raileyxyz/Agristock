@@ -31,6 +31,15 @@ class UserManagementService
         ];
     }
 
+    public function getStatistics(): array
+    {
+        return [
+            'total' => User::count(),
+            'active' => User::where('status', 'Active')->count(),
+            'archived' => User::where('status', 'Archived')->count(),
+        ];
+    }
+
     public function create(array $data): User
     {
         return DB::transaction(function () use ($data) {

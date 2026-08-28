@@ -24,7 +24,7 @@
                             {{ $role }}
                         </span>
                         <p class="text-xs text-gray-400 mt-1">
-                            {{ $userCounts[$role] ?? 0 }} {{ Str::plural('active user', $userCounts[$role] ?? 0) }}
+                            {{ $userCounts[$role] ?? 0 }} {{ Str::plural('Active User', $userCounts[$role] ?? 0) }}
                         </p>
                     </div>
                 </div>

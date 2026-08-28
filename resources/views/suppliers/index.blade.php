@@ -83,7 +83,7 @@
             </div>
             @can('suppliers.create')
                 <a href="{{ route('suppliers.create') }}"
-                class="bg-green-600 hover:bg-green-600 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
+                class="bg-green-600 hover:bg-green-700 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
                     <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                     Add Supplier
                 </a>
@@ -391,7 +391,7 @@
                             </button>
                             <button type="submit"
                                     :disabled="!hasChanges()"
-                                    :class="hasChanges() ? 'bg-green-700 hover:bg-green-800 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
+                                    :class="hasChanges() ? 'bg-green-600 hover:bg-green-700 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
                                     class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm order-1 sm:order-2">
                                 Save changes
                             </button>

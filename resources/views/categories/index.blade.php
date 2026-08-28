@@ -114,15 +114,15 @@
 
             <div class="flex items-center gap-1.5 bg-gray-100 p-1 rounded-lg w-full sm:w-fit overflow-x-auto">
                 <a href="{{ request()->fullUrlWithQuery(['status' => 'all', 'page' => null]) }}"
-                class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap shrink-0 {{ request('status', 'all') === 'all' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
+                class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap shrink-0 {{ request('status', 'all') === 'all' ? 'bg-green-600 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
                     All
                 </a>
                 <a href="{{ request()->fullUrlWithQuery(['status' => 'Active', 'page' => null]) }}"
-                class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap shrink-0 {{ request('status') === 'Active' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
+                class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap shrink-0 {{ request('status') === 'Active' ? 'bg-green-600 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
                     Active
                 </a>
                 <a href="{{ request()->fullUrlWithQuery(['status' => 'Archived', 'page' => null]) }}"
-                class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap shrink-0 {{ request('status') === 'Archived' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
+                class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap shrink-0 {{ request('status') === 'Archived' ? 'bg-green-600 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
                     Archived
                 </a>
             </div>

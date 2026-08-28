@@ -93,7 +93,7 @@
                 <!-- Product -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                        Product <span class="text-red-500">*</span>
+                        Product
                     </label>
                     <select name="product_id" x-model="form.product_id"
                             @change="form.location = ''; form.inventory_id = ''; form.actual_quantity = ''"
@@ -109,7 +109,7 @@
                 <!-- Location -->
                 <div x-show="form.product_id" x-collapse>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                        Location <span class="text-red-500">*</span>
+                        Location
                     </label>
                     <select x-model="form.location" @change="form.inventory_id = ''; form.actual_quantity = ''"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
@@ -126,7 +126,7 @@
                 <!-- Batch -->
                 <div x-show="form.location" x-collapse>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                        Batch <span class="text-red-500">*</span>
+                        Batch
                     </label>
                     <select name="inventory_id" x-model="form.inventory_id" @change="form.actual_quantity = ''"
                             class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors
@@ -152,7 +152,6 @@
                 <div x-show="selectedBatch" x-collapse>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
                         Actual Quantity <span class="text-xs text-gray-400" x-text="selectedProduct?.unit_abbr ? '(' + selectedProduct.unit_abbr + ')' : ''"></span>
-                        <span class="text-red-500">*</span>
                     </label>
                     <input type="number" step="0.01" name="actual_quantity" x-model="form.actual_quantity" placeholder="0"
                            class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors
@@ -173,7 +172,7 @@
                 <!-- Reason -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                        Reason <span class="text-red-500">*</span>
+                        Reason
                     </label>
                     <select name="reason"
                             class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors
