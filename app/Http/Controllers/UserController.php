@@ -112,11 +112,7 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
 
-        $userCounts = User::query()
-            ->where('status', 'Active')
-            ->selectRaw('role, count(*) as total')
-            ->groupBy('role')
-            ->pluck('total', 'role');
+        $userCounts = $this->userManagementService->getRoleUserCounts();
 
         return view('users.roles', ['permissions' => config('permissions'), 'userCounts' => $userCounts,]);
     }

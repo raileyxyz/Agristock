@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\StorageLocation;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\StockOut;
@@ -18,6 +19,39 @@ class StockOutService
     public function getAvailableStock(int $productId, string $location): float
     {
         return (float) Inventory::where('product_id', $productId)->where('location', $location)->sum('remaining_quantity');
+    }
+
+    public function getCreateData(): array
+    {
+        $products = Product::active()->with('unit')->orderBy('name')->get();
+
+        $locations = StorageLocation::values();
+
+        $inventories = Inventory::whereIn('product_id', $products->pluck('id'))
+            ->where('remaining_quantity', '>', 0)
+            ->get()
+            ->groupBy(['product_id', 'location']);
+
+        $stockData = [];
+
+        foreach ($products as $product) {
+            foreach ($locations as $location) {
+                $batches = $inventories->get($product->id, collect())->get($location, collect());
+
+                if ($batches->isEmpty()) {
+                    continue;
+                }
+
+                $sorted = $product->expiry_track ? $batches->sortBy('expiry_date') : $batches->sortBy('created_at');
+
+                $stockData[$product->id][$location] = [
+                    'available' => (float) $sorted->sum('remaining_quantity'),
+                    'batch' => $sorted->first()->batch_number,
+                ];
+            }
+        }
+
+        return compact('products', 'stockData',  'locations');
     }
 
     public function create(array $data): StockOut

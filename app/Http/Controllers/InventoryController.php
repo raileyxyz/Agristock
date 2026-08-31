@@ -23,7 +23,7 @@ class InventoryController extends Controller
         $inventories = $this->inventoryService->getInventories($request->all());
         $summary = $this->inventoryService->getSummary();
         $categories = Category::where('status', 'Active')->orderBy('name')->get();
-        $products = $this->getActiveProducts();
+        $products = $this->inventoryService->getActiveProducts();
 
         return view('inventories.index', compact('inventories', 'summary', 'categories', 'products'));
     }
@@ -32,7 +32,7 @@ class InventoryController extends Controller
     {
         $this->authorize('inventory.stock-in');
 
-        $products = $this->getActiveProducts();
+        $products = $this->inventoryService->getActiveProducts();
 
         return view('inventories.create', compact('products'));
     }
@@ -50,7 +50,7 @@ class InventoryController extends Controller
     {
         $this->authorize('inventory.manage');
 
-        $products = $this->getActiveProducts();
+        $products = $this->inventoryService->getActiveProducts();
 
         return view('inventories.edit', compact('inventory', 'products'));
     }
@@ -76,10 +76,5 @@ class InventoryController extends Controller
         $this->inventoryService->archive($inventory);
 
         return redirect()->route('inventories.index')->with('success', 'Stock archived successfully.');
-    }
-
-    private function getActiveProducts()
-    {
-        return Product::active()->with('unit')->orderBy('name')->get();
     }
 }

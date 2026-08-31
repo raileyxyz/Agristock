@@ -55,5 +55,4 @@ class UnitController extends Controller
 
         return redirect()->route('units.index')->with('success', "{$unit->name} deleted successfully.");
     }
-
 }

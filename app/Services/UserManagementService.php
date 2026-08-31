@@ -40,6 +40,15 @@ class UserManagementService
         ];
     }
 
+    public function getRoleUserCounts()
+    {
+        return User::query()
+            ->where('status', 'Active')
+            ->selectRaw('role, count(*) as total')
+            ->groupBy('role')
+            ->pluck('total', 'role');
+    }
+
     public function create(array $data): User
     {
         return DB::transaction(function () use ($data) {

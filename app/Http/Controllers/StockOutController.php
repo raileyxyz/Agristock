@@ -30,33 +30,9 @@ class StockOutController extends Controller
     {
         $this->authorize('inventory.stock-out');
 
-        $products = Product::active()->with('unit')->orderBy('name')->get();
-        $locations = StorageLocation::values();
+        $data = $this->stockOutService->getCreateData();
 
-        $inventories = Inventory::whereIn('product_id', $products->pluck('id'))
-            ->where('remaining_quantity', '>', 0)
-            ->get()
-            ->groupBy(['product_id', 'location']);
-
-        $stockData = [];
-        foreach ($products as $product) {
-            foreach ($locations as $location) {
-                $batches = $inventories->get($product->id, collect())->get($location, collect());
-
-                if ($batches->isEmpty()) continue;
-
-                $sorted = $product->expiry_track
-                    ? $batches->sortBy('expiry_date')
-                    : $batches->sortBy('created_at');
-
-                $stockData[$product->id][$location] = [
-                    'available' => (float) $sorted->sum('remaining_quantity'),
-                    'batch' => $sorted->first()->batch_number,
-                ];
-            }
-        }
-
-        return view('stock-outs.create', compact('products', 'stockData', 'locations'));
+        return view('stock-outs.create', $data);
     }
 
     /**

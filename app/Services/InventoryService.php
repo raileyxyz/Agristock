@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Inventory;
+use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 
 class InventoryService
@@ -29,6 +30,11 @@ class InventoryService
             'total_items' => Inventory::count(),
             'total_locations' => Inventory::distinct('location')->count('location'),
         ];
+    }
+
+    public function getActiveProducts()
+    {
+        return Product::active()->with('unit')->orderBy('name')->get();
     }
 
     public function create(array $data): Inventory

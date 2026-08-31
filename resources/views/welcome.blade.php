@@ -310,12 +310,14 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-12 sm:py-16 grid sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10">
 
             <div class="sm:col-span-2">
-                <div class="flex items-center gap-2.5 mb-4">
-                    <div class="w-9 h-9 bg-green-600 rounded-lg flex items-center justify-center">
-                        <i data-lucide="leaf" class="w-5 h-5 text-white"></i>
+                <a href="#top" class="group flex items-center gap-2.5 mb-4">
+                    <div class="w-9 h-9 bg-green-600 rounded-lg flex items-center justify-center transition-all duration-300 ease-out group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-md group-hover:shadow-green-700/30">
+                        <i data-lucide="leaf"class="w-5 h-5 text-white"></i>
                     </div>
-                    <span class="font-display font-bold text-lg text-white">AgriStock</span>
-                </div>
+                    <span class="font-display font-bold text-lg text-white transition-colors duration-300 group-hover:text-green-200">
+                        AgriStock
+                    </span>
+                </a>
                 <p class="text-green-300 text-sm leading-relaxed max-w-sm">
                     Full visibility over every farm input from seeds to fertilizers to equipment built for Philippine agriculture.
                 </p>
