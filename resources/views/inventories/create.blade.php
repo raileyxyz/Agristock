@@ -155,11 +155,19 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">Supplier</label>
-                        <select name="supplier_id" disabled
-                                class="w-full border border-gray-200 rounded-lg px-3.5 py-2.5 text-sm bg-gray-50 text-gray-400 cursor-not-allowed">
-                            <option value="">No suppliers yet</option>
+                        <select name="supplier_id"
+                                class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors
+                                {{ $errors->has('supplier_id') ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500' }}">
+                            <option value="">Select supplier...</option>
+                            @foreach($suppliers as $supplier)
+                                <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
+                                    {{ $supplier->company_name }}
+                                </option>
+                            @endforeach
                         </select>
-                        <p class="text-xs text-gray-400 mt-1.5">Supplier management is coming soon.</p>
+                        @error('supplier_id')
+                            <p class="text-xs text-red-600 mt-1.5">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 

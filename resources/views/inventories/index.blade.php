@@ -36,10 +36,11 @@
                     id: inventory.id,
                     product_id: inventory.product_id,
                     quantity: parseFloat(inventory.remaining_quantity).toFixed(2),
-                    batch_number: inventory.batch_number,
-                    expiry_date: inventory.expiry_date,
-                    location: inventory.location,
-                    notes: inventory.notes,
+                    batch_number: inventory.batch_number ?? "",
+                    expiry_date: inventory.expiry_date ?? "",
+                    location: inventory.location ?? "",
+                    supplier_id: inventory.supplier_id ?? "",
+                    notes: inventory.notes ?? "",
                     has_movement: inventory.has_movement
                 };
                 this.originalForm = { ...this.editForm };
@@ -73,10 +74,12 @@
                     id: '{{ old('id') }}',
                     product_id: '{{ old('product_id') }}',
                     quantity: '{{ old('quantity') }}',
-                    batch_number: '{{ addslashes(old('batch_number')) }}',
+                    batch_number: @js(old('batch_number', '')),
                     expiry_date: '{{ old('expiry_date') }}',
-                    location: '{{ old('location') }}',
-                    notes: '{{ addslashes(old('notes')) }}'
+                    location: @js(old('location', '')),
+                    supplier_id: '{{ old('supplier_id', '') }}',
+                    notes: @js(old('notes', '')),
+                    has_movement: false
                 };
                 editErrors = @js($errors->messages());
                 showEditModal = true;
@@ -133,9 +136,22 @@
                 <select name="location" onchange="this.form.submit()"
                         class="w-full sm:w-auto appearance-none border border-gray-300 rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                     <option value="">All Locations</option>
-                    @foreach(['Main Warehouse', 'Storage Room A', 'Storage Room B', 'Field Storage'] as $loc)
+                    @foreach($locations as $loc)
                         <option value="{{ $loc }}" {{ request('location') == $loc ? 'selected' : '' }}>
                             {{ $loc }}
+                        </option>
+                    @endforeach
+                </select>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            </div>
+
+            <div class="relative w-full sm:w-auto">
+                <select name="supplier_id" onchange="this.form.submit()"
+                        class="w-full sm:w-auto appearance-none border border-gray-300 rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    <option value="">All Suppliers</option>
+                    @foreach($suppliers as $supplier)
+                        <option value="{{ $supplier->id }}" {{ request('supplier_id') == $supplier->id ? 'selected' : '' }}>
+                            {{ $supplier->company_name }}
                         </option>
                     @endforeach
                 </select>
@@ -167,9 +183,14 @@
                     <tbody class="divide-y divide-gray-100">
                         @forelse($inventories as $inventory)
                             <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-4 py-3 font-medium text-gray-800 max-w-[220px] truncate" title="{{ $inventory->product->name }}">
+                            <td class="px-4 py-3 max-w-[220px]">
+                                <p class="font-medium text-gray-800 truncate" title="{{ $inventory->product->name }}">
                                     {{ $inventory->product->name }}
-                                </td>
+                                </p>
+                                <p class="text-xs text-gray-400 truncate mt-0.2">
+                                    {{ $inventory->supplier->company_name ?? 'No supplier' }}
+                                </p>
+                            </td>
                                 <td class="px-4 py-3 whitespace-nowrap">
                                     <span class="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full text-white"
                                         style="background-color: {{ $inventory->product->category->icon_color ?? '#6b7280' }};">
@@ -202,6 +223,7 @@
                                                             'batch_number' => $inventory->batch_number,
                                                             'expiry_date' => $inventory->expiry_date?->format('Y-m-d'),
                                                             'location' => $inventory->location,
+                                                            'supplier_id' => $inventory->supplier_id,
                                                             'notes' => $inventory->notes,
                                                             'has_movement' => $inventory->has_movement,
                                                         ]))"
@@ -347,13 +369,24 @@
                                 <select name="location" x-model="editForm.location" :disabled="editForm.has_movement"
                                         class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors"
                                         :class="editForm.has_movement ? 'bg-gray-50 text-gray-400 cursor-not-allowed border-gray-200' : (editErrors.location ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'bg-white border-gray-300 focus:ring-green-500/40 focus:border-green-500')">
-                                    @foreach(['Main Warehouse', 'Warehouse A', 'Warehouse B', 'Warehouse C'] as $loc)
+                                    @foreach($locations as $loc)
                                         <option value="{{ $loc }}">{{ $loc }}</option>
                                     @endforeach
                                 </select>
                                 <template x-if="editForm.has_movement">
                                     <input type="hidden" name="location" :value="editForm.location">
                                 </template>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1.5">Supplier</label>
+                                <select name="supplier_id" x-model="editForm.supplier_id"
+                                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+                                    <option value="">Select supplier...</option>
+                                    @foreach($suppliers as $supplier)
+                                        <option value="{{ $supplier->id }}">{{ $supplier->company_name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div>

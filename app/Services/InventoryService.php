@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Inventory;
 use App\Models\Product;
+use App\Models\Supplier;
 use Illuminate\Support\Facades\Auth;
 
 class InventoryService
@@ -19,6 +20,7 @@ class InventoryService
             ->search($filters['search'] ?? null)
             ->filterCategory($filters['category_id'] ?? null)
             ->filterLocation($filters['location'] ?? null)
+            ->filterSupplier($filters['supplier_id'] ?? null)
             ->latest()
             ->paginate(15)
             ->withQueryString();
@@ -35,6 +37,11 @@ class InventoryService
     public function getActiveProducts()
     {
         return Product::active()->with('unit')->orderBy('name')->get();
+    }
+
+    public function getActiveSuppliers()
+    {
+        return Supplier::active()->orderBy('company_name')->get();
     }
 
     public function create(array $data): Inventory

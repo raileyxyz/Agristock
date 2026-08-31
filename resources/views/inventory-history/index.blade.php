@@ -81,7 +81,7 @@
                                 <div class="text-xs text-gray-600">{{ $row->user_name }}</div>
                                 @if($row->user_role && $row->user_role !== '—')
                                     <div class="text-[10px]
-                                        {{ $row->user_role === 'Admin' ? 'text-purple-500' : 'text-gray-400' }}">
+                                        {{ $row->user_role === 'Admin' ? 'text-purple-600' : ($row->user_role === 'Manager' ? 'text-blue-600' : 'text-gray-500')}}">
                                         {{ $row->user_role }}
                                     </div>
                                 @endif

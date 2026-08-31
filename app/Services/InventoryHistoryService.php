@@ -65,7 +65,7 @@ class InventoryHistoryService
                     'unit_abbr' => $inv->product->unit->abbreviation ?? '',
                     'reason' => $isTransferMirror ? $inv->notes : '—',
                     'user_name' => $inv->user->name ?? '—',
-                    'user_role' => $inv->user->role ?? '—',
+                    'user_role' => $inv->user->role?->value ?? '—',
                     'is_transfer' => $isTransferMirror,
                 ];
             })
@@ -94,7 +94,7 @@ class InventoryHistoryService
                     'unit_abbr' => $out->product->unit->abbreviation ?? '',
                     'reason' => $isTransfer ? "Transfer to {$out->transfer_to}" : $out->reason,
                     'user_name' => $out->user->name ?? '—',
-                    'user_role' => $out->user->role ?? '—',
+                    'user_role' => $out->user->role?->value ?? '—',
                     'is_transfer' => $isTransfer,
                 ];
             })
@@ -120,7 +120,7 @@ class InventoryHistoryService
                 'unit_abbr' => $adj->inventory->product->unit->abbreviation ?? '',
                 'reason' => $adj->reason,
                 'user_name' => $adj->user->name ?? '—',
-                'user_role' => $adj->user->role ?? '—',
+                'user_role' => $adj->user->role?->value ?? '—',
             ]);
     }
 }

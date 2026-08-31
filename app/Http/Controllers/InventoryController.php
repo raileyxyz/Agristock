@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Inventory;
+use App\Enums\StorageLocation;
 use Illuminate\Http\Request;
 use App\Services\InventoryService;
 use App\Http\Requests\StoreInventoryRequest;
@@ -24,8 +25,10 @@ class InventoryController extends Controller
         $summary = $this->inventoryService->getSummary();
         $categories = Category::where('status', 'Active')->orderBy('name')->get();
         $products = $this->inventoryService->getActiveProducts();
+        $suppliers = $this->inventoryService->getActiveSuppliers();
+        $locations = StorageLocation::values();
 
-        return view('inventories.index', compact('inventories', 'summary', 'categories', 'products'));
+        return view('inventories.index', compact('inventories', 'summary', 'categories', 'products', 'suppliers', 'locations'));
     }
 
     public function create()
@@ -33,8 +36,10 @@ class InventoryController extends Controller
         $this->authorize('inventory.stock-in');
 
         $products = $this->inventoryService->getActiveProducts();
+        $suppliers = $this->inventoryService->getActiveSuppliers();
+        $locations = StorageLocation::values();
 
-        return view('inventories.create', compact('products'));
+        return view('inventories.create', compact('products', 'suppliers', 'locations'));
     }
 
     public function store(StoreInventoryRequest $request)

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Product;
+use App\Enums\StorageLocation;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -41,6 +42,11 @@ class UpdateInventoryRequest extends FormRequest
                 'string',
                 'max:50',
                 Rule::unique('inventories', 'batch_number')->ignore($this->inventory),
+            ],
+
+            'location' => [
+                'required',
+                Rule::in(StorageLocation::values()),
             ],
 
             'expiry_date' => [

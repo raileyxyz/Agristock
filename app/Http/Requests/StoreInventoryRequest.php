@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Product;
+use App\Enums\StorageLocation;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -27,7 +28,7 @@ class StoreInventoryRequest extends FormRequest
 
             'supplier_id' => [
                 'nullable',
-                'integer',
+                Rule::exists('suppliers', 'id'),
             ],
 
             'quantity' => [
@@ -42,6 +43,11 @@ class StoreInventoryRequest extends FormRequest
                 'string',
                 'max:50',
                 Rule::unique('inventories', 'batch_number'),
+            ],
+
+            'location' => [
+                'required',
+                Rule::in(StorageLocation::values()),
             ],
 
             'expiry_date' => [

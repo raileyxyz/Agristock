@@ -41,11 +41,10 @@ class Inventory extends Model
         return $this->hasMany(StockAdjustment::class);
     }
 
-    // Uncomment once the Supplier model/table exists:
-    // public function supplier()
-    // {
-    //     return $this->belongsTo(Supplier::class);
-    // }
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
 
     public function scopeSearch($query, $search)
     {
@@ -69,6 +68,11 @@ class Inventory extends Model
     public function scopeFilterLocation($query, $location)
     {
         return $query->when($location, fn($query) => $query->where('location', $location));
+    }
+
+    public function scopeFilterSupplier($query, $supplierId)
+    {
+        return $query->when($supplierId, fn($q) => $q->where('supplier_id', $supplierId));
     }
 
     public function getFormattedQuantityAttribute(): string
