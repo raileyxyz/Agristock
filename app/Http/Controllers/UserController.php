@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Enums\UserRole;
 use App\Models\User;
 use App\Services\UserManagementService;
 use Illuminate\Http\RedirectResponse;
@@ -35,7 +36,7 @@ class UserController extends Controller
             'users' => $users,
             'statistics' => $statistics,
             'summary' => $summary,
-            'roles' => User::ROLES,
+            'roles' => UserRole::values(),
         ]);
     }
 
@@ -47,7 +48,7 @@ class UserController extends Controller
         $this->authorize('create', User::class);
 
         return view('users.create', [
-            'roles' => User::ROLES,
+            'roles' => UserRole::values(),
             'permissions' => config('permissions'),
         ]);
     }
@@ -79,7 +80,7 @@ class UserController extends Controller
 
         return view('users.edit', [
             'user' => $user,
-            'roles' => User::ROLES,
+            'roles' => UserRole::values(),
             'permissions' => config('permissions'),
         ]);
     }

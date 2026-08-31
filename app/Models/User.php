@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,21 +15,6 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    public const ROLE_ADMIN = 'Admin';
-    public const ROLE_MANAGER = 'Manager';
-    public const ROLE_STAFF = 'Staff';
-
-    const ROLES = [
-        self::ROLE_ADMIN,
-        self::ROLE_MANAGER,
-        self::ROLE_STAFF,
-    ];
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -38,48 +24,39 @@ class User extends Authenticatable
         'last_login_at',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'last_login_at' => 'datetime',
+            'role' => UserRole::class,
         ];
     }
 
     public function isAdmin(): bool
     {
-        return $this->role === self::ROLE_ADMIN;
+        return $this->role === UserRole::ADMIN;
     }
 
     public function isManager(): bool
     {
-        return $this->role === self::ROLE_MANAGER;
+        return $this->role === UserRole::MANAGER;
     }
 
     public function isStaff(): bool
     {
-        return $this->role === self::ROLE_STAFF;
+        return $this->role === UserRole::STAFF;
     }
 
-    public function scopeRole(Builder $query, ?string $role): Builder
+    public function scopeRole(Builder $query, UserRole|string|null $role): Builder
     {
-        return $query->when($role, fn (Builder $q) => $q->where('role', $role));
+        return $query->when($role, fn (Builder $q) => $q->where('role', $role instanceof UserRole ? $role->value : $role));
     }
 
     public function scopeSearch(Builder $query, ?string $term): Builder

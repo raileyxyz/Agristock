@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\User;
+use App\Enums\UserRole;
 
 return [
-    User::ROLE_ADMIN => [
+    UserRole::ADMIN->value => [
         'Dashboard',
         'Product Management (full)',
         'Inventory Management (full)',
@@ -12,7 +12,7 @@ return [
         'Reports (all)',
         'User Management (full)',
     ],
-    User::ROLE_MANAGER => [
+    UserRole::MANAGER->value => [
         'Dashboard',
         'Product Management (view/add/edit)',
         'Inventory Management (full)',
@@ -21,7 +21,7 @@ return [
         'Reports (stock, movement, expiry)',
         'User Management (view only)',
     ],
-    User::ROLE_STAFF => [
+    UserRole::STAFF->value => [
         'Dashboard',
         'Product Management (view)',
         'Inventory Management (stock in/out)',

@@ -120,7 +120,7 @@
                     <tbody class="divide-y divide-gray-100">
                         @forelse($users as $user)
                             @php
-                                $roleBadge = match($user->role) {
+                                $roleBadge = match($user->role->value) {
                                     'Admin' => 'bg-purple-100 text-purple-700',
                                     'Manager' => 'bg-blue-100 text-blue-700',
                                     default => 'bg-gray-100 text-gray-600',
@@ -144,7 +144,7 @@
                                 </td>
                                 <td class="px-4 py-3 text-gray-500 whitespace-nowrap">{{ $user->email }}</td>
                                 <td class="px-4 py-3 whitespace-nowrap">
-                                    <span class="text-xs font-bold px-2.5 py-1 rounded-full {{ $roleBadge }}">{{ $user->role }}</span>
+                                    <span class="text-xs font-bold px-2.5 py-1 rounded-full {{ $roleBadge }}">{{ $user->role->value }}</span>
                                 </td>
                                 <td class="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">
                                     {{ $user->last_login_at?->format('Y-m-d H:i') ?? 'Never' }}

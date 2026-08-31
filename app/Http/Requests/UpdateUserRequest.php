@@ -2,7 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
+use App\Enums\UserRole;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -42,7 +43,7 @@ class UpdateUserRequest extends FormRequest
 
             'role' => [
                 'required',
-                Rule::in(User::ROLES)
+                new Enum(UserRole::class)
             ],
 
             'password' => [
