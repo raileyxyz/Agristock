@@ -145,7 +145,7 @@
                                 class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors
                                 {{ $errors->has('location') ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500' }}">
                             <option value="">Select location...</option>
-                            @foreach(['Main Warehouse', 'Storage Room A', 'Storage Room B', 'Field Storage'] as $loc)
+                            @foreach($locations as $loc)
                                 <option value="{{ $loc }}" {{ old('location') === $loc ? 'selected' : '' }}>{{ $loc }}</option>
                             @endforeach
                         </select>
