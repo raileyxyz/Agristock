@@ -44,8 +44,8 @@
 
         <div class="relative" x-data="{ userMenuOpen: false }">
             <button @click="userMenuOpen = !userMenuOpen"
-                    class="w-9 h-9 rounded-full bg-green-600 text-white flex items-center justify-center text-sm font-semibold shrink-0 hover:ring-2 hover:ring-green-200 transition-all">
-                {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                    class="rounded-full hover:ring-2 hover:ring-green-200 transition-all shrink-0">
+                <x-avatar size="w-10 h-10" text-size="text-sm" />
             </button>
 
             <!-- Dropdown card -->
@@ -62,9 +62,7 @@
 
                 <!-- Identity block -->
                 <div class="flex items-center gap-3 p-4 bg-gray-50">
-                    <div class="w-11 h-11 rounded-full bg-green-600 text-white flex items-center justify-center font-semibold shrink-0">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
-                    </div>
+                    <x-avatar size="w-11 h-11" text-size="text-base" />
                     <div class="min-w-0">
                         <p class="text-sm font-semibold text-gray-800 truncate">{{ Auth::user()->name }}</p>
                         <p class="text-xs text-gray-500 truncate">{{ Auth::user()->email }}</p>

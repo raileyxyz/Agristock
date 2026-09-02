@@ -285,9 +285,7 @@
     <!-- User -->
     <div class="border-t border-gray-100 p-4 shrink-0">
         <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full bg-green-600 text-white flex items-center justify-center text-sm font-semibold shrink-0">
-                {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
-            </div>
+            <x-avatar size="w-9 h-9" text-size="text-sm" />
 
             <div class="min-w-0 flex-1">
                 <p class="text-sm font-semibold text-gray-800 truncate">{{ Auth::user()->name }}</p>
