@@ -44,7 +44,7 @@
 
         <div class="relative" x-data="{ userMenuOpen: false }">
             <button @click="userMenuOpen = !userMenuOpen"
-                    class="rounded-full hover:ring-2 hover:ring-green-200 transition-all shrink-0">
+                    class="rounded-full hover:ring-2 hover:ring-green-600 transition-all shrink-0">
                 <x-avatar size="w-10 h-10" text-size="text-sm" />
             </button>
 

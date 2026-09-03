@@ -1,5 +1,9 @@
 <x-app-layout>
-    <div x-data="{ activeTab: 'profile', showPhotoModal: false, photoPreview: null }" class="max-w-8xl mx-auto">
+    <div x-data="{
+        activeTab: '{{ session('status') === 'password-updated' || $errors->updatePassword->isNotEmpty() || $errors->userDeletion->isNotEmpty() ? 'security' : 'profile' }}',
+        showPhotoModal: false,
+        photoPreview: null
+    }" class="max-w-8xl mx-auto">
 
         <div class="mb-6">
             <h1 class="text-2xl font-bold text-gray-900">Settings</h1>
@@ -35,14 +39,16 @@
             <!-- Content -->
             <div class="flex-1 min-w-0">
 
-                @if(session('status') === 'profile-updated' || session('status') === 'avatar-updated')
-                    <div class="mb-4 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-lg">
-                        Changes saved successfully.
-                    </div>
-                @endif
-
                 <!-- Profile tab -->
                 <div x-show="activeTab === 'profile'" class="bg-white border border-gray-200 rounded-xl p-6">
+
+                    @if(session('status') === 'profile-updated' || session('status') === 'avatar-updated')
+                        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" x-transition
+                            class="mb-4 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-lg">
+                            Changes saved successfully.
+                        </div>
+                    @endif
+
                     <h2 class="text-base font-semibold text-gray-800">Profile Information</h2>
 
                     <!-- Photo -->
@@ -172,6 +178,13 @@
                         <h2 class="text-base font-semibold text-gray-800">Change Password</h2>
                         <p class="text-sm text-gray-400 mt-1 mb-5">Use a long, random password to stay secure.</p>
 
+                        @if(session('status') === 'password-updated')
+                            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" x-transition
+                                class="mb-5 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-lg">
+                                Password updated successfully.
+                            </div>
+                        @endif
+
                         <form method="post" action="{{ route('password.update') }}" class="space-y-5">
                             @csrf
                             @method('put')
@@ -205,29 +218,59 @@
                         <h2 class="text-base font-bold text-red-600">Delete Account</h2>
                         <p class="text-sm text-gray-500 mt-1 mb-5">Once deleted, all of your data will be permanently removed. This cannot be undone.</p>
 
-                        <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">
-                            Delete Account
+                        <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')" class="inline-flex items-center gap-2">
+                            <i data-lucide="trash-2" class="w-4 h-4 stroke-[3]"></i>Delete Account
                         </x-danger-button>
 
-                        <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-                            <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
-                                @csrf
-                                @method('delete')
+                        <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" max-width="md" focusable>
+                            <div x-data="{ password: '' }" class="p-6 sm:p-7">
 
-                                <h2 class="text-lg font-medium text-gray-900">Are you sure you want to delete your account?</h2>
-                                <p class="mt-1 text-sm text-gray-600">Please enter your password to confirm.</p>
-
-                                <div class="mt-6">
-                                    <x-input-label for="password" value="Password" class="sr-only" />
-                                    <x-text-input id="password" name="password" type="password" class="mt-1 block w-3/4" placeholder="Password" />
-                                    <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                                <!-- Header & Icon -->
+                                <div class="flex items-start gap-4">
+                                    <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                                        <i data-lucide="triangle-alert" class="w-6 h-6 text-red-600 stroke-[2.5]"></i>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-base font-semibold text-gray-900">Delete Account</h2>
+                                        <p class="mt-1 text-sm text-gray-500 leading-normal">
+                                            This action is permanent and cannot be undone. All associated data will be removed.
+                                        </p>
+                                    </div>
                                 </div>
 
-                                <div class="mt-6 flex justify-end">
-                                    <x-secondary-button x-on:click="$dispatch('close')">Cancel</x-secondary-button>
-                                    <x-danger-button class="ms-3">Delete Account</x-danger-button>
-                                </div>
-                            </form>
+                                <!-- Form -->
+                                <form method="post" action="{{ route('profile.destroy') }}" class="mt-6">
+                                    @csrf
+                                    @method('delete')
+
+                                    <div class="space-y-1.5">
+                                        <label for="password" class="block text-xs font-medium text-gray-700">
+                                            Confirm your password
+                                        </label>
+                                        <input id="password"
+                                            name="password"
+                                            type="password"
+                                            x-model="password"
+                                            class="w-full h-10 border border-gray-200 rounded-lg px-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all">
+                                        <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-1 text-xs" />
+                                    </div>
+
+                                    <!-- Actions -->
+                                    <div class="mt-6 flex items-center justify-end gap-3">
+                                        <button type="button"
+                                                x-on:click="$dispatch('close')"
+                                                class="h-9 px-4 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 transition-colors">
+                                            Cancel
+                                        </button>
+                                        <button type="submit"
+                                                :disabled="!password"
+                                                class="h-9 px-4 rounded-lg text-sm font-medium text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-red-600 hover:bg-red-700 active:bg-red-800 shadow-sm">
+                                            Delete Account
+                                        </button>
+                                    </div>
+                                </form>
+
+                            </div>
                         </x-modal>
                     </div>
 
