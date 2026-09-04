@@ -189,38 +189,57 @@
                                 <td class="px-3 py-2 whitespace-nowrap">
                                     <span class="text-xs font-medium px-2 py-0.5 rounded-full
                                         {{ $product->status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">
-                                        {{ ($product->status) }}
+                                        {{ $product->status }}
                                     </span>
                                 </td>
-                                <td class="px-3 py-2 whitespace-nowrap">
-                                    <div class="flex items-center justify-end gap-0.5">
-                                        <button @click="openView(@js($product))"
-                                                title="View product"
-                                                class="text-gray-400 hover:text-blue-700 p-1 rounded-md hover:bg-gray-100">
-                                            <i data-lucide="eye" class="w-4 h-4"></i>
+
+                                <!-- Actions Dropdown Column -->
+                                <td class="px-3 py-2 whitespace-nowrap text-right">
+                                    <div x-data="{ open: false }" class="relative inline-block text-left">
+                                        <button @click="open = !open"
+                                                @click.outside="open = false"
+                                                title="Options"
+                                                class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-1.5 rounded-lg transition-colors">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
                                         </button>
 
-                                        @can('products.update')
-                                            <button @click="openEdit(@js($product))"
-                                                    title="Edit product"
-                                                    class="text-gray-400 hover:text-green-700 p-1 rounded-md hover:bg-gray-100">
-                                                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
-                                            </button>
-                                        @endcan
+                                        <div x-show="open"
+                                            x-transition:enter="transition ease-out duration-100"
+                                            x-transition:enter-start="transform opacity-0 scale-95"
+                                            x-transition:enter-end="transform opacity-100 scale-100"
+                                            x-transition:leave="transition ease-in duration-75"
+                                            x-transition:leave-start="transform opacity-100 scale-100"
+                                            x-transition:leave-end="transform opacity-0 scale-95"
+                                            class="absolute right-0 z-20 mt-1 w-36 origin-top-right rounded-xl bg-white p-1 shadow-lg ring-1 ring-black/5 focus:outline-none"
+                                            x-cloak>
 
-                                        @can('products.delete')
-                                            @if($product->status === 'Active')
-                                                <button @click="openArchive({{ $product->id }}, '{{ addslashes($product->name) }}')"
-                                                        title="Archive product"
-                                                        class="text-gray-400 hover:text-red-600 p-1 rounded-md hover:bg-gray-100">
-                                                    <i data-lucide="archive" class="w-3.5 h-3.5"></i>
+                                            <!-- View Product -->
+                                            <button @click="open = false; openView(@js($product))"
+                                                    class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 hover:bg-gray-50 hover:text-green-600 transition-colors">
+                                                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                                                View
+                                            </button>
+
+                                            <!-- Edit Product -->
+                                            @can('products.update')
+                                                <button @click="open = false; openEdit(@js($product))"
+                                                        class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 hover:bg-gray-50 hover:text-green-600 transition-colors">
+                                                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                                                    Edit
                                                 </button>
-                                            @else
-                                                <span title="Already archived" class="text-gray-200 p-1 cursor-not-allowed inline-flex">
-                                                    <i data-lucide="archive" class="w-3.5 h-3.5"></i>
-                                                </span>
-                                            @endif
-                                        @endcan
+                                            @endcan
+
+                                            <!-- Archive Product -->
+                                            @can('products.delete')
+                                                @if($product->status === 'Active')
+                                                    <button @click="open = false; openArchive({{ $product->id }}, '{{ addslashes($product->name) }}')"
+                                                            class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-red-600 hover:bg-red-50 transition-colors">
+                                                        <i data-lucide="archive" class="w-3.5 h-3.5"></i>
+                                                        Archive
+                                                    </button>
+                                                @endif
+                                            @endcan
+                                        </div>
                                     </div>
                                 </td>
                             </tr>

@@ -15,7 +15,7 @@ class UserManagementService
     public function list(?string $search, ?string $role, int $perPage = 10): LengthAwarePaginator
     {
         return User::query()
-            ->select(['id', 'name', 'email', 'role', 'status', 'last_login_at', 'created_at'])
+            ->select(['id', 'name', 'email', 'phone', 'address', 'avatar', 'role', 'status', 'last_login_at', 'created_at'])
             ->search($search)
             ->role($role)
             ->latest()

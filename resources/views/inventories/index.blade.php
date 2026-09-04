@@ -228,7 +228,7 @@
                                                             'has_movement' => $inventory->has_movement,
                                                         ]))"
                                                         title="Edit stock entry"
-                                                        class="text-gray-400 hover:text-green-700 p-1 rounded-md hover:bg-gray-100">
+                                                        class="text-gray-400 hover:text-green-600 p-1 rounded-md hover:bg-green-50">
                                                     <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
                                                 </button>
                                             @endcan

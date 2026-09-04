@@ -9,6 +9,14 @@
             archiveTarget: { id: null, name: '' },
             showSuccessModal: false,
             successMessage: '{{ addslashes(session('success', '')) }}',
+            showViewModal: false,
+            viewTarget: {},
+
+            openView(user) {
+                this.viewTarget = user;
+                this.showViewModal = true;
+                this.$nextTick(() => lucide.createIcons());
+            },
 
             openEdit(user) {
                 this.editForm = { ...user, password: '' };
@@ -112,9 +120,7 @@
                             <th class="px-4 py-3 font-medium whitespace-nowrap">Role</th>
                             <th class="px-4 py-3 font-medium whitespace-nowrap">Last Login</th>
                             <th class="px-4 py-3 font-medium whitespace-nowrap">Status</th>
-                            @if($canManageUnits)
-                                <th class="px-4 py-3 font-medium text-right whitespace-nowrap">Actions</th>
-                            @endif
+                            <th class="px-4 py-3 font-medium text-right whitespace-nowrap">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -130,9 +136,7 @@
                                 <td class="px-4 py-3 whitespace-nowrap">
                                     <div class="flex items-center gap-2.5">
                                         <div class="relative shrink-0">
-                                            <div class="w-8 h-8 rounded-full bg-green-600 text-white flex items-center justify-center text-xs font-semibold">
-                                                {{ strtoupper(substr($user->name, 0, 2)) }}
-                                            </div>
+                                            <x-avatar :user="$user" size="w-8 h-8" text-size="text-xs" />
                                             @if($user->id === auth()->id())
                                                 <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-white border border-gray-200 flex items-center justify-center">
                                                     <i data-lucide="check" class="w-3 h-3 text-red-600 font-bold"></i>
@@ -152,39 +156,76 @@
                                 <td class="px-4 py-3 whitespace-nowrap">
                                     <span class="text-xs font-medium px-2.5 py-1 rounded-full
                                         {{ $user->status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">
-                                        {{ ($user->status) }}
+                                        {{ $user->status }}
                                     </span>
                                 </td>
-                                @if($canManageUnits)
-                                    <td class="px-4 py-3 whitespace-nowrap">
-                                        <div class="flex items-center justify-end gap-1">
+
+                                <td class="px-4 py-3 whitespace-nowrap text-right">
+                                    <div x-data="{ open: false }" class="relative inline-block text-left">
+                                        <button @click="open = !open"
+                                                @click.outside="open = false"
+                                                class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-1.5 rounded-lg transition-colors">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+
+                                        <div x-show="open"
+                                            x-transition:enter="transition ease-out duration-100"
+                                            x-transition:enter-start="transform opacity-0 scale-95"
+                                            x-transition:enter-end="transform opacity-100 scale-100"
+                                            x-transition:leave="transition ease-in duration-75"
+                                            x-transition:leave-start="transform opacity-100 scale-100"
+                                            x-transition:leave-end="transform opacity-0 scale-95"
+                                            class="absolute right-0 z-20 mt-1 w-36 origin-top-right rounded-xl bg-white p-1 shadow-lg ring-1 ring-black/5 focus:outline-none"
+                                            x-cloak>
+
+                                            <!-- View -->
+                                            <button @click="open = false; openView(@js([
+                                                        'id' => $user->id,
+                                                        'name' => $user->name,
+                                                        'email' => $user->email,
+                                                        'phone' => $user->phone,
+                                                        'address' => $user->address,
+                                                        'avatar' => $user->avatar ? \Illuminate\Support\Facades\Storage::url($user->avatar) : null,
+                                                        'role' => $user->role->value,
+                                                        'status' => $user->status,
+                                                        'last_login_at' => $user->last_login_at?->format('M d, Y - h:i A'),
+                                                        'created_at' => $user->created_at?->format('M d, Y'),
+                                                    ]))"
+                                                    class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 hover:bg-gray-50 hover:text-green-600 transition-colors">
+                                                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                                                View
+                                            </button>
+
+                                            <!-- Edit -->
                                             @if($user->id !== auth()->id())
-                                                @can('users.update')
-                                                    <button @click="openEdit(@js([
+                                                @can('update', $user)
+                                                    <button @click="open = false; openEdit(@js([
                                                                 'id' => $user->id,
                                                                 'name' => $user->name,
                                                                 'email' => $user->email,
-                                                                'role' => $user->role,
+                                                                'role' => $user->role->value,
                                                                 'status' => $user->status,
                                                             ]))"
-                                                            title="Edit user"
-                                                            class="text-gray-400 hover:text-green-700 p-1.5 rounded-md hover:bg-gray-100">
-                                                        <i data-lucide="pencil" class="w-4 h-4"></i>
+                                                            class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 hover:bg-gray-50 hover:text-green-600 transition-colors">
+                                                        <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                                                        Edit
                                                     </button>
                                                 @endcan
                                             @endif
+
+                                            <!-- Archive -->
                                             @if($user->id !== auth()->id() && $user->status === 'Active')
-                                                @can('suppliers.delete')
-                                                    <button @click="openArchive({{ $user->id }}, '{{ addslashes($user->name) }}')"
-                                                            title="Archive user"
-                                                            class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-gray-100">
-                                                        <i data-lucide="archive" class="w-4 h-4"></i>
+                                                @can('delete', $user)
+                                                    <button @click="open = false; openArchive({{ $user->id }}, '{{ addslashes($user->name) }}')"
+                                                            class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                                        <i data-lucide="archive" class="w-3.5 h-3.5"></i>
+                                                        Archive
                                                     </button>
                                                 @endcan
                                             @endif
                                         </div>
-                                    </td>
-                                @endif
+                                    </div>
+                                </td>
                             </tr>
                         @empty
                             <tr>
@@ -202,6 +243,121 @@
         @if($users->hasPages())
             <div class="mt-6">{{ $users->links() }}</div>
         @endif
+
+        <!-- View User Modal -->
+
+        <div x-show="showViewModal"
+            x-transition:enter="transition-opacity ease-out duration-200"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-150"
+            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            style="display: none;" x-cloak>
+
+            <div @click.outside="showViewModal = false"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                class="bg-white rounded-2xl shadow-xl border border-gray-100 w-full max-w-sm overflow-hidden">
+
+                <!-- Top Action Bar -->
+                <div class="flex items-center justify-between px-6 pt-5 pb-4 shrink-0 border-b border-gray-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center shrink-0">
+                            <i data-lucide="user" class="w-4.5 h-4.5"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-semibold text-gray-900 text-base leading-tight">User Details</h2>
+                            <p class="text-xs text-gray-500 mt-0.5">View user profile information</p>
+                        </div>
+                    </div>
+                    <button type="button" @click="showViewModal = false"
+                            class="text-gray-400 hover:text-gray-600 hover:bg-gray-100/80 rounded-lg p-1.5 transition-colors">
+                        <i data-lucide="x" class="w-4.5 h-4.5"></i>
+                    </button>
+                </div>
+
+                <!-- Profile Hero Section -->
+                <div class="px-6 pb-5 pt-2 flex flex-col items-center text-center border-b border-gray-100">
+                    <div class="relative mb-3">
+                        <template x-if="viewTarget.avatar">
+                            <img :src="viewTarget.avatar" class="w-16 h-16 rounded-full object-cover ring-2 ring-gray-100 shadow-sm">
+                        </template>
+
+                        <!-- Green Avatar Background (When avatar is null) -->
+                        <template x-if="!viewTarget.avatar">
+                            <div class="w-16 h-16 rounded-full bg-green-600 text-white flex items-center justify-center text-lg font-semibold ring-2 ring-emerald-100 shadow-sm"
+                                x-text="viewTarget.name ? viewTarget.name.substring(0, 2).toUpperCase() : ''"></div>
+                        </template>
+                    </div>
+
+                    <h3 class="font-semibold text-gray-900 text-base leading-snug" x-text="viewTarget.name"></h3>
+                    <p class="text-xs text-gray-500 mt-0.5" x-text="viewTarget.email"></p>
+
+                    <!-- Status & Role Badges -->
+                    <div class="flex items-center gap-2 mt-3">
+                        <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset"
+                            :class="viewTarget.status === 'Active'
+                                ? 'bg-green-50 text-green-600 ring-green-600/20'
+                                : 'bg-gray-50 text-gray-600 ring-gray-500/10'">
+                            <span class="h-1.5 w-1.5 rounded-full"
+                                :class="viewTarget.status === 'Active' ? 'bg-green-600' : 'bg-gray-400'"></span>
+                            <span x-text="viewTarget.status"></span>
+                        </span>
+
+                        <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ring-inset"
+                            :class="viewTarget.role === 'Admin' ? 'bg-purple-100 text-purple-700 ring-purple-700/10' :
+                                    (viewTarget.role === 'Manager' ? 'bg-blue-100 text-blue-700 ring-blue-700/10' : 'bg-gray-100 text-gray-600 ring-gray-500/10')"
+                            x-text="viewTarget.role">
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Details List -->
+                <div class="p-6 bg-gray-50/50 space-y-3.5">
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-gray-500 flex items-center gap-2">
+                            <i data-lucide="phone" class="w-3.5 h-3.5 text-gray-400"></i>
+                            Phone
+                        </span>
+                        <span class="text-gray-900 font-medium" x-text="viewTarget.phone || '—'"></span>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-gray-500 flex items-center gap-2">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gray-400"></i>
+                            Address
+                        </span>
+                        <span class="text-gray-900 font-medium text-right max-w-[180px] truncate" x-text="viewTarget.address || '—'"></span>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-gray-500 flex items-center gap-2">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 text-gray-400"></i>
+                            Last Activity
+                        </span>
+                        <span class="text-gray-900 font-medium" x-text="viewTarget.last_login_at || 'Never'"></span>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-gray-500 flex items-center gap-2">
+                            <i data-lucide="calendar" class="w-3.5 h-3.5 text-gray-400"></i>
+                            Member Since
+                        </span>
+                        <span class="text-gray-900 font-medium" x-text="viewTarget.created_at"></span>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="p-4 bg-white border-t border-gray-100 flex justify-end">
+                    <button type="button" @click="showViewModal = false"
+                            class="w-full h-9 rounded-lg text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200/80 transition-colors">
+                        Done
+                    </button>
+                </div>
+
+            </div>
+        </div>
 
         <!-- Edit User Modal -->
         <div x-show="showEditModal"

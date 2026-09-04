@@ -140,19 +140,31 @@
                                 @if($canManageUnits)
                                     <td class="px-5 py-3.5">
                                         <div class="flex items-center justify-end gap-1">
+                                            <!-- Edit Button -->
                                             @can('products.update')
                                                 <button @click="openEdit({{ $unit->id }}, '{{ addslashes($unit->name) }}', '{{ addslashes($unit->abbreviation) }}')"
                                                         title="Edit unit"
-                                                        class="text-gray-400 hover:text-green-700 p-1.5 rounded-md hover:bg-gray-100">
+                                                        class="text-gray-400 hover:text-green-600 p-1.5 rounded-lg hover:bg-green-50 transition-colors">
                                                     <i data-lucide="pencil" class="w-4 h-4"></i>
                                                 </button>
                                             @endcan
+
+                                            <!-- Delete Button -->
                                             @can('products.delete')
-                                                <button @click="openDelete({{ $unit->id }}, '{{ addslashes($unit->name) }}', {{ $unit->products_count }})"
-                                                        title="Delete unit"
-                                                        class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-gray-100">
-                                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                                </button>
+                                                @if($unit->products_count == 0)
+                                                    <button @click="openDelete({{ $unit->id }}, '{{ addslashes($unit->name) }}', {{ $unit->products_count }})"
+                                                            title="Delete unit"
+                                                            class="text-gray-400 hover:text-red-600 p-1.5 rounded-lg hover:bg-red-50 transition-colors">
+                                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                                    </button>
+                                                @else
+                                                    <!-- Disabled State (Kapag ginagamit pa ng produkto) -->
+                                                    <button disabled
+                                                            title="Cannot delete: Unit is currently in use"
+                                                            class="text-gray-200 p-1.5 cursor-not-allowed">
+                                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                                    </button>
+                                                @endif
                                             @endcan
                                         </div>
                                     </td>

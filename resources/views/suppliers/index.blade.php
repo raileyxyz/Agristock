@@ -148,7 +148,7 @@
                         </div>
 
                         <!-- Actions -->
-                        <div class="flex items-center gap-2 shrink-0">
+                        <div class="flex items-center gap-1 shrink-0">
 
                             @can('suppliers.update')
                                 <button
@@ -164,7 +164,7 @@
                                         'category_ids' => $supplier->categories->pluck('id'),
                                     ]))"
                                     title="Edit supplier"
-                                    class="text-gray-400 hover:text-green-700 transition-colors">
+                                    class="text-gray-400 hover:text-green-600 hover:bg-green-50 p-1.5 rounded-md transition-colors">
                                     <i data-lucide="pencil" class="w-4 h-4"></i>
                                 </button>
                             @endcan
@@ -180,7 +180,7 @@
                                     title="{{ $supplier->status === 'Active' ? 'Archive supplier' : 'Supplier already archived' }}"
                                     class="shrink-0 transition-colors
                                         {{ $supplier->status === 'Active'
-                                            ? 'text-gray-400 hover:text-red-600 cursor-pointer'
+                                            ? 'text-gray-400 hover:text-red-600 cursor-pointer p-1.5 rounded-md hover:bg-red-50'
                                             : 'text-gray-200 cursor-not-allowed'
                                         }}"
                                     {{ $supplier->status === 'Archived' ? 'disabled' : '' }}

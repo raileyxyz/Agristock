@@ -154,7 +154,7 @@
                             <button
                                 @click="editCategory(@js($category))"
                                 title="Edit category"
-                                class="text-gray-400 hover:text-green-700 p-1.5 rounded-md hover:bg-gray-100">
+                                class="text-gray-400 hover:text-green-600 p-1.5 rounded-md hover:bg-green-50">
                                 <i data-lucide="pencil" class="w-4 h-4"></i>
                             </button>
                         @endcan
@@ -164,7 +164,7 @@
                                 <button
                                     @click="openArchive({{ $category->id }}, '{{ addslashes($category->name) }}')"
                                     title="Archive category"
-                                    class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-gray-100">
+                                    class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-red-50">
                                     <i data-lucide="archive" class="w-4 h-4"></i>
                                 </button>
                             @else
