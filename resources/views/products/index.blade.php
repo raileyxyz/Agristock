@@ -578,7 +578,7 @@
                         <!-- Header -->
                         <div class="flex items-start justify-between px-4 sm:px-6 pt-6 pb-5 shrink-0">
                             <div class="flex items-center gap-3 min-w-0">
-                                <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center shrink-0">
                                     <i data-lucide="package" class="w-4.5 h-4.5"></i>
                                 </div>
                                 <div class="min-w-0">

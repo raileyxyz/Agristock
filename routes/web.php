@@ -11,6 +11,7 @@ use App\Http\Controllers\StockOutController;
 use App\Http\Controllers\StockAdjustmentController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,6 +26,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Product Management
@@ -94,10 +96,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/users-roles-permissions', [UserController::class, 'rolesPermissions'])
         ->name('users.roles');
-});
 
-Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
-Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::middleware('can:reports.stock')->group(function () {
+        Route::get('/reports/stock', [ReportController::class, 'stock'])->name('reports.stock');
+    });
+});
 
 require __DIR__.'/auth.php';
