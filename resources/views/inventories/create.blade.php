@@ -16,7 +16,7 @@
         x-data='{
             products: @json($productsForJs),
             form: {
-                product_id: "{{ old('product_id') }}"
+                product_id: "{{ old('product_id', request('product_id')) }}"
             },
             showSuccessModal: false,
             successMessage: "{{ addslashes(session('success', '')) }}",

@@ -64,10 +64,10 @@
                                 <span class="text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap {{ $status['badge'] }}">
                                     {{ $status['label'] }}
                                 </span>
-                                <button type="button" title="Coming soon"
-                                        class="bg-gray-200 text-gray-400 px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium cursor-not-allowed whitespace-nowrap">
-                                    Reorder
-                                </button>
+                                <a href="{{ route('inventories.create', ['product_id' => $product->id]) }}"
+                                class="bg-green-600 hover:bg-green-700 text-white px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-colors">
+                                    Stock In
+                                </a>
                             </div>
                         </div>
 

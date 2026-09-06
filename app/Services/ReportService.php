@@ -13,9 +13,7 @@ class ReportService
     {
         $products = Product::query()
             ->where('status', 'Active')
-            ->withSum(['inventories' => function ($q) {
-                $q->where('status', '!=', 'Archived');
-            }], 'remaining_quantity')
+            ->withSum('inventories', 'remaining_quantity')
             ->get();
 
         $totalSkus = $products->count();
@@ -51,10 +49,7 @@ class ReportService
         $rows = Product::query()
             ->where('products.status', 'Active')
             ->join('categories', 'categories.id', '=', 'products.category_id')
-            ->leftJoin('inventories', function ($join) {
-                $join->on('inventories.product_id', '=', 'products.id')
-                     ->where('inventories.status', '!=', 'Archived');
-            })
+            ->leftJoin('inventories', 'inventories.product_id', '=', 'products.id')
             ->groupBy('categories.id', 'categories.name')
             ->orderBy('categories.name')
             ->selectRaw('categories.name as category_name, COALESCE(SUM(inventories.remaining_quantity), 0) as total_quantity')
