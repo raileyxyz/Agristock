@@ -20,4 +20,14 @@ class ReportController extends Controller
 
         return view('reports.stock', compact('summary', 'categoryData'));
     }
+
+    public function movement(): View
+    {
+        $this->authorize('reports.movement');
+
+        $summary = $this->reportService->getMovementSummary();
+        $productData = $this->reportService->getMovementByProduct();
+
+        return view('reports.movement', compact('summary', 'productData'));
+    }
 }

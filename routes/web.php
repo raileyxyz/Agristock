@@ -100,6 +100,10 @@ Route::middleware('auth')->group(function () {
     Route::middleware('can:reports.stock')->group(function () {
         Route::get('/reports/stock', [ReportController::class, 'stock'])->name('reports.stock');
     });
+
+    Route::middleware('can:reports.movement')->group(function () {
+    Route::get('/reports/movement', [ReportController::class, 'movement'])->name('reports.movement');
+    });
 });
 
 require __DIR__.'/auth.php';
