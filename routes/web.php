@@ -104,6 +104,10 @@ Route::middleware('auth')->group(function () {
     Route::middleware('can:reports.movement')->group(function () {
     Route::get('/reports/movement', [ReportController::class, 'movement'])->name('reports.movement');
     });
+
+    Route::middleware('can:reports.expiry')->group(function () {
+    Route::get('/reports/expiry', [ReportController::class, 'expiry'])->name('reports.expiry');
+    });
 });
 
 require __DIR__.'/auth.php';

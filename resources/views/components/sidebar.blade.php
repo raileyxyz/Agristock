@@ -224,15 +224,15 @@
                     </a>
                     @endcan
                     @can('reports.expiry')
-                    <a href="" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('reports.expiry') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('reports.expiry') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('reports.expiry') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
                         <i data-lucide="calendar-x" class="w-3.5 h-3.5"></i> Expiry Report
                     </a>
                     @endcan
-                    @can('reports.purchase')
+                    {{-- @can('reports.purchase')
                     <a href="" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('reports.purchase') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
                         <i data-lucide="receipt" class="w-3.5 h-3.5"></i> Purchase Report
                     </a>
-                    @endcan
+                    @endcan --}}
                 </div>
             </div>
 

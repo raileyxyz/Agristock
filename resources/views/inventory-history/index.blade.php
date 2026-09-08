@@ -20,7 +20,7 @@
         @foreach($tabs as $value => $label)
             <a href="{{ request()->fullUrlWithQuery(['type' => $value, 'page' => null]) }}"
                class="px-3.5 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap shrink-0
-               {{ request('type', 'all') === $value ? 'bg-green-600 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
+               {{ request('type', 'all') === $value ? 'bg-green-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900' }}">
                 {{ $label }}
             </a>
         @endforeach

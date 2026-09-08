@@ -17,7 +17,6 @@ class Inventory extends Model
         'expiry_date',
         'location',
         'notes',
-        'status',
     ];
 
     protected $casts = [

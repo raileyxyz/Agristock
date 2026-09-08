@@ -80,10 +80,42 @@
                 <p class="text-gray-500 text-sm mt-0.5">All stock movements and inventory flows to date</p>
             </div>
             <!-- Range Selector Control -->
-            <div class="inline-flex rounded-lg border border-slate-200 bg-white p-1 shadow-sm">
-                <button class="px-3 py-1.5 text-xs font-medium text-slate-700 rounded-md bg-slate-100">7 Days</button>
-                <button class="px-3 py-1.5 text-xs font-medium text-slate-500 hover:text-slate-900 rounded-md">30 Days</button>
-                <button class="px-3 py-1.5 text-xs font-medium text-slate-500 hover:text-slate-900 rounded-md">1 Year</button>
+            <div class="flex flex-wrap items-center gap-2" x-data="{ showCustom: {{ $range === 'custom' ? 'true' : 'false' }} }">
+                <div class="inline-flex rounded-lg border border-slate-200 bg-white p-1 shadow-sm">
+                    <a href="{{ route('reports.movement', ['range' => '7d']) }}"
+                    class="px-3 py-1.5 text-xs font-medium rounded-md transition-colors {{ $range === '7d' ? 'bg-green-600 text-white' : 'text-slate-500 hover:text-slate-900' }}">
+                        7 Days
+                    </a>
+                    <a href="{{ route('reports.movement', ['range' => '30d']) }}"
+                    class="px-3 py-1.5 text-xs font-medium rounded-md transition-colors {{ $range === '30d' ? 'bg-green-600 text-white' : 'text-slate-500 hover:text-slate-900' }}">
+                        30 Days
+                    </a>
+                    <a href="{{ route('reports.movement', ['range' => '1y']) }}"
+                    class="px-3 py-1.5 text-xs font-medium rounded-md transition-colors {{ $range === '1y' ? 'bg-green-600 text-white' : 'text-slate-500 hover:text-slate-900' }}">
+                        1 Year
+                    </a>
+                    <a href="{{ route('reports.movement', ['range' => 'all']) }}"
+                    class="px-3 py-1.5 text-xs font-medium rounded-md transition-colors {{ $range === 'all' ? 'bg-green-600 text-white' : 'text-slate-500 hover:text-slate-900' }}">
+                        All Time
+                    </a>
+                    <button type="button" @click="showCustom = !showCustom"
+                            class="px-3 py-1.5 text-xs font-medium rounded-md transition-colors {{ $range === 'custom' ? 'bg-green-600 text-white' : 'text-slate-500 hover:text-slate-900' }}">
+                        Custom
+                    </button>
+                </div>
+
+                <form method="GET" action="{{ route('reports.movement') }}" x-show="showCustom" x-cloak class="flex items-center gap-2">
+                    <input type="hidden" name="range" value="custom">
+                    <input type="date" name="start_date" value="{{ $customStart }}" required
+                        class="border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500">
+                    <span class="text-xs text-slate-400">to</span>
+                    <input type="date" name="end_date" value="{{ $customEnd }}" required
+                        class="border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500">
+                    <button type="submit"
+                            class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">
+                        Apply
+                    </button>
+                </form>
             </div>
         </div>
 

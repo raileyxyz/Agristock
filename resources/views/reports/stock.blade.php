@@ -97,10 +97,10 @@
             <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex items-center justify-between">
                 <div>
                     <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total SKUs</span>
-                    <p class="text-2xl font-bold text-slate-900 mt-1">{{ number_format($summary['total_skus']) }}</p>
+                    <p class="text-2xl font-bold text-blue-600 mt-1">{{ number_format($summary['total_skus']) }}</p>
                 </div>
-                <div class="w-10 h-10 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="boxes" class="w-5 h-5"></i>
+                <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                    <i data-lucide="package" class="w-5 h-5"></i>
                 </div>
             </div>
 
@@ -108,9 +108,9 @@
             <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex items-center justify-between">
                 <div>
                     <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">In Stock</span>
-                    <p class="text-2xl font-bold text-emerald-600 mt-1">{{ number_format($summary['in_stock']) }}</p>
+                    <p class="text-2xl font-bold text-green-600 mt-1">{{ number_format($summary['in_stock']) }}</p>
                 </div>
-                <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                <div class="w-10 h-10 rounded-lg bg-emerald-50 text-green-600 flex items-center justify-center shrink-0">
                     <i data-lucide="check-circle-2" class="w-5 h-5"></i>
                 </div>
             </div>
@@ -130,9 +130,9 @@
             <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex items-center justify-between">
                 <div>
                     <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Out of Stock</span>
-                    <p class="text-2xl font-bold text-rose-600 mt-1">{{ number_format($summary['out_of_stock']) }}</p>
+                    <p class="text-2xl font-bold text-red-600 mt-1">{{ number_format($summary['out_of_stock']) }}</p>
                 </div>
-                <div class="w-10 h-10 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+                <div class="w-10 h-10 rounded-lg bg-red-50 text-red-600 flex items-center justify-center shrink-0">
                     <i data-lucide="x-circle" class="w-5 h-5"></i>
                 </div>
             </div>
