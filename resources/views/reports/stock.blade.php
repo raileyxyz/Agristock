@@ -60,11 +60,11 @@
                         legend: {
                             position: 'right',
                             labels: {
-                                boxWidth: 8,
+                                boxWidth: 10,
                                 usePointStyle: true,
                                 pointStyle: 'circle',
                                 padding: 14,
-                                font: { size: 12, weight: '500' },
+                                font: { size: 11, weight: '500' },
                                 color: '#475569'
                             }
                         }
