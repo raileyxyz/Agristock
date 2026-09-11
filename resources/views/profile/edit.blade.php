@@ -140,35 +140,152 @@
                 </div>
 
                 <!-- Notifications tab -->
-                <div x-show="activeTab === 'notifications'" class="bg-white border border-gray-200 rounded-xl p-6">
-                    <h2 class="text-base font-semibold text-gray-800">Notification Preferences</h2>
-                    <p class="text-sm text-gray-400 mt-1 mb-5">Choose what you want to be notified about.</p>
+                <div x-show="activeTab === 'notifications'"
+                    x-data="{
+                        prefs: {
+                            lowStock: true,
+                            criticalStock: true,
+                            expiringSoon: true,
+                            expiredProducts: true,
+                            orderReceived: true,
+                            newOrderCreated: false,
+                            newUserAdded: false,
+                            weeklyReport: true,
+                        }
+                    }"
+                    class="bg-white border border-gray-200 rounded-xl p-6">
 
-                    <div class="space-y-3" x-data="{ lowStock: true, poUpdates: true, emailDigest: false }">
-                        <label class="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg px-4 py-3.5 cursor-pointer">
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Low stock alerts</p>
-                                <p class="text-xs text-gray-400">Get notified when items fall below threshold</p>
+                    <h2 class="text-base font-semibold text-gray-800">Notification Preferences</h2>
+                    <p class="text-sm text-gray-400 mt-1 mb-6">Choose which events you want to be alerted about.</p>
+
+                    <!-- Inventory Alerts -->
+                    <div class="mb-6">
+                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Inventory Alerts</p>
+                        <div class="space-y-2.5">
+
+                            <div class="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3.5">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">Low Stock Alert</p>
+                                    <p class="text-xs text-gray-400 mt-0.5">Notify when stock drops below minimum level</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer shrink-0 ml-4">
+                                    <input type="checkbox" x-model="prefs.lowStock" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-600 transition-colors"></div>
+                                    <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full shadow-sm transition-transform peer-checked:translate-x-5"></div>
+                                </label>
                             </div>
-                            <input type="checkbox" x-model="lowStock" class="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500/40">
-                        </label>
-                        <label class="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg px-4 py-3.5 cursor-pointer">
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Purchase order updates</p>
-                                <p class="text-xs text-gray-400">Notify me on order status changes</p>
+
+                            <div class="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3.5">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">Critical Stock Alert</p>
+                                    <p class="text-xs text-gray-400 mt-0.5">Notify when stock reaches critical levels or runs out</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer shrink-0 ml-4">
+                                    <input type="checkbox" x-model="prefs.criticalStock" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-600 transition-colors"></div>
+                                    <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full shadow-sm transition-transform peer-checked:translate-x-5"></div>
+                                </label>
                             </div>
-                            <input type="checkbox" x-model="poUpdates" class="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500/40">
-                        </label>
-                        <label class="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg px-4 py-3.5 cursor-pointer">
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Weekly email digest</p>
-                                <p class="text-xs text-gray-400">Summary of activity sent every Monday</p>
+
+                            <div class="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3.5">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">Expiring Soon</p>
+                                    <p class="text-xs text-gray-400 mt-0.5">Notify 60 days before product expiry</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer shrink-0 ml-4">
+                                    <input type="checkbox" x-model="prefs.expiringSoon" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-600 transition-colors"></div>
+                                    <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full shadow-sm transition-transform peer-checked:translate-x-5"></div>
+                                </label>
                             </div>
-                            <input type="checkbox" x-model="emailDigest" class="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500/40">
-                        </label>
+
+                            <div class="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3.5">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">Expired Products</p>
+                                    <p class="text-xs text-gray-400 mt-0.5">Notify when a product batch expires</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer shrink-0 ml-4">
+                                    <input type="checkbox" x-model="prefs.expiredProducts" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-600 transition-colors"></div>
+                                    <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full shadow-sm transition-transform peer-checked:translate-x-5"></div>
+                                </label>
+                            </div>
+
+                        </div>
                     </div>
 
-                    <p class="text-xs text-gray-400 mt-4">Note: notification preferences are not yet wired to the backend.</p>
+                    <!-- Purchase Orders -->
+                    <div class="mb-6">
+                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Purchase Orders</p>
+                        <div class="space-y-2.5">
+
+                            <div class="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3.5">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">Order Received</p>
+                                    <p class="text-xs text-gray-400 mt-0.5">Notify when a PO is marked as received</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer shrink-0 ml-4">
+                                    <input type="checkbox" x-model="prefs.orderReceived" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-600 transition-colors"></div>
+                                    <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full shadow-sm transition-transform peer-checked:translate-x-5"></div>
+                                </label>
+                            </div>
+
+                            <div class="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3.5">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">New Order Created</p>
+                                    <p class="text-xs text-gray-400 mt-0.5">Notify when a new purchase order is created</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer shrink-0 ml-4">
+                                    <input type="checkbox" x-model="prefs.newOrderCreated" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-600 transition-colors"></div>
+                                    <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full shadow-sm transition-transform peer-checked:translate-x-5"></div>
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- System -->
+                    <div class="mb-6">
+                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">System</p>
+                        <div class="space-y-2.5">
+
+                            <div class="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3.5">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">New User Added</p>
+                                    <p class="text-xs text-gray-400 mt-0.5">Notify when a new user account is created</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer shrink-0 ml-4">
+                                    <input type="checkbox" x-model="prefs.newUserAdded" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-600 transition-colors"></div>
+                                    <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full shadow-sm transition-transform peer-checked:translate-x-5"></div>
+                                </label>
+                            </div>
+
+                            <div class="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3.5">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">Weekly Report Ready</p>
+                                    <p class="text-xs text-gray-400 mt-0.5">Notify when weekly summary reports are available</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer shrink-0 ml-4">
+                                    <input type="checkbox" x-model="prefs.weeklyReport" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-600 transition-colors"></div>
+                                    <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full shadow-sm transition-transform peer-checked:translate-x-5"></div>
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-gray-100">
+                        <button type="button"
+                                class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors mt-5">
+                            Save Preferences
+                        </button>
+                        <p class="text-xs text-gray-400 mt-3">Preview only — these preferences are not yet saved or applied.</p>
+                    </div>
+
                 </div>
 
                 <!-- Security tab -->
