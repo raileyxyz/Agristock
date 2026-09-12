@@ -53,7 +53,11 @@ class InventoryService
         $data['remaining_quantity'] = $data['quantity'];
         $data['user_id'] = Auth::id();
 
-        return Inventory::create($data);
+        $inventory = Inventory::create($data);
+
+        event(new \App\Events\StockReceived($inventory, Auth::user()));
+
+        return $inventory;
     }
 
     public function update(Inventory $inventory, array $data): Inventory

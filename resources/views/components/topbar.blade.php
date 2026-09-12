@@ -35,12 +35,68 @@
             Sync
         </button>
 
-        <button class="relative">
-            <i data-lucide="bell" class="w-5 h-5"></i>
-            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                11
-            </span>
-        </button>
+        <div class="relative" x-data="{ notifOpen: false }">
+            <button @click="notifOpen = !notifOpen" class="relative">
+                <i data-lucide="bell" class="w-5 h-5"></i>
+                @if($unreadNotificationCount > 0)
+                    <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                        {{ $unreadNotificationCount > 9 ? '9+' : $unreadNotificationCount }}
+                    </span>
+                @endif
+            </button>
+
+            <!-- Notification dropdown -->
+            <div x-show="notifOpen"
+                @click.outside="notifOpen = false"
+                x-transition:enter="transition ease-out duration-150"
+                x-transition:enter-start="opacity-0 scale-95 -translate-y-2"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-100"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-95"
+                class="absolute top-full right-0 mt-2 w-80 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-50"
+                style="display: none;">
+
+                <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+                    <p class="text-sm font-semibold text-gray-800">Notifications</p>
+                    @if($unreadNotificationCount > 0)
+                        <form method="POST" action="{{ route('notifications.read-all') }}">
+                            @csrf @method('PATCH')
+                            <button type="submit" class="text-xs text-green-600 hover:text-green-700 font-medium">
+                                Mark all read
+                            </button>
+                        </form>
+                    @endif
+                </div>
+
+                <div class="max-h-80 overflow-y-auto divide-y divide-gray-100">
+                    @forelse($topbarNotifications as $notification)
+                        <div class="flex items-start gap-3 px-4 py-3 {{ $notification->read_at ? '' : 'bg-green-50/40' }}">
+                            <div class="w-2 h-2 rounded-full mt-1.5 shrink-0 {{ $notification->read_at ? 'bg-transparent' : 'bg-green-600' }}"></div>
+                            <div class="min-w-0 flex-1">
+                                <p class="text-sm font-medium text-gray-800">{{ $notification->data['title'] }}</p>
+                                <p class="text-xs text-gray-500 mt-0.5">{{ $notification->data['body'] }}</p>
+                                <p class="text-[11px] text-gray-400 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
+                            </div>
+                            @if(! $notification->read_at)
+                                <form method="POST" action="{{ route('notifications.read', $notification->id) }}">
+                                    @csrf @method('PATCH')
+                                    <button type="submit" title="Mark as read" class="text-gray-300 hover:text-green-600 shrink-0">
+                                        <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
+                    @empty
+                        <div class="px-4 py-8 text-center">
+                            <i data-lucide="bell-off" class="w-6 h-6 text-gray-300 mx-auto mb-2"></i>
+                            <p class="text-sm text-gray-400">No notifications yet.</p>
+                        </div>
+                    @endforelse
+                </div>
+
+            </div>
+        </div>
 
         <div class="relative" x-data="{ userMenuOpen: false }">
             <button @click="userMenuOpen = !userMenuOpen"

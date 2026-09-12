@@ -75,7 +75,15 @@ class StockOutService
 
             $data['user_id'] = Auth::id();
 
-            return StockOut::create($data);
+            $stockOut = StockOut::create($data);
+
+            if ($data['reason'] === 'Transfer') {
+                event(new \App\Events\StockTransferCompleted($stockOut, Auth::user()));
+            } else {
+                event(new \App\Events\StockOutRecorded($stockOut, Auth::user()));
+            }
+
+            return $stockOut;
         });
     }
 

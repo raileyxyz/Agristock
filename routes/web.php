@@ -13,6 +13,8 @@ use App\Http\Controllers\StockAdjustmentController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\NotificationPreferenceController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -109,6 +111,15 @@ Route::middleware('auth')->group(function () {
     Route::middleware('can:reports.expiry')->group(function () {
     Route::get('/reports/expiry', [ReportController::class, 'expiry'])->name('reports.expiry');
     });
+
+    Route::patch('/notification-preferences', [NotificationPreferenceController::class, 'update'])
+    ->name('notification-preferences.update');
+
+    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])
+        ->name('notifications.read');
+
+    Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])
+        ->name('notifications.read-all');
 });
 
 require __DIR__.'/auth.php';

@@ -52,7 +52,7 @@ class StockAdjustmentService
             $inventory->remaining_quantity = $data['actual_quantity'];
             $inventory->save();
 
-            return StockAdjustment::create([
+            $adjustment = StockAdjustment::create([
                 'inventory_id' => $inventory->id,
                 'user_id' => Auth::id(),
                 'system_quantity' => $systemQuantity,
@@ -60,6 +60,10 @@ class StockAdjustmentService
                 'reason' => $data['reason'],
                 'notes' => $data['notes'] ?? null,
             ]);
+
+            event(new \App\Events\StockAdjusted($adjustment, Auth::user()));
+
+            return $adjustment;
         });
     }
 }

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserManagementService
 {
@@ -52,19 +53,25 @@ class UserManagementService
     public function create(array $data): User
     {
         return DB::transaction(function () use ($data) {
-            return User::create([
+            $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
                 'role' => $data['role'],
                 'status' => 'Active',
             ]);
+
+            event(new \App\Events\NewUserAdded($user, Auth::user()));
+
+            return $user;
         });
     }
 
     public function update(User $user, array $data): User
     {
         return DB::transaction(function () use ($user, $data) {
+            $oldRole = $user->role->value;
+
             $payload = [
                 'name' => $data['name'],
                 'email' => $data['email'],
@@ -80,13 +87,20 @@ class UserManagementService
             }
 
             $user->update($payload);
+            $user = $user->fresh();
 
-            return $user->fresh();
+            if ($oldRole !== $user->role->value) {
+                event(new \App\Events\UserRoleChanged($user, $oldRole, $user->role->value, Auth::user()));
+            }
+
+            return $user;
         });
     }
 
     public function archive(User $user): void
     {
         $user->update(['status' => 'Archived']);
+
+        event(new \App\Events\UserAccountArchived($user, Auth::user()));
     }
 }
