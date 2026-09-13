@@ -59,6 +59,8 @@ class StockOutService
         return DB::transaction(function () use ($data) {
             $product = Product::findOrFail($data['product_id']);
 
+            $remainingBefore = $product->inventories()->sum('remaining_quantity');
+
             $consumedBatches = $this->stockDeduction->deduct(
                 $product,
                 $data['location'],
@@ -82,6 +84,9 @@ class StockOutService
             } else {
                 event(new \App\Events\StockOutRecorded($stockOut, Auth::user()));
             }
+
+            $remainingAfter = $product->inventories()->sum('remaining_quantity');
+            event(new \App\Events\StockLevelChanged($product->fresh(), $remainingBefore, $remainingAfter, Auth::user()));
 
             return $stockOut;
         });

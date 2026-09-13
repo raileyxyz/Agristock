@@ -29,17 +29,18 @@
         </p>
     </div>
 
-    <div class="flex items-center gap-3 lg:gap-5 shrink-0">
+    <div class="flex items-center gap-3 lg:gap-3 shrink-0">
         <button class="hidden sm:flex px-4 py-2 border rounded-lg text-sm hover:bg-gray-100 items-center gap-2">
             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
             Sync
         </button>
 
         <div class="relative" x-data="{ notifOpen: false }">
-            <button @click="notifOpen = !notifOpen" class="relative">
-                <i data-lucide="bell" class="w-5 h-5"></i>
+            <button @click="notifOpen = !notifOpen"
+                    class="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
+                <i data-lucide="bell" class="w-5 h-5 stroke-[2]"></i>
                 @if($unreadNotificationCount > 0)
-                    <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    <span class="absolute top-1 right-1 bg-red-500 text-white text-[10px] leading-none rounded-full min-w-[16px] h-[16px] flex items-center justify-center px-0.5">
                         {{ $unreadNotificationCount > 9 ? '9+' : $unreadNotificationCount }}
                     </span>
                 @endif

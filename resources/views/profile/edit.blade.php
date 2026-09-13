@@ -1,6 +1,12 @@
 <x-app-layout>
     <div x-data="{
-        activeTab: '{{ session('status') === 'password-updated' || $errors->updatePassword->isNotEmpty() || $errors->userDeletion->isNotEmpty() ? 'security' : 'profile' }}',
+        activeTab: '{{
+            session('status') === 'notifications-updated'
+                ? 'notifications'
+                : (session('status') === 'password-updated' || $errors->updatePassword->isNotEmpty() || $errors->userDeletion->isNotEmpty()
+                    ? 'security'
+                    : 'profile')
+        }}',
         showPhotoModal: false,
         photoPreview: null
     }" class="max-w-8xl mx-auto">
@@ -139,55 +145,55 @@
                     <form id="send-verification" method="post" action="{{ route('verification.send') }}">@csrf</form>
                 </div>
 
-<!-- Notifications tab -->
-<div x-show="activeTab === 'notifications'" class="bg-white border border-gray-200 rounded-xl p-6">
+                <!-- Notifications tab -->
+                <div x-show="activeTab === 'notifications'" class="bg-white border border-gray-200 rounded-xl p-6">
 
-    @if(session('status') === 'notifications-updated')
-        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" x-transition
-             class="mb-5 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-lg">
-            Notification preferences saved.
-        </div>
-    @endif
-
-    <h2 class="text-base font-semibold text-gray-800">Notification Preferences</h2>
-    <p class="text-sm text-gray-400 mt-1 mb-6">Choose which events you want to be alerted about.</p>
-
-    <form method="post" action="{{ route('notification-preferences.update') }}">
-        @csrf
-        @method('patch')
-
-        @foreach($notificationGroups as $category => $items)
-            <div class="mb-6">
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">{{ $category }}</p>
-                <div class="space-y-2.5">
-                    @foreach($items as $item)
-                        <div class="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3.5">
-                            <div>
-                                <p class="text-sm font-medium text-gray-800">{{ $item['label'] }}</p>
-                                <p class="text-xs text-gray-400 mt-0.5">{{ $item['description'] }}</p>
-                            </div>
-                            <label class="relative inline-flex items-center cursor-pointer shrink-0 ml-4">
-                                <input type="hidden" name="preferences[{{ $item['type'] }}]" value="0">
-                                <input type="checkbox" name="preferences[{{ $item['type'] }}]" value="1"
-                                       {{ $item['enabled'] ? 'checked' : '' }} class="sr-only peer">
-                                <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-600 transition-colors"></div>
-                                <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full shadow-sm transition-transform peer-checked:translate-x-5"></div>
-                            </label>
+                    @if(session('status') === 'notifications-updated')
+                        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" x-transition
+                            class="mb-5 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-lg">
+                            Notification preferences saved.
                         </div>
-                    @endforeach
+                    @endif
+
+                    <h2 class="text-base font-semibold text-gray-800">Notification Preferences</h2>
+                    <p class="text-sm text-gray-400 mt-1 mb-6">Choose which events you want to be alerted about.</p>
+
+                    <form method="post" action="{{ route('notification-preferences.update') }}">
+                        @csrf
+                        @method('patch')
+
+                        @foreach($notificationGroups as $category => $items)
+                            <div class="mb-6">
+                                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">{{ $category }}</p>
+                                <div class="space-y-2.5">
+                                    @foreach($items as $item)
+                                        <div class="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3.5">
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-800">{{ $item['label'] }}</p>
+                                                <p class="text-xs text-gray-400 mt-0.5">{{ $item['description'] }}</p>
+                                            </div>
+                                            <label class="relative inline-flex items-center cursor-pointer shrink-0 ml-4">
+                                                <input type="hidden" name="preferences[{{ $item['type'] }}]" value="0">
+                                                <input type="checkbox" name="preferences[{{ $item['type'] }}]" value="1"
+                                                    {{ $item['enabled'] ? 'checked' : '' }} class="sr-only peer">
+                                                <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-600 transition-colors"></div>
+                                                <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full shadow-sm transition-transform peer-checked:translate-x-5"></div>
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
+
+                        <div class="pt-2 border-t border-gray-100">
+                            <button type="submit"
+                                    class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors mt-5">
+                                Save Preferences
+                            </button>
+                        </div>
+                    </form>
+
                 </div>
-            </div>
-        @endforeach
-
-        <div class="pt-2 border-t border-gray-100">
-            <button type="submit"
-                    class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors mt-5">
-                Save Preferences
-            </button>
-        </div>
-    </form>
-
-</div>
 
                 <!-- Security tab -->
                 <div x-show="activeTab === 'security'" class="space-y-6">

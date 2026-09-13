@@ -46,6 +46,9 @@ class StockAdjustmentService
     {
         return DB::transaction(function () use ($data) {
             $inventory = Inventory::findOrFail($data['inventory_id']);
+            $product = $inventory->product;
+
+            $remainingBefore = $product->inventories()->sum('remaining_quantity');
 
             $systemQuantity = $inventory->remaining_quantity;
 
@@ -62,6 +65,9 @@ class StockAdjustmentService
             ]);
 
             event(new \App\Events\StockAdjusted($adjustment, Auth::user()));
+
+            $remainingAfter = $product->inventories()->sum('remaining_quantity');
+            event(new \App\Events\StockLevelChanged($product->fresh(), $remainingBefore, $remainingAfter, Auth::user()));
 
             return $adjustment;
         });

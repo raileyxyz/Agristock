@@ -15,12 +15,17 @@ class Inventory extends Model
         'remaining_quantity',
         'batch_number',
         'expiry_date',
+        'expiring_soon_notified_at',
+        'expired_notified_at',
         'location',
         'notes',
+        'status',
     ];
 
     protected $casts = [
         'expiry_date' => 'date',
+        'expiring_soon_notified_at' => 'datetime',
+        'expired_notified_at' => 'datetime',
         'quantity' => 'decimal:2',
         'remaining_quantity' => 'decimal:2',
     ];

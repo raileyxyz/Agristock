@@ -44,15 +44,4 @@ class AppServiceProvider extends ServiceProvider
             Gate::define($ability, fn (User $user) => in_array($user->role, $allowedRoles, true));
         }
     }
-
-    protected function registerNotificationListeners(): void
-    {
-        Event::listen(\App\Events\StockReceived::class, \App\Listeners\SendStockReceivedNotification::class);
-        Event::listen(\App\Events\StockOutRecorded::class, \App\Listeners\SendStockOutNotification::class);
-        Event::listen(\App\Events\StockTransferCompleted::class, \App\Listeners\SendStockTransferNotification::class);
-        Event::listen(\App\Events\StockAdjusted::class, \App\Listeners\SendStockAdjustmentNotification::class);
-        Event::listen(\App\Events\NewUserAdded::class, \App\Listeners\SendNewUserAddedNotification::class);
-        Event::listen(\App\Events\UserAccountArchived::class, \App\Listeners\SendUserArchivedNotification::class);
-        Event::listen(\App\Events\UserRoleChanged::class, \App\Listeners\SendUserRoleChangedNotification::class);
-    }
 }
