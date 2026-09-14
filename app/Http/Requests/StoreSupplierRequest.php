@@ -17,6 +17,18 @@ class StoreSupplierRequest extends FormRequest
     }
 
     /**
+     * Normalize the phone number before validation runs.
+     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->filled('phone')) {
+            $this->merge([
+                'phone' => preg_replace('/[\s\-]+/', '', $this->phone),
+            ]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, ValidationRule|array<mixed>|string>
@@ -37,7 +49,7 @@ class StoreSupplierRequest extends FormRequest
                 'string',
                 'min:2',
                 'max:255',
-                'regex:/^[a-zA-ZÀ-ÿ\s.\'-]+$/',
+                'regex:/^[\pL\s\.\'\-]+$/u',
             ],
 
             'phone' => [
@@ -58,21 +70,23 @@ class StoreSupplierRequest extends FormRequest
             'address' => [
                 'nullable',
                 'string',
-                'max:500'
+                'max:500',
             ],
 
             'supply_categories' => [
                 'required',
                 'array',
-                'min:1'
+                'min:1',
             ],
 
-            'supply_categories.*' => ['exists:categories,id'],
+            'supply_categories.*' => [
+                Rule::exists('categories', 'id')->where('status', 'Active'),
+            ],
 
             'notes' => [
                 'nullable',
                 'string',
-                'max:1000'
+                'max:1000',
             ],
         ];
     }
@@ -88,6 +102,7 @@ class StoreSupplierRequest extends FormRequest
             'email.unique' => 'This email is already registered.',
             'supply_categories.required' => 'Select at least one supply category.',
             'supply_categories.min' => 'Select at least one supply category.',
+            'supply_categories.*.exists' => 'One of the selected categories is no longer available.',
         ];
     }
 }

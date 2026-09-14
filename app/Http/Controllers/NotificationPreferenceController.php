@@ -14,11 +14,13 @@ class NotificationPreferenceController extends Controller
 
     public function update(Request $request): RedirectResponse
     {
-        $this->preferenceService->updatePreferences(
+        $changed = $this->preferenceService->updatePreferences(
             $request->user(),
             $request->input('preferences', [])
         );
 
-        return redirect()->route('profile.edit')->with('status', 'notifications-updated');
+        $status = $changed ? 'notifications-updated' : 'notifications-unchanged';
+
+        return redirect()->route('profile.edit')->with('status', $status);
     }
 }

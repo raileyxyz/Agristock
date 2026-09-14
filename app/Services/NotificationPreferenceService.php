@@ -34,18 +34,36 @@ class NotificationPreferenceService
         return $grouped;
     }
 
-    public function updatePreferences(User $user, array $preferences): void
+    public function updatePreferences(User $user, array $preferences): bool
     {
         $allowedTypes = collect(config('notification_types'))
             ->filter(fn ($meta) => in_array($user->role, $meta['roles'], true))
             ->keys();
 
+        $existing = NotificationPreference::where('user_id', $user->id)
+            ->whereIn('notification_type', $allowedTypes)
+            ->pluck('enabled', 'notification_type');
+
+        $changed = false;
+
         foreach ($allowedTypes as $type) {
+            $newValue = (bool) ($preferences[$type] ?? false);
+
+            $currentValue = $existing->has($type)
+                ? (bool) $existing[$type]
+                : config("notification_types.{$type}.default_enabled");
+
+            if ($newValue !== $currentValue) {
+                $changed = true;
+            }
+
             NotificationPreference::updateOrCreate(
                 ['user_id' => $user->id, 'notification_type' => $type],
-                ['enabled' => (bool) ($preferences[$type] ?? false)]
+                ['enabled' => $newValue]
             );
         }
+
+        return $changed;
     }
 
     public function isEnabled(User $user, string $type): bool

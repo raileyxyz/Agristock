@@ -78,7 +78,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
                             Phone Number
                         </label>
-                        <input type="text" name="phone" value="{{ old('phone') }}" placeholder="+63 9XXXXXXXXX"
+                        <input type="text" name="phone" value="{{ old('phone') }}" placeholder="+63 917 234 5678"
                                class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors
                                {{ $errors->has('phone') ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500' }}">
                         @error('phone')

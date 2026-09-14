@@ -1,7 +1,7 @@
 <x-app-layout>
     <div x-data="{
         activeTab: '{{
-            session('status') === 'notifications-updated'
+            in_array(session('status'), ['notifications-updated', 'notifications-unchanged'])
                 ? 'notifications'
                 : (session('status') === 'password-updated' || $errors->updatePassword->isNotEmpty() || $errors->userDeletion->isNotEmpty()
                     ? 'security'
@@ -238,64 +238,75 @@
                         </form>
                     </div>
 
-                    <div class="bg-white border border-red-300 rounded-xl p-6">
+                    <div class="bg-white border border-red-300 rounded-xl p-6" x-data="{ showDeleteModal: false, password: '' }">
                         <h2 class="text-base font-bold text-red-600">Delete Account</h2>
                         <p class="text-sm text-gray-500 mt-1 mb-5">Once deleted, all of your data will be permanently removed. This cannot be undone.</p>
 
-                        <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')" class="inline-flex items-center gap-2">
-                            <i data-lucide="trash-2" class="w-4 h-4 stroke-[3]"></i>Delete Account
-                        </x-danger-button>
+                        <button type="button" @click="showDeleteModal = true; $nextTick(() => lucide.createIcons())"
+                                class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            Delete Account
+                        </button>
 
-                        <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" max-width="md" focusable>
-                            <div x-data="{ password: '' }" class="p-6 sm:p-7">
+                        <!-- Delete Account Modal -->
+                        <div x-show="showDeleteModal"
+                            x-transition:enter="transition-opacity ease-out duration-200"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition-opacity ease-in duration-150"
+                            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                            style="display: none;" x-cloak>
+                            <div @click.outside="showDeleteModal = false"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
 
-                                <!-- Header & Icon -->
-                                <div class="flex items-start gap-4">
-                                    <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center shrink-0">
-                                        <i data-lucide="triangle-alert" class="w-6 h-6 text-red-600 stroke-[2.5]"></i>
+                                <div class="px-6 pt-7 pb-6 text-center">
+                                    <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-4">
+                                        <i data-lucide="trash-2" class="w-6 h-6"></i>
                                     </div>
-                                    <div>
-                                        <h2 class="text-base font-semibold text-gray-900">Delete Account</h2>
-                                        <p class="mt-1 text-sm text-gray-500 leading-normal">
-                                            This action is permanent and cannot be undone. All associated data will be removed.
-                                        </p>
-                                    </div>
-                                </div>
 
-                                <!-- Form -->
-                                <form method="post" action="{{ route('profile.destroy') }}" class="mt-6">
-                                    @csrf
-                                    @method('delete')
+                                    <h2 class="text-base font-semibold text-gray-900">Delete your account?</h2>
+                                    <p class="mt-1.5 text-sm text-gray-500 leading-relaxed">
+                                        This action is permanent. All your data will be removed and cannot be recovered.
+                                    </p>
 
-                                    <div class="space-y-1.5">
-                                        <label for="password" class="block text-xs font-medium text-gray-700">
+                                    <form method="post" action="{{ route('profile.destroy') }}" class="mt-5 text-left">
+                                        @csrf
+                                        @method('delete')
+
+                                        <label for="password" class="block text-xs font-medium text-gray-700 mb-1.5">
                                             Confirm your password
                                         </label>
-                                        <input id="password"
-                                            name="password"
-                                            type="password"
-                                            x-model="password"
-                                            class="w-full h-10 border border-gray-200 rounded-lg px-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all">
-                                        <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-1 text-xs" />
-                                    </div>
+                                        <div class="relative">
+                                            <i data-lucide="lock" class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                                            <input id="password"
+                                                name="password"
+                                                type="password"
+                                                x-model="password"
+                                                placeholder="Enter your password"
+                                                class="w-full h-10 border border-gray-200 rounded-lg pl-9 pr-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all">
+                                        </div>
+                                        <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-1.5" />
 
-                                    <!-- Actions -->
-                                    <div class="mt-6 flex items-center justify-end gap-3">
-                                        <button type="button"
-                                                x-on:click="$dispatch('close')"
-                                                class="h-9 px-4 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 transition-colors">
-                                            Cancel
-                                        </button>
-                                        <button type="submit"
-                                                :disabled="!password"
-                                                class="h-9 px-4 rounded-lg text-sm font-medium text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-red-600 hover:bg-red-700 active:bg-red-800 shadow-sm">
-                                            Delete Account
-                                        </button>
-                                    </div>
-                                </form>
+                                        <div class="mt-6 flex items-center gap-2.5">
+                                            <button type="button" @click="showDeleteModal = false; password = ''"
+                                                    class="flex-1 h-10 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">
+                                                Cancel
+                                            </button>
+                                            <button type="submit"
+                                                    :disabled="!password"
+                                                    :class="password ? 'bg-red-600 hover:bg-red-700' : 'bg-red-300 cursor-not-allowed'"
+                                                    class="flex-1 h-10 rounded-lg text-sm font-medium text-white transition-colors shadow-sm">
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
 
                             </div>
-                        </x-modal>
+                        </div>
                     </div>
 
                 </div>

@@ -12,7 +12,7 @@ class TopbarNotificationComposer
         $user = Auth::user();
 
         $notifications = $user
-            ? $user->notifications()->latest()->limit(8)->get()
+            ? $user->notifications()->latest()->limit(50)->get()
             : collect();
 
         $view->with('topbarNotifications', $notifications);
