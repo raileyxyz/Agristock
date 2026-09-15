@@ -238,7 +238,9 @@
                         </form>
                     </div>
 
-                    <div class="bg-white border border-red-300 rounded-xl p-6" x-data="{ showDeleteModal: false, password: '' }">
+                    <div class="bg-white border border-red-300 rounded-xl p-6"
+                        x-data="{ showDeleteModal: {{ $errors->userDeletion->isNotEmpty() ? 'true' : 'false' }}, password: '' }"
+                        x-init="if (showDeleteModal) $nextTick(() => lucide.createIcons())">
                         <h2 class="text-base font-bold text-red-600">Delete Account</h2>
                         <p class="text-sm text-gray-500 mt-1 mb-5">Once deleted, all of your data will be permanently removed. This cannot be undone.</p>
 
@@ -286,9 +288,18 @@
                                                 type="password"
                                                 x-model="password"
                                                 placeholder="Enter your password"
-                                                class="w-full h-10 border border-gray-200 rounded-lg pl-9 pr-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all">
+                                                class="w-full h-10 border rounded-lg pl-9 pr-3 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 transition-all
+                                                {{ $errors->userDeletion->has('password')
+                                                    ? 'border-red-400 focus:ring-red-500/20 focus:border-red-500'
+                                                    : 'border-gray-200 focus:ring-red-500/20 focus:border-red-500' }}">
                                         </div>
-                                        <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-1.5" />
+
+                                        @error('password', 'userDeletion')
+                                            <p class="mt-1.5 text-xs text-red-600 flex items-center gap-1">
+                                                <i data-lucide="circle-alert" class="w-3 h-3 shrink-0"></i>
+                                                {{ $message }}
+                                            </p>
+                                        @enderror
 
                                         <div class="mt-6 flex items-center gap-2.5">
                                             <button type="button" @click="showDeleteModal = false; password = ''"

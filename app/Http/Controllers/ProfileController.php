@@ -78,6 +78,8 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
+        event(new \App\Events\UserAccountDeleted($user->name, $user->email));
+
         Auth::logout();
 
         $user->delete();

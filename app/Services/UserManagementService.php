@@ -71,6 +71,7 @@ class UserManagementService
     {
         return DB::transaction(function () use ($user, $data) {
             $oldRole = $user->role->value;
+            $oldStatus = $user->status;
 
             $payload = [
                 'name' => $data['name'],
@@ -91,6 +92,14 @@ class UserManagementService
 
             if ($oldRole !== $user->role->value) {
                 event(new \App\Events\UserRoleChanged($user, $oldRole, $user->role->value, Auth::user()));
+            }
+
+            if ($oldStatus === 'Archived' && $user->status === 'Active') {
+                event(new \App\Events\UserAccountRestored($user, Auth::user()));
+            }
+
+            if ($oldStatus === 'Active' && $user->status === 'Archived') {
+                event(new \App\Events\UserAccountArchived($user, Auth::user()));
             }
 
             return $user;

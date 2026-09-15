@@ -79,9 +79,23 @@ return [
         'roles' => [UserRole::ADMIN],
         'default_enabled' => true,
     ],
+    'user_restored' => [
+        'label' => 'User Account Restored',
+        'description' => 'Notify when an archived user account is reactivated.',
+        'category' => 'User & Security',
+        'roles' => [UserRole::ADMIN],
+        'default_enabled' => true,
+    ],
     'user_role_changed' => [
         'label' => 'User Role Changed',
         'description' => "Notify when a user's role is changed.",
+        'category' => 'User & Security',
+        'roles' => [UserRole::ADMIN],
+        'default_enabled' => true,
+    ],
+    'user_deleted' => [
+        'label' => 'User Account Deleted',
+        'description' => 'Notify when a user permanently deletes their own account.',
         'category' => 'User & Security',
         'roles' => [UserRole::ADMIN],
         'default_enabled' => true,
