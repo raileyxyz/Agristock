@@ -13,111 +13,112 @@
         body { font-family: 'Figtree', sans-serif; }
         h1, h2, h3, .font-display { font-family: 'Playfair Display', serif; }
         [x-cloak] { display: none !important; }
+        section[id] { scroll-margin-top: 5rem; }
     </style>
 </head>
-<body class="bg-white text-gray-800">
+<body class="bg-white text-gray-800"
+    x-data="{ mobileMenuOpen: false, scrolled: false }"
+    x-effect="document.body.style.overflow = mobileMenuOpen ? 'hidden' : ''"
+    @scroll.window="scrolled = window.scrollY > 8"
+    @keydown.escape.window="mobileMenuOpen = false">
 
     <!-- Nav -->
-    <div
-        x-data="{ mobileMenuOpen: false }"
-        x-effect="document.body.style.overflow = mobileMenuOpen ? 'hidden' : ''"
-        @keydown.escape.window="mobileMenuOpen = false">
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md transition-shadow duration-300"
+            :class="scrolled ? 'shadow-sm border-b border-gray-200/80' : 'border-b border-transparent'">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 h-16 sm:h-20 flex items-center justify-between">
+            <a href="#top" class="group flex items-center gap-2.5">
+                <div class="w-8 h-8 sm:w-9 sm:h-9 bg-green-600 rounded-lg flex items-center justify-center transition-all duration-300 ease-out group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-md group-hover:shadow-green-700/30">
+                    <i data-lucide="leaf" class="w-4.5 h-4.5 sm:w-5 sm:h-5 text-white"></i>
+                </div>
+                <span class="font-display font-bold text-base sm:text-lg text-gray-900 transition-colors duration-300 group-hover:text-green-700">AgriStock</span>
+            </a>
 
-        <header class="border-b border-gray-100 sticky top-0 bg-white/90 backdrop-blur-sm z-40">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 h-16 sm:h-20 flex items-center justify-between">
-                <a href="#top" class="group flex items-center gap-2.5">
-                    <div class="w-8 h-8 sm:w-9 sm:h-9 bg-green-600 rounded-lg flex items-center justify-center transition-all duration-300 ease-out group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-md group-hover:shadow-green-700/30">
-                        <i data-lucide="leaf" class="w-4.5 h-4.5 sm:w-5 sm:h-5 text-white"></i>
-                    </div>
-                    <span class="font-display font-bold text-base sm:text-lg text-gray-900 transition-colors duration-300 group-hover:text-green-700">AgriStock</span>
+            <nav class="hidden md:flex items-center gap-10 text-sm text-gray-600">
+                <a href="#features" class="relative py-1 hover:text-gray-900 transition-colors after:absolute after:left-0 after:-bottom-0.5 after:h-0.5 after:w-0 after:bg-green-600 after:transition-all after:duration-300 hover:after:w-full">Features</a>
+                <a href="#how-it-works" class="relative py-1 hover:text-gray-900 transition-colors after:absolute after:left-0 after:-bottom-0.5 after:h-0.5 after:w-0 after:bg-green-600 after:transition-all after:duration-300 hover:after:w-full">How It Works</a>
+                <a href="#about" class="relative py-1 hover:text-gray-900 transition-colors after:absolute after:left-0 after:-bottom-0.5 after:h-0.5 after:w-0 after:bg-green-600 after:transition-all after:duration-300 hover:after:w-full">About</a>
+            </nav>
+
+            <div class="flex items-center gap-2">
+                <a href="{{ route('login') }}"
+                    class="group hidden md:flex bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold items-center gap-2 transition-all duration-300 ease-out transform hover:-translate-y-0.5 hover:shadow-lg">
+                    Open System
+                    <i data-lucide="arrow-right" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"></i>
                 </a>
 
-                <nav class="hidden md:flex items-center gap-10 text-sm text-gray-600">
-                    <a href="#features" class="hover:text-gray-900 transition-colors">Features</a>
-                    <a href="#how-it-works" class="hover:text-gray-900 transition-colors">How It Works</a>
-                    <a href="#about" class="hover:text-gray-900 transition-colors">About</a>
-                </nav>
-
-                <div class="flex items-center gap-2">
-                    <a href="{{ route('login') }}"
-                        class="group hidden md:flex bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold items-center gap-2 transition-all duration-300 ease-out transform hover:-translate-y-0.5 hover:shadow-lg">
-                        Open System
-                        <i data-lucide="arrow-right" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"></i>
-                    </a>
-
-                    <!-- Hamburger toggle -->
-                    <button type="button"
-                            @click="mobileMenuOpen = true"
-                            aria-label="Open menu"
-                            class="md:hidden text-gray-700 hover:text-green-700 hover:bg-gray-100 rounded-lg p-2 transition-colors">
-                        <i data-lucide="menu" class="w-6 h-6"></i>
-                    </button>
-                </div>
+                <!-- Hamburger toggle -->
+                <button type="button"
+                        @click="mobileMenuOpen = true"
+                        aria-label="Open menu"
+                        class="md:hidden text-gray-700 hover:text-green-700 hover:bg-gray-100 rounded-lg p-2 transition-colors">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <div x-show="mobileMenuOpen" class="md:hidden fixed inset-0 z-[60]" x-cloak>
+    <!-- Mobile off-canvas menu -->
+    <div x-show="mobileMenuOpen" class="md:hidden fixed inset-0 z-[60]" x-cloak>
 
-            <!-- Backdrop -->
-            <div x-show="mobileMenuOpen"
-                x-transition:enter="transition-opacity ease-out duration-300"
-                x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100"
-                x-transition:leave="transition-opacity ease-in duration-200"
-                x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0"
-                @click="mobileMenuOpen = false"
-                class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm"></div>
+        <!-- Backdrop -->
+        <div x-show="mobileMenuOpen"
+            x-transition:enter="transition-opacity ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            @click="mobileMenuOpen = false"
+            class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm"></div>
 
-            <!-- Slide-in panel -->
-            <div x-show="mobileMenuOpen"
-                x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="translate-x-full"
-                x-transition:enter-end="translate-x-0"
-                x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="translate-x-0"
-                x-transition:leave-end="translate-x-full"
-                @click.outside="mobileMenuOpen = false"
-                class="fixed inset-y-0 right-0 w-full max-w-xs bg-white shadow-2xl flex flex-col h-full">
+        <!-- Slide-in panel -->
+        <div x-show="mobileMenuOpen"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="translate-x-full"
+            x-transition:enter-end="translate-x-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="translate-x-0"
+            x-transition:leave-end="translate-x-full"
+            @click.outside="mobileMenuOpen = false"
+            class="fixed inset-y-0 right-0 w-full max-w-xs bg-white shadow-2xl flex flex-col h-full">
 
-                <!-- Panel header -->
-                <div class="h-16 sm:h-20 px-5 flex items-center justify-between border-b border-gray-100 shrink-0">
-                    <span class="flex items-center gap-2.5">
-                        <div class="w-8 h-8 bg-green-700 rounded-lg flex items-center justify-center">
-                            <i data-lucide="leaf" class="w-4 h-4 text-white"></i>
-                        </div>
-                        <span class="font-display font-bold text-base text-gray-900">AgriStock</span>
-                    </span>
-                    <button @click="mobileMenuOpen = false" aria-label="Close menu"
-                            class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 transition-colors">
-                        <i data-lucide="x" class="w-5 h-5"></i>
-                    </button>
-                </div>
+            <!-- Panel header -->
+            <div class="h-16 sm:h-20 px-5 flex items-center justify-between border-b border-gray-100 shrink-0">
+                <span class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
+                        <i data-lucide="leaf" class="w-4 h-4 text-white"></i>
+                    </div>
+                    <span class="font-display font-bold text-base text-gray-900">AgriStock</span>
+                </span>
+                <button @click="mobileMenuOpen = false" aria-label="Close menu"
+                        class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
 
-                <!-- Links -->
-                <nav class="flex-1 px-4 py-5 space-y-1 overflow-y-auto">
-                    <a href="#features" @click="mobileMenuOpen = false"
-                       class="flex items-center gap-3 px-3 py-3 rounded-lg text-[15px] font-medium text-gray-700 hover:bg-gray-50 hover:text-green-700 transition-colors">
-                        Features
-                    </a>
-                    <a href="#how-it-works" @click="mobileMenuOpen = false"
-                       class="flex items-center gap-3 px-3 py-3 rounded-lg text-[15px] font-medium text-gray-700 hover:bg-gray-50 hover:text-green-700 transition-colors">
-                        How It Works
-                    </a>
-                    <a href="#about" @click="mobileMenuOpen = false"
-                       class="flex items-center gap-3 px-3 py-3 rounded-lg text-[15px] font-medium text-gray-700 hover:bg-gray-50 hover:text-green-700 transition-colors">
-                        About
-                    </a>
-                </nav>
+            <!-- Links -->
+            <nav class="flex-1 px-4 py-5 space-y-1 overflow-y-auto">
+                <a href="#features" @click="mobileMenuOpen = false"
+                   class="flex items-center gap-3 px-3 py-3 rounded-lg text-[15px] font-medium text-gray-700 hover:bg-gray-50 hover:text-green-700 transition-colors">
+                    Features
+                </a>
+                <a href="#how-it-works" @click="mobileMenuOpen = false"
+                   class="flex items-center gap-3 px-3 py-3 rounded-lg text-[15px] font-medium text-gray-700 hover:bg-gray-50 hover:text-green-700 transition-colors">
+                    How It Works
+                </a>
+                <a href="#about" @click="mobileMenuOpen = false"
+                   class="flex items-center gap-3 px-3 py-3 rounded-lg text-[15px] font-medium text-gray-700 hover:bg-gray-50 hover:text-green-700 transition-colors">
+                    About
+                </a>
+            </nav>
 
-                <!-- CTA footer -->
-                <div class="p-4 border-t border-gray-100 shrink-0">
-                    <a href="{{ route('login') }}"
-                    class="group bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-colors w-full">
-                        Open System
-                        <i data-lucide="arrow-right" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"></i>
-                    </a>
-                </div>
+            <!-- CTA footer -->
+            <div class="p-4 border-t border-gray-100 shrink-0">
+                <a href="{{ route('login') }}"
+                class="group bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-colors w-full">
+                    Open System
+                    <i data-lucide="arrow-right" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"></i>
+                </a>
             </div>
         </div>
     </div>
@@ -271,8 +272,8 @@
         </div>
     </section>
 
-    <!-- About / Image band -->
-    <section id="about">
+    <!-- Gallery band -->
+    <section>
         <div class="grid grid-cols-1 md:grid-cols-3 h-56 sm:h-72 overflow-hidden">
             @php
                 $galleryImages = [
@@ -289,20 +290,91 @@
                 </div>
             @endforeach
         </div>
+    </section>
 
-        <div class="bg-green-700 text-center py-14 sm:py-20 px-4 sm:px-6">
-            <h2 class="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4">
-                Ready to take control of your farm inventory?
-            </h2>
-            <p class="text-green-100 text-base sm:text-lg max-w-2xl mx-auto mb-8">
-                Join hundreds of farms across the Philippines using AgriStock to eliminate stockouts, reduce waste, and stay on top of every input.
-            </p>
-            <a href="{{ route('login') }}"
-                class="group inline-flex items-center gap-2 bg-white hover:bg-green-50 text-green-800 px-7 py-3.5 rounded-lg font-semibold transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg">
-                Open AgriStock Dashboard
-                <i data-lucide="arrow-right" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"></i>
-            </a>
+    <!-- About -->
+    <section id="about" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-10">
+        <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+
+            <!-- Copy -->
+            <div class="min-w-0">
+                <span class="inline-flex items-center gap-2 bg-green-50 text-green-700 text-xs font-semibold px-3.5 py-1.5 rounded-full mb-5 sm:mb-6">
+                    <i data-lucide="sprout" class="w-3.5 h-3.5"></i> About AgriStock
+                </span>
+
+                <h2 class="font-display text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-5">
+                    Built for the realities of Philippine agriculture
+                </h2>
+
+                <p class="text-gray-500 text-base leading-relaxed mb-4">
+                    AgriStock was designed from the ground up for farm managers who need more than a spreadsheet — but less than an enterprise ERP. It handles the entire lifecycle of agri-inputs: from catalog setup and stock receiving, through daily movements and batch expiry monitoring, to purchase orders and supplier records.
+                </p>
+                <p class="text-gray-500 text-base leading-relaxed mb-8">
+                    Whether you're managing a single farm or coordinating across multiple locations, AgriStock gives every team member — from admin to field staff — exactly the access they need to keep operations running without stockouts or waste.
+                </p>
+
+                <!-- Checklist -->
+                <div class="space-y-4">
+                    @php
+                        $points = [
+                            ['icon' => 'zap', 'text' => 'Real-time alerts when stock drops below reorder thresholds'],
+                            ['icon' => 'clock', 'text' => 'Batch expiry tracking prevents costly disposal of inputs'],
+                            ['icon' => 'globe', 'text' => 'Multi-location stock visibility from one dashboard'],
+                            ['icon' => 'trending-down', 'text' => 'Movement history and reports reduce guesswork in procurement'],
+                        ];
+                    @endphp
+
+                    @foreach($points as $point)
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center shrink-0">
+                                <i data-lucide="{{ $point['icon'] }}" class="w-4 h-4 text-green-600"></i>
+                            </div>
+                            <p class="text-gray-600 text-[15px]">{{ $point['text'] }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Stat cards -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-green-700 rounded-2xl p-6 sm:p-7">
+                    <p class="font-display text-3xl sm:text-4xl font-bold text-white leading-none mb-3">2,400+</p>
+                    <p class="text-white font-semibold text-sm mb-1">Farms Onboarded</p>
+                    <p class="text-green-200 text-xs leading-relaxed">across Luzon, Visayas &amp; Mindanao</p>
+                </div>
+                <div class="bg-gray-900 rounded-2xl p-6 sm:p-7">
+                    <p class="font-display text-3xl sm:text-4xl font-bold text-white leading-none mb-3">98%</p>
+                    <p class="text-white font-semibold text-sm mb-1">Stock Accuracy</p>
+                    <p class="text-gray-400 text-xs leading-relaxed">average across active farms</p>
+                </div>
+                <div class="bg-green-50 rounded-2xl p-6 sm:p-7">
+                    <p class="font-display text-3xl sm:text-4xl font-bold text-gray-900 leading-none mb-3">35%</p>
+                    <p class="text-gray-800 font-semibold text-sm mb-1">Waste Reduction</p>
+                    <p class="text-gray-500 text-xs leading-relaxed">avg. reduction in expired inputs</p>
+                </div>
+                <div class="bg-gray-100 rounded-2xl p-6 sm:p-7">
+                    <p class="font-display text-3xl sm:text-4xl font-bold text-gray-900 leading-none mb-3">180K+</p>
+                    <p class="text-gray-800 font-semibold text-sm mb-1">Movements Logged</p>
+                    <p class="text-gray-500 text-xs leading-relaxed">stock in, out &amp; adjustments</p>
+                </div>
+            </div>
+
         </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="bg-green-700 text-center py-14 sm:py-20 px-4 sm:px-6">
+        <h2 class="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4">
+            Ready to take control of your farm inventory?
+        </h2>
+        <p class="text-green-100 text-base sm:text-lg max-w-2xl mx-auto mb-8">
+            Join hundreds of farms across the Philippines using AgriStock to eliminate stockouts, reduce waste, and stay on top of every input.
+        </p>
+        <a href="{{ route('login') }}"
+            class="group inline-flex items-center gap-2 bg-white hover:bg-green-50 text-green-800 px-7 py-3.5 rounded-lg font-semibold transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg">
+            Open AgriStock Dashboard
+            <i data-lucide="arrow-right" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"></i>
+        </a>
     </section>
 
     <!-- Footer -->
@@ -310,9 +382,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-12 sm:py-16 grid sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10">
 
             <div class="sm:col-span-2">
-                <a href="#top" class="group flex items-center gap-2.5 mb-4">
+                <a href="#top" class="group flex items-center gap-2.5 mb-4 w-fit">
                     <div class="w-9 h-9 bg-green-600 rounded-lg flex items-center justify-center transition-all duration-300 ease-out group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-md group-hover:shadow-green-700/30">
-                        <i data-lucide="leaf"class="w-5 h-5 text-white"></i>
+                        <i data-lucide="leaf" class="w-5 h-5 text-white"></i>
                     </div>
                     <span class="font-display font-bold text-lg text-white transition-colors duration-300 group-hover:text-green-200">
                         AgriStock
