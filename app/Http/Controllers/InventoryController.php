@@ -20,7 +20,7 @@ class InventoryController extends Controller
     {
         $inventories = $this->inventoryService->getInventories($request->all());
         $summary = $this->inventoryService->getSummary();
-        $categories = Category::where('status', 'Active')->orderBy('name')->get();
+        $categories = Category::active()->orderBy('name')->get();
         $products = $this->inventoryService->getActiveProducts();
         $suppliers = $this->inventoryService->getActiveSuppliers();
         $locations = StorageLocation::values();

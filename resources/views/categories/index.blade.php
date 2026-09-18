@@ -140,7 +140,7 @@
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-2">
                             <p class="font-semibold text-gray-800 truncate">{{ $category->name }}</p>
-                            @if($category->status === 'Archived')
+                            @if($category->status === \App\Enums\Status::ARCHIVED)
                                 <span class="text-[10px] font-medium text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded shrink-0">
                                     Archived
                                 </span>
@@ -160,7 +160,7 @@
                         @endcan
 
                         @can('products.delete')
-                            @if($category->status === 'Active')
+                            @if($category->status === \App\Enums\Status::ACTIVE)
                                 <button
                                     @click="openArchive({{ $category->id }}, '{{ addslashes($category->name) }}')"
                                     title="Archive category"

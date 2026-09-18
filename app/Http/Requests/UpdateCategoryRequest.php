@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Status;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -49,7 +50,7 @@ class UpdateCategoryRequest extends FormRequest
 
             'status' => [
                 'required',
-                Rule::in(['Active', 'Archived'])
+                Rule::in(Status::values())
             ],
         ];
     }

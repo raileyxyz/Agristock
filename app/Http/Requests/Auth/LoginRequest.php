@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Enums\Status;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -50,7 +51,7 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        if (Auth::user()->status === 'Archived') {
+        if (Auth::user()->status === Status::ARCHIVED) {
             Auth::logout();
 
             throw ValidationException::withMessages([

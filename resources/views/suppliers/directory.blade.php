@@ -44,8 +44,8 @@
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap">
                                 <span class="text-xs font-medium px-2.5 py-1 rounded-full
-                                    {{ $supplier->status === 'Active' ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500' }}">
-                                    {{ ($supplier->status) }}
+                                    {{ $supplier->status === \App\Enums\Status::ACTIVE ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500' }}">
+                                    {{ $supplier->status->value }}
                                 </span>
                             </td>
                         </tr>

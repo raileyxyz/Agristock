@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\Status;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -27,8 +28,8 @@ class UserManagementService
     public function getSummary(): array
     {
         return [
-            'active' => User::where('status', 'Active')->count(),
-            'inactive' => User::where('status', 'Archived')->count(),
+            'active' => User::where('status', Status::ACTIVE->value)->count(),
+            'inactive' => User::where('status', Status::ARCHIVED->value)->count(),
         ];
     }
 
@@ -36,15 +37,15 @@ class UserManagementService
     {
         return [
             'total' => User::count(),
-            'active' => User::where('status', 'Active')->count(),
-            'archived' => User::where('status', 'Archived')->count(),
+            'active' => User::where('status', Status::ACTIVE->value)->count(),
+            'archived' => User::where('status', Status::ARCHIVED->value)->count(),
         ];
     }
 
     public function getRoleUserCounts()
     {
         return User::query()
-            ->where('status', 'Active')
+            ->active()
             ->selectRaw('role, count(*) as total')
             ->groupBy('role')
             ->pluck('total', 'role');
@@ -58,7 +59,7 @@ class UserManagementService
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
                 'role' => $data['role'],
-                'status' => 'Active',
+                'status' => Status::ACTIVE,
             ]);
 
             event(new \App\Events\NewUserAdded($user, Auth::user()));
@@ -71,7 +72,7 @@ class UserManagementService
     {
         return DB::transaction(function () use ($user, $data) {
             $oldRole = $user->role->value;
-            $oldStatus = $user->status;
+            $oldStatus = $user->status->value;
 
             $payload = [
                 'name' => $data['name'],
@@ -94,11 +95,11 @@ class UserManagementService
                 event(new \App\Events\UserRoleChanged($user, $oldRole, $user->role->value, Auth::user()));
             }
 
-            if ($oldStatus === 'Archived' && $user->status === 'Active') {
+            if ($oldStatus === Status::ARCHIVED->value && $user->status === Status::ACTIVE) {
                 event(new \App\Events\UserAccountRestored($user, Auth::user()));
             }
 
-            if ($oldStatus === 'Active' && $user->status === 'Archived') {
+            if ($oldStatus === Status::ACTIVE->value && $user->status === Status::ARCHIVED) {
                 event(new \App\Events\UserAccountArchived($user, Auth::user()));
             }
 
@@ -108,7 +109,7 @@ class UserManagementService
 
     public function archive(User $user): void
     {
-        $user->update(['status' => 'Archived']);
+        $user->update(['status' => Status::ARCHIVED]);
 
         event(new \App\Events\UserAccountArchived($user, Auth::user()));
     }

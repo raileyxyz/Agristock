@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Status;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -51,7 +52,7 @@ class StoreCategoryRequest extends FormRequest
             'status' => [
                 'nullable',
                 'string',
-                Rule::in(['Active', 'Archived']),
+                Rule::in(Status::values()),
             ],
         ];
     }

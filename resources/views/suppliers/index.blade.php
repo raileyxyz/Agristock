@@ -140,10 +140,10 @@
                             </p>
 
                             <span class="text-[10px] font-medium px-2 py-0.5 rounded-full shrink-0
-                                {{ $supplier->status === 'Active'
+                                {{ $supplier->status === \App\Enums\Status::ACTIVE
                                     ? 'bg-green-100 text-green-800'
                                     : 'bg-gray-100 text-gray-600' }}">
-                                {{ $supplier->status }}
+                                {{ $supplier->status->value }}
                             </span>
                         </div>
 
@@ -171,19 +171,19 @@
 
                             @can('suppliers.delete')
                                 <button
-                                    @if($supplier->status === 'Active')
+                                    @if($supplier->status === \App\Enums\Status::ACTIVE)
                                         @click="openArchive(
                                             {{ $supplier->id }},
                                             '{{ addslashes($supplier->company_name) }}'
                                         )"
                                     @endif
-                                    title="{{ $supplier->status === 'Active' ? 'Archive supplier' : 'Supplier already archived' }}"
+                                    title="{{ $supplier->status === \App\Enums\Status::ACTIVE ? 'Archive supplier' : 'Supplier already archived' }}"
                                     class="shrink-0 transition-colors
-                                        {{ $supplier->status === 'Active'
+                                        {{ $supplier->status === \App\Enums\Status::ACTIVE
                                             ? 'text-gray-400 hover:text-red-600 cursor-pointer p-1.5 rounded-md hover:bg-red-50'
                                             : 'text-gray-200 cursor-not-allowed'
                                         }}"
-                                    {{ $supplier->status === 'Archived' ? 'disabled' : '' }}
+                                    {{ $supplier->status === \App\Enums\Status::ARCHIVED ? 'disabled' : '' }}
                                 >
                                     <i data-lucide="archive" class="w-4 h-4"></i>
                                 </button>

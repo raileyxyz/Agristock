@@ -155,8 +155,8 @@
                                 </td>
                                 <td class="px-4 py-3 whitespace-nowrap">
                                     <span class="text-xs font-medium px-2.5 py-1 rounded-full
-                                        {{ $user->status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">
-                                        {{ $user->status }}
+                                        {{ $user->status === \App\Enums\Status::ACTIVE ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">
+                                        {{ $user->status->value }}
                                     </span>
                                 </td>
 
@@ -187,7 +187,7 @@
                                                         'address' => $user->address,
                                                         'avatar' => $user->avatar ? \Illuminate\Support\Facades\Storage::url($user->avatar) : null,
                                                         'role' => $user->role->value,
-                                                        'status' => $user->status,
+                                                        'status' => $user->status->value,
                                                         'last_login_at' => $user->last_login_at?->format('M d, Y - h:i A'),
                                                         'created_at' => $user->created_at?->format('M d, Y'),
                                                     ]))"
@@ -204,7 +204,7 @@
                                                                 'name' => $user->name,
                                                                 'email' => $user->email,
                                                                 'role' => $user->role->value,
-                                                                'status' => $user->status,
+                                                                'status' => $user->status->value,
                                                             ]))"
                                                             class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 hover:bg-gray-50 hover:text-green-600 transition-colors">
                                                         <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
@@ -214,7 +214,7 @@
                                             @endif
 
                                             <!-- Archive -->
-                                            @if($user->id !== auth()->id() && $user->status === 'Active')
+                                            @if($user->id !== auth()->id() && $user->status === \App\Enums\Status::ACTIVE)
                                                 @can('delete', $user)
                                                     <button @click="open = false; openArchive({{ $user->id }}, '{{ addslashes($user->name) }}')"
                                                             class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-red-600 hover:bg-red-50 rounded-lg transition-colors">

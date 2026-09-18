@@ -16,7 +16,7 @@ class LowStockController extends Controller
     {
         $products = $this->lowStockService->getLowStockProducts($request->all());
         $totalCount = $this->lowStockService->getSummary();
-        $categories = Category::where('status', 'Active')->orderBy('name')->get();
+        $categories = Category::active()->orderBy('name')->get();
 
         return view('low-stock.index', compact('products', 'totalCount', 'categories'));
     }

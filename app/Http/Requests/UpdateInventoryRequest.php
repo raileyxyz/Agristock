@@ -59,11 +59,6 @@ class UpdateInventoryRequest extends FormRequest
                 'after:today',
             ],
 
-            'location' => [
-                'required',
-                Rule::in(['Main Warehouse', 'Storage Room A', 'Storage Room B', 'Field Storage']),
-            ],
-
             'notes' => [
                 'nullable',
                 'string',

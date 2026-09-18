@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Status;
 use App\Enums\UserRole;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -54,7 +55,7 @@ class UpdateUserRequest extends FormRequest
 
             'status' => [
                 'required',
-                Rule::in(['Active', 'Archived'])
+                Rule::in(Status::values())
             ],
         ];
     }

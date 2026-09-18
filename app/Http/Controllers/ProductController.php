@@ -25,7 +25,7 @@ class ProductController extends Controller
     {
         $products = $this->productService->getProducts($request->all());
 
-        $categories = Category::where('status', 'Active')->orderBy('name')->get();
+        $categories = Category::active()->orderBy('name')->get();
         $units = Unit::all();
         $statistics = $this->productService->getStatistics();
 
@@ -37,7 +37,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('status', 'Active')->orderBy('name')->get();
+        $categories = Category::active()->orderBy('name')->get();
         $units = Unit::orderBy('name')->get();
 
         return view('products.create', compact('categories', 'units'));

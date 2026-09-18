@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\Status;
 use App\Models\Supplier;
 
 class SupplierService
@@ -11,7 +12,7 @@ class SupplierService
         return Supplier::query()
             ->with('categories')
             ->search($filters['search'] ?? null)
-            ->filterStatus($filters['status'] ?? 'Active')
+            ->filterStatus($filters['status'] ?? Status::ACTIVE->value)
             ->filterCategory($filters['category_id'] ?? null)
             ->latest()
             ->paginate(15)
@@ -21,7 +22,7 @@ class SupplierService
     public function getDirectory()
     {
         return Supplier::with('categories')
-            ->orderByRaw("FIELD(status, 'Active', 'Archived')")
+            ->orderByRaw(sprintf("FIELD(status, '%s', '%s')", Status::ACTIVE->value, Status::ARCHIVED->value))
             ->orderBy('company_name')
             ->paginate(15)
             ->withQueryString();
@@ -31,8 +32,8 @@ class SupplierService
     {
         return [
             'total' => Supplier::count(),
-            'active' => Supplier::where('status', 'Active')->count(),
-            'archived' => Supplier::where('status', 'Archived')->count(),
+            'active' => Supplier::where('status', Status::ACTIVE->value)->count(),
+            'archived' => Supplier::where('status', Status::ARCHIVED->value)->count(),
         ];
     }
 
@@ -60,7 +61,7 @@ class SupplierService
 
     public function archive(Supplier $supplier): void
     {
-        $supplier->update(['status' => 'Archived']);
+        $supplier->update(['status' => Status::ARCHIVED]);
     }
 
     public function addSupplyCategoryIfMissing(int $supplierId, int $categoryId): void

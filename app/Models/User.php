@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\Status;
 use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -39,6 +39,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'last_login_at' => 'datetime',
             'role' => UserRole::class,
+            'status' => Status::class,
         ];
     }
 
@@ -55,6 +56,11 @@ class User extends Authenticatable
     public function isStaff(): bool
     {
         return $this->role === UserRole::STAFF;
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('status', Status::ACTIVE->value);
     }
 
     public function scopeRole(Builder $query, UserRole|string|null $role): Builder

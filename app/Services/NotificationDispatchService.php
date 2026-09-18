@@ -23,7 +23,7 @@ class NotificationDispatchService
         }
 
         $recipients = User::query()
-            ->where('status', 'Active')
+            ->active()
             ->whereIn('role', $meta['roles'])
             ->when($actor, fn ($q) => $q->where('id', '!=', $actor->id))
             ->get()

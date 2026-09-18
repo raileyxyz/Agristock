@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Status;
 use Illuminate\Database\Eloquent\Model;
 
 class Supplier extends Model
@@ -16,6 +17,10 @@ class Supplier extends Model
         'notes',
     ];
 
+    protected $casts = [
+        'status' => Status::class,
+    ];
+
     public function categories()
     {
         return $this->belongsToMany(Category::class);
@@ -23,7 +28,7 @@ class Supplier extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('status', 'Active');
+        return $query->where('status', Status::ACTIVE->value);
     }
 
     public function scopeSearch($query, $search)

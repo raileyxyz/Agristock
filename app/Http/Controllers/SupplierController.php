@@ -22,7 +22,7 @@ class SupplierController extends Controller
     {
         $suppliers = $this->supplierService->getSuppliers($request->all());
         $statistics = $this->supplierService->getStatistics();
-        $categories = Category::where('status', 'Active')->orderBy('name')->get();
+        $categories = Category::active()->orderBy('name')->get();
 
         return view('suppliers.index', compact('suppliers', 'categories', 'statistics'));
     }
@@ -32,7 +32,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('status', 'Active')->orderBy('name')->get();
+        $categories = Category::active()->orderBy('name')->get();
 
         return view('suppliers.create', compact('categories'));
     }
@@ -60,7 +60,7 @@ class SupplierController extends Controller
      */
     public function edit(Supplier $supplier)
     {
-        $categories = Category::where('status', 'Active')->orderBy('name')->get();
+        $categories = Category::active()->orderBy('name')->get();
         $supplier->load('categories');
 
         return view('suppliers.edit', compact('supplier', 'categories'));
