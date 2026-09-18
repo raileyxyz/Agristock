@@ -18,8 +18,6 @@ class CategoryController extends Controller
 
     public function index(Request $request)
     {
-        $this->authorize('products.view');
-
         $categories = $this->categoryService->getCategories($request->all());
 
         return view('categories.index', compact('categories'));
@@ -27,8 +25,6 @@ class CategoryController extends Controller
 
     public function store(StoreCategoryRequest $request)
     {
-        $this->authorize('products.create');
-
         $this->categoryService->create($request->validated());
 
         return redirect()->route('categories.index')->with('success', 'Category added successfully.');
@@ -36,8 +32,6 @@ class CategoryController extends Controller
 
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $this->authorize('products.update');
-
         $data = $request->validated();
 
         if (! Gate::allows('products.delete')) {
@@ -56,8 +50,6 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        $this->authorize('products.delete');
-
         try {
             $this->categoryService->archive($category);
 

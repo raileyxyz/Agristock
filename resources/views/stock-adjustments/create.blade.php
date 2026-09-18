@@ -178,7 +178,7 @@
                             class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 transition-colors
                             {{ $errors->has('reason') ? 'border-red-300 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 focus:ring-green-500/40 focus:border-green-500' }}">
                         <option value="">Select reason...</option>
-                        @foreach(['Physical Count', 'Damaged Goods', 'Theft/Loss', 'Expired Removal', 'Data Entry Error', 'Other'] as $reason)
+                        @foreach(\App\Enums\StockAdjustmentReason::values() as $reason)
                             <option value="{{ $reason }}" {{ old('reason') === $reason ? 'selected' : '' }}>{{ $reason }}</option>
                         @endforeach
                     </select>

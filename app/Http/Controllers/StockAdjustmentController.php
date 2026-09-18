@@ -16,8 +16,6 @@ class StockAdjustmentController extends Controller
 
     public function create()
     {
-        $this->authorize('inventory.manage');
-
         $products = Product::active()->with('unit')->orderBy('name')->get();
         $stockData = $this->stockAdjustmentService->getStockData();
 
@@ -26,8 +24,6 @@ class StockAdjustmentController extends Controller
 
     public function store(StoreStockAdjustmentRequest $request)
     {
-        $this->authorize('inventory.manage');
-
         try {
             $this->stockAdjustmentService->create($request->validated());
 

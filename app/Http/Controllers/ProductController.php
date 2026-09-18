@@ -23,8 +23,6 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('products.view');
-
         $products = $this->productService->getProducts($request->all());
 
         $categories = Category::where('status', 'Active')->orderBy('name')->get();
@@ -39,8 +37,6 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $this->authorize('products.create');
-
         $categories = Category::where('status', 'Active')->orderBy('name')->get();
         $units = Unit::orderBy('name')->get();
 
@@ -52,8 +48,6 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        $this->authorize('products.create');
-
         $this->productService->create($request->validated());
 
         return redirect()->route('products.create')->with('success', 'Product created successfully.');
@@ -80,8 +74,6 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $this->authorize('products.update');
-
         $data = $request->validated();
 
         if (! Gate::allows('products.delete')) {
@@ -98,8 +90,6 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $this->authorize('products.delete');
-
         $this->productService->archive($product);
 
         return redirect()->route('products.index')->with('success', "\"{$product->name}\" has been archived.");

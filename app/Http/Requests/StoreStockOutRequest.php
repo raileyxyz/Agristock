@@ -2,11 +2,13 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\StockOutReason;
 use App\Enums\StorageLocation;
 use App\Models\Inventory;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+
 
 class StoreStockOutRequest extends FormRequest
 {
@@ -44,15 +46,7 @@ class StoreStockOutRequest extends FormRequest
 
             'reason' => [
                 'required',
-                Rule::in([
-                    'Sale',
-                    'Damaged',
-                    'Expired',
-                    'Transfer',
-                    'Adjustment',
-                    'Return to Supplier',
-                    'Other',
-                ]),
+                Rule::in(StockOutReason::values()),
             ],
 
             'transfer_to' => [

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Status;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Inventory;
 
@@ -25,6 +26,7 @@ class Product extends Model
         'cost_price' => "decimal:2",
         'selling_price' => "decimal:2",
         'expiry_track' => "boolean",
+        'status' => Status::class,
     ];
 
     public function category()
@@ -44,7 +46,7 @@ class Product extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('status', 'Active');
+        return $query->where('status', Status::ACTIVE->value);
     }
 
     public function scopeSearch($query, $search)
@@ -66,7 +68,7 @@ class Product extends Model
 
     public function scopeNeedsReorder($query)
     {
-        return $query->where('status', 'Active')
+        return $query->where('status', Status::ACTIVE->value)
             ->withSum(['inventories' => function ($q) {
                 $q->where('status', '!=', 'Archived');
             }], 'remaining_quantity')

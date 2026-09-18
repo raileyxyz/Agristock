@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\Status;
 use App\Models\Product;
 use App\Models\Category;
 
@@ -28,8 +29,8 @@ class ProductService
     {
         return [
             'total' => Product::count(),
-            'active' => Product::where('status', 'Active')->count(),
-            'archived' => Product::where('status', 'Archived')->count(),
+            'active' => Product::where('status', Status::ACTIVE->value)->count(),
+            'archived' => Product::where('status', Status::ARCHIVED->value)->count(),
         ];
     }
 
@@ -53,6 +54,6 @@ class ProductService
 
     public function archive(Product $product): void
     {
-        $product->update(['status' => 'Archived',]);
+        $product->update(['status' => Status::ARCHIVED]);
     }
 }

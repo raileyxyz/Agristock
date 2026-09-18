@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\Product;
 use App\Models\Inventory;
 use App\Enums\StorageLocation;
 use Illuminate\Http\Request;
@@ -19,8 +18,6 @@ class InventoryController extends Controller
 
     public function index(Request $request)
     {
-        $this->authorize('inventory.view');
-
         $inventories = $this->inventoryService->getInventories($request->all());
         $summary = $this->inventoryService->getSummary();
         $categories = Category::where('status', 'Active')->orderBy('name')->get();
@@ -33,8 +30,6 @@ class InventoryController extends Controller
 
     public function create()
     {
-        $this->authorize('inventory.stock-in');
-
         $products = $this->inventoryService->getActiveProducts();
         $suppliers = $this->inventoryService->getActiveSuppliers();
         $locations = StorageLocation::values();
@@ -44,8 +39,6 @@ class InventoryController extends Controller
 
     public function store(StoreInventoryRequest $request)
     {
-        $this->authorize('inventory.stock-in');
-
         $this->inventoryService->create($request->validated());
 
         return redirect()->route('inventories.create')->with('success', 'Stock added successfully.');
@@ -53,8 +46,6 @@ class InventoryController extends Controller
 
     public function edit(Inventory $inventory)
     {
-        $this->authorize('inventory.manage');
-
         $products = $this->inventoryService->getActiveProducts();
 
         return view('inventories.edit', compact('inventory', 'products'));
@@ -62,8 +53,6 @@ class InventoryController extends Controller
 
     public function update(UpdateInventoryRequest $request, Inventory $inventory)
     {
-        $this->authorize('inventory.manage');
-
         try {
             $this->inventoryService->update($inventory, $request->validated());
 
@@ -76,8 +65,6 @@ class InventoryController extends Controller
 
     public function destroy(Inventory $inventory)
     {
-        $this->authorize('inventory.manage');
-
         $this->inventoryService->archive($inventory);
 
         return redirect()->route('inventories.index')->with('success', 'Stock archived successfully.');

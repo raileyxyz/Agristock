@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\StorageLocation;
-use App\Models\Product;
-use App\Models\Inventory;
 use App\Services\StockOutService;
 use App\Http\Requests\StoreStockOutRequest;
 use Illuminate\Http\Request;
@@ -28,8 +25,6 @@ class StockOutController extends Controller
      */
     public function create()
     {
-        $this->authorize('inventory.stock-out');
-
         $data = $this->stockOutService->getCreateData();
 
         return view('stock-outs.create', $data);
@@ -40,8 +35,6 @@ class StockOutController extends Controller
      */
     public function store(StoreStockOutRequest $request)
     {
-        $this->authorize('inventory.stock-out');
-
         $this->stockOutService->create($request->validated());
 
         return redirect()->route('stock-outs.create')->with('success', 'Stock out recorded successfully.');

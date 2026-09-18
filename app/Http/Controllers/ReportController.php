@@ -15,8 +15,6 @@ class ReportController extends Controller
 
     public function stock(): View
     {
-        $this->authorize('reports.stock');
-
         $summary = $this->reportService->getStockSummary();
         $categoryData = $this->reportService->getStockByCategory();
 
@@ -25,8 +23,6 @@ class ReportController extends Controller
 
     public function movement(Request $request): View
     {
-        $this->authorize('reports.movement');
-
         $range = $request->query('range', 'all');
         $customStart = $request->query('start_date');
         $customEnd = $request->query('end_date');
@@ -65,8 +61,6 @@ class ReportController extends Controller
 
     public function expiry(): View
     {
-        $this->authorize('reports.expiry');
-
         $summary = $this->reportService->getExpirySummary();
         $batches = $this->reportService->getExpiryBatches();
 
