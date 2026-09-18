@@ -6,11 +6,13 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class InventoryService
 {
     public function __construct(
-        private BatchNumberGeneratorService $batchNumberGenerator
+        private BatchNumberGeneratorService $batchNumberGenerator,
+        private SupplierService $supplierService
     ) {}
 
     public function getInventories(array $filters)
@@ -53,11 +55,20 @@ class InventoryService
         $data['remaining_quantity'] = $data['quantity'];
         $data['user_id'] = Auth::id();
 
-        $inventory = Inventory::create($data);
+        return DB::transaction(function () use ($data) {
+            $inventory = Inventory::create($data);
 
-        event(new \App\Events\StockReceived($inventory, Auth::user()));
+            if (! empty($data['supplier_id'])) {
+                $this->supplierService->addSupplyCategoryIfMissing(
+                    $data['supplier_id'],
+                    $inventory->product->category_id
+                );
+            }
 
-        return $inventory;
+            event(new \App\Events\StockReceived($inventory, Auth::user()));
+
+            return $inventory;
+        });
     }
 
     public function update(Inventory $inventory, array $data): Inventory
@@ -81,5 +92,4 @@ class InventoryService
     {
         $inventory->update(['status' => 'Archived']);
     }
-
 }

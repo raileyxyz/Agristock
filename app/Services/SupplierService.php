@@ -62,4 +62,9 @@ class SupplierService
     {
         $supplier->update(['status' => 'Archived']);
     }
+
+    public function addSupplyCategoryIfMissing(int $supplierId, int $categoryId): void
+    {
+        Supplier::find($supplierId)?->categories()->syncWithoutDetaching([$categoryId]);
+    }
 }

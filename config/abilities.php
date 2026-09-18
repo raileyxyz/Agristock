@@ -23,10 +23,10 @@ return [
     'suppliers.delete' => [],
 
     // Purchase Orders
-    'purchase-orders.view'   => [UserRole::MANAGER, UserRole::STAFF],
-    'purchase-orders.create' => [UserRole::MANAGER],
-    'purchase-orders.update' => [],
-    'purchase-orders.delete' => [],
+    // 'purchase-orders.view'   => [UserRole::MANAGER, UserRole::STAFF],
+    // 'purchase-orders.create' => [UserRole::MANAGER],
+    // 'purchase-orders.update' => [],
+    // 'purchase-orders.delete' => [],
 
     // Reports
     'reports.stock'    => [UserRole::MANAGER, UserRole::STAFF],

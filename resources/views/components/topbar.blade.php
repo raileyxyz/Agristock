@@ -216,15 +216,20 @@
 
                 <!-- Actions -->
                 <div class="py-1.5">
-                    <a href="{{ route('profile.edit') }}"
-                    class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                        <i data-lucide="settings" class="w-4 h-4 text-gray-400"></i>
-                        Account Settings
-                    </a>
                     <a href="{{ route('landing') }}"
                     class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                         <i data-lucide="home" class="w-4 h-4 text-gray-400"></i>
                         Landing Page
+                    </a>
+                    <a href="{{ route('profile.edit') }}"
+                    class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                        <i data-lucide="pencil" class="w-4 h-4 text-gray-400"></i>
+                        Edit Profile
+                    </a>
+                    <a href="{{ route('profile.edit') }}"
+                    class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                        <i data-lucide="settings" class="w-4 h-4 text-gray-400"></i>
+                        Settings
                     </a>
                 </div>
 
