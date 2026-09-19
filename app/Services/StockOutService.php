@@ -6,7 +6,7 @@ use App\Enums\StorageLocation;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\StockOut;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class StockOutService
@@ -54,9 +54,9 @@ class StockOutService
         return compact('products', 'stockData',  'locations');
     }
 
-    public function create(array $data): StockOut
+    public function create(array $data, User $actor): StockOut
     {
-        return DB::transaction(function () use ($data) {
+        return DB::transaction(function () use ($data, $actor) {
             $product = Product::findOrFail($data['product_id']);
 
             $remainingBefore = $product->inventories()->sum('remaining_quantity');
@@ -72,27 +72,27 @@ class StockOutService
                 ->implode(', ');
 
             if ($data['reason'] === 'Transfer' && ! empty($data['transfer_to'])) {
-                $this->mirrorTransferAtDestination($product, $data, $consumedBatches);
+                $this->mirrorTransferAtDestination($product, $data, $consumedBatches, $actor);
             }
 
-            $data['user_id'] = Auth::id();
+            $data['user_id'] = $actor->id;
 
             $stockOut = StockOut::create($data);
 
             if ($data['reason'] === 'Transfer') {
-                event(new \App\Events\StockTransferCompleted($stockOut, Auth::user()));
+                event(new \App\Events\StockTransferCompleted($stockOut, $actor));
             } else {
-                event(new \App\Events\StockOutRecorded($stockOut, Auth::user()));
+                event(new \App\Events\StockOutRecorded($stockOut, $actor));
             }
 
             $remainingAfter = $product->inventories()->sum('remaining_quantity');
-            event(new \App\Events\StockLevelChanged($product->fresh(), $remainingBefore, $remainingAfter, Auth::user()));
+            event(new \App\Events\StockLevelChanged($product->fresh(), $remainingBefore, $remainingAfter, $actor));
 
             return $stockOut;
         });
     }
 
-    private function mirrorTransferAtDestination(Product $product, array $data, array $consumedBatches): void
+    private function mirrorTransferAtDestination(Product $product, array $data, array $consumedBatches, User $actor): void
     {
         foreach ($consumedBatches as $batch) {
             $existing = Inventory::where('product_id', $product->id)
@@ -121,7 +121,7 @@ class StockOutService
 
             Inventory::create([
                 'product_id' => $product->id,
-                'user_id' => Auth::id(),
+                'user_id' => $actor->id,
                 'quantity' => $batch['quantity'],
                 'remaining_quantity' => $batch['quantity'],
                 'batch_number' => $this->batchNumberGenerator->generate(),

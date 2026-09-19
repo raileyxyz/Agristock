@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 
 class UserManagementService
 {
@@ -51,28 +50,28 @@ class UserManagementService
             ->pluck('total', 'role');
     }
 
-    public function create(array $data): User
+    public function create(array $data, User $actor): User
     {
-        return DB::transaction(function () use ($data) {
+        return DB::transaction(function () use ($data, $actor) {
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
                 'role' => $data['role'],
-                'status' => Status::ACTIVE,
+                'status' => 'Active',
             ]);
 
-            event(new \App\Events\NewUserAdded($user, Auth::user()));
+            event(new \App\Events\NewUserAdded($user, $actor));
 
             return $user;
         });
     }
 
-    public function update(User $user, array $data): User
+    public function update(User $user, array $data, User $actor): User
     {
-        return DB::transaction(function () use ($user, $data) {
+        return DB::transaction(function () use ($user, $data, $actor) {
             $oldRole = $user->role->value;
-            $oldStatus = $user->status->value;
+            $oldStatus = $user->status;
 
             $payload = [
                 'name' => $data['name'],
@@ -92,25 +91,25 @@ class UserManagementService
             $user = $user->fresh();
 
             if ($oldRole !== $user->role->value) {
-                event(new \App\Events\UserRoleChanged($user, $oldRole, $user->role->value, Auth::user()));
+                event(new \App\Events\UserRoleChanged($user, $oldRole, $user->role->value, $actor));
             }
 
-            if ($oldStatus === Status::ARCHIVED->value && $user->status === Status::ACTIVE) {
-                event(new \App\Events\UserAccountRestored($user, Auth::user()));
+            if ($oldStatus === 'Archived' && $user->status === 'Active') {
+                event(new \App\Events\UserAccountRestored($user, $actor));
             }
 
-            if ($oldStatus === Status::ACTIVE->value && $user->status === Status::ARCHIVED) {
-                event(new \App\Events\UserAccountArchived($user, Auth::user()));
+            if ($oldStatus === 'Active' && $user->status === 'Archived') {
+                event(new \App\Events\UserAccountArchived($user, $actor));
             }
 
             return $user;
         });
     }
 
-    public function archive(User $user): void
+    public function archive(User $user, User $actor): void
     {
-        $user->update(['status' => Status::ARCHIVED]);
+        $user->update(['status' => 'Archived']);
 
-        event(new \App\Events\UserAccountArchived($user, Auth::user()));
+        event(new \App\Events\UserAccountArchived($user, $actor));
     }
 }

@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\UserManagementService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -58,7 +59,7 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        $this->userManagementService->create($request->validated());
+        $this->userManagementService->create($request->validated(), Auth::user());
 
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
@@ -92,7 +93,7 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
-        $this->userManagementService->update($user, $request->validated());
+        $this->userManagementService->update($user, $request->validated(), Auth::user());
 
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
@@ -104,7 +105,7 @@ class UserController extends Controller
     {
         $this->authorize('delete', $user);
 
-        $this->userManagementService->archive($user);
+        $this->userManagementService->archive($user, Auth::user());
 
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }

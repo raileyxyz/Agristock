@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\StockOutService;
 use App\Http\Requests\StoreStockOutRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StockOutController extends Controller
 {
@@ -35,7 +36,7 @@ class StockOutController extends Controller
      */
     public function store(StoreStockOutRequest $request)
     {
-        $this->stockOutService->create($request->validated());
+        $this->stockOutService->create($request->validated(), Auth::user());
 
         return redirect()->route('stock-outs.create')->with('success', 'Stock out recorded successfully.');
     }

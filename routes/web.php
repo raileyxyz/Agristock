@@ -72,7 +72,6 @@ Route::middleware('auth')->group(function () {
     Route::middleware('can:inventory.manage')->group(function () {
         Route::get('/inventories/{inventory}/edit', [InventoryController::class, 'edit'])->name('inventories.edit');
         Route::put('/inventories/{inventory}', [InventoryController::class, 'update'])->name('inventories.update');
-        Route::delete('/inventories/{inventory}', [InventoryController::class, 'destroy'])->name('inventories.destroy');
         Route::get('/stock-adjustments/create', [StockAdjustmentController::class, 'create'])->name('stock-adjustments.create');
         Route::post('/stock-adjustments', [StockAdjustmentController::class, 'store'])->name('stock-adjustments.store');
     });

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
 use App\Services\StockAdjustmentService;
 use App\Http\Requests\StoreStockAdjustmentRequest;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +24,7 @@ class StockAdjustmentController extends Controller
     public function store(StoreStockAdjustmentRequest $request)
     {
         try {
-            $this->stockAdjustmentService->create($request->validated());
+            $this->stockAdjustmentService->create($request->validated(), Auth::user());
 
             return redirect()->route('stock-adjustments.create')->with('success', 'Stock adjustment recorded successfully.');
 

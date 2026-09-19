@@ -69,9 +69,7 @@ class Product extends Model
     public function scopeNeedsReorder($query)
     {
         return $query->where('status', Status::ACTIVE->value)
-            ->withSum(['inventories' => function ($q) {
-                $q->where('status', '!=', 'Archived');
-            }], 'remaining_quantity')
+            ->withSum('inventories', 'remaining_quantity')
             ->havingRaw('COALESCE(inventories_sum_remaining_quantity, 0) <= reorder_point');
     }
 }

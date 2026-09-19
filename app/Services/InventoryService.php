@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Supplier;
@@ -46,16 +47,16 @@ class InventoryService
         return Supplier::active()->orderBy('company_name')->get();
     }
 
-    public function create(array $data): Inventory
+    public function create(array $data, User $actor): Inventory
     {
         if (empty($data['batch_number'])) {
             $data['batch_number'] = $this->batchNumberGenerator->generate();
         }
 
         $data['remaining_quantity'] = $data['quantity'];
-        $data['user_id'] = Auth::id();
+        $data['user_id'] = $actor->id;
 
-        return DB::transaction(function () use ($data) {
+        return DB::transaction(function () use ($data, $actor) {
             $inventory = Inventory::create($data);
 
             if (! empty($data['supplier_id'])) {
@@ -65,7 +66,7 @@ class InventoryService
                 );
             }
 
-            event(new \App\Events\StockReceived($inventory, Auth::user()));
+            event(new \App\Events\StockReceived($inventory, $actor));
 
             return $inventory;
         });
@@ -86,10 +87,5 @@ class InventoryService
         $inventory->update($data);
 
         return $inventory;
-    }
-
-    public function archive(Inventory $inventory): void
-    {
-        $inventory->update(['status' => 'Archived']);
     }
 }

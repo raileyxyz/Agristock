@@ -3,9 +3,8 @@
 namespace App\Services;
 
 use App\Models\Inventory;
-use App\Models\Product;
+use App\Models\User;
 use App\Models\StockAdjustment;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class StockAdjustmentService
@@ -42,9 +41,9 @@ class StockAdjustmentService
         return $stockData;
     }
 
-    public function create(array $data): StockAdjustment
+    public function create(array $data, User $actor): StockAdjustment
     {
-        return DB::transaction(function () use ($data) {
+        return DB::transaction(function () use ($data, $actor) {
             $inventory = Inventory::findOrFail($data['inventory_id']);
             $product = $inventory->product;
 
@@ -57,17 +56,17 @@ class StockAdjustmentService
 
             $adjustment = StockAdjustment::create([
                 'inventory_id' => $inventory->id,
-                'user_id' => Auth::id(),
+                'user_id' => $actor->id,
                 'system_quantity' => $systemQuantity,
                 'actual_quantity' => $data['actual_quantity'],
                 'reason' => $data['reason'],
                 'notes' => $data['notes'] ?? null,
             ]);
 
-            event(new \App\Events\StockAdjusted($adjustment, Auth::user()));
+            event(new \App\Events\StockAdjusted($adjustment, $actor));
 
             $remainingAfter = $product->inventories()->sum('remaining_quantity');
-            event(new \App\Events\StockLevelChanged($product->fresh(), $remainingBefore, $remainingAfter, Auth::user()));
+            event(new \App\Events\StockLevelChanged($product->fresh(), $remainingBefore, $remainingAfter, $actor));
 
             return $adjustment;
         });

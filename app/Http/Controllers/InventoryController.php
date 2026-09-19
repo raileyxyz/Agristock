@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Inventory;
 use App\Enums\StorageLocation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Services\InventoryService;
 use App\Http\Requests\StoreInventoryRequest;
 use App\Http\Requests\UpdateInventoryRequest;
@@ -39,9 +40,9 @@ class InventoryController extends Controller
 
     public function store(StoreInventoryRequest $request)
     {
-        $this->inventoryService->create($request->validated());
+        $this->inventoryService->create($request->validated(), Auth::user());
 
-        return redirect()->route('inventories.create')->with('success', 'Stock added successfully.');
+        return redirect()->route('inventories.create')->with('success', 'Stock in recorded successfully.');
     }
 
     public function edit(Inventory $inventory)
@@ -61,12 +62,5 @@ class InventoryController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('inventories.index')->with('error', $e->getMessage());
         }
-    }
-
-    public function destroy(Inventory $inventory)
-    {
-        $this->inventoryService->archive($inventory);
-
-        return redirect()->route('inventories.index')->with('success', 'Stock archived successfully.');
     }
 }
