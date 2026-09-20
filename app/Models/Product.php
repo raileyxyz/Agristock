@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Enums\Status;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Inventory;
 
 class Product extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'category_id',
         'unit_id',
@@ -70,6 +73,6 @@ class Product extends Model
     {
         return $query->where('status', Status::ACTIVE->value)
             ->withSum('inventories', 'remaining_quantity')
-            ->havingRaw('COALESCE(inventories_sum_remaining_quantity, 0) <= reorder_point');
+            ->whereRaw('(select coalesce(sum(remaining_quantity), 0) from inventories where inventories.product_id = products.id) <= products.reorder_point');
     }
 }

@@ -4,9 +4,12 @@ namespace App\Models;
 
 use App\Enums\Status;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Supplier extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'company_name',
         'contact_person',

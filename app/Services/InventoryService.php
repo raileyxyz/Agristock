@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Supplier;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class InventoryService
