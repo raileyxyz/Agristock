@@ -45,11 +45,9 @@ class InventoryController extends Controller
         return redirect()->route('inventories.create')->with('success', 'Stock in recorded successfully.');
     }
 
-    public function edit(Inventory $inventory)
+    public function edit(string $id)
     {
-        $products = $this->inventoryService->getActiveProducts();
-
-        return view('inventories.edit', compact('inventory', 'products'));
+        //
     }
 
     public function update(UpdateInventoryRequest $request, Inventory $inventory)

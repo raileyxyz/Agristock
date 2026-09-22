@@ -58,12 +58,9 @@ class SupplierController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Supplier $supplier)
+    public function edit(string $id)
     {
-        $categories = Category::active()->orderBy('name')->get();
-        $supplier->load('categories');
-
-        return view('suppliers.edit', compact('supplier', 'categories'));
+        //
     }
 
     /**

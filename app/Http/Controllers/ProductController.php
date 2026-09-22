@@ -80,7 +80,7 @@ class ProductController extends Controller
             unset($data['status']);
         }
 
-        $this->productService->update($product, $request->validated());
+        $this->productService->update($product, $data);
 
         return redirect()->route('products.index')->with('success', "\"{$product->name}\" has been updated.");
     }

@@ -70,7 +70,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/stock-outs', [StockOutController::class, 'store'])->name('stock-outs.store');
     });
     Route::middleware('can:inventory.manage')->group(function () {
-        Route::get('/inventories/{inventory}/edit', [InventoryController::class, 'edit'])->name('inventories.edit');
         Route::put('/inventories/{inventory}', [InventoryController::class, 'update'])->name('inventories.update');
         Route::get('/stock-adjustments/create', [StockAdjustmentController::class, 'create'])->name('stock-adjustments.create');
         Route::post('/stock-adjustments', [StockAdjustmentController::class, 'store'])->name('stock-adjustments.store');
@@ -86,7 +85,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
     });
     Route::middleware('can:suppliers.update')->group(function () {
-        Route::get('/suppliers/{supplier}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
         Route::put('/suppliers/{supplier}', [SupplierController::class, 'update'])->name('suppliers.update');
     });
     Route::middleware('can:suppliers.delete')->group(function () {

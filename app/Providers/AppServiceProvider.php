@@ -38,7 +38,19 @@ class AppServiceProvider extends ServiceProvider
 
     protected function registerAbilityGates(): void
     {
-        Gate::before(fn (User $user) => $user->isAdmin() ? true : null);
+        Gate::before(function (User $user, string $ability, array $arguments = []) {
+            if (! $user->isAdmin()) {
+                return null;
+            }
+
+            $isDeletingSelf = $ability === 'delete' && ($arguments[0] ?? null) instanceof User && $arguments[0]->is($user);
+
+            if ($isDeletingSelf) {
+                return null;
+            }
+
+            return true;
+        });
 
         foreach (config('abilities') as $ability => $allowedRoles) {
             Gate::define($ability, fn (User $user) => in_array($user->role, $allowedRoles, true));

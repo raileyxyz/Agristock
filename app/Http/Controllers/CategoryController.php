@@ -39,7 +39,7 @@ class CategoryController extends Controller
         }
 
         try {
-            $this->categoryService->update($category, $request->validated());
+            $this->categoryService->update($category, $data);
 
             return redirect()->route('categories.index')->with('success', "{$category->name} updated successfully.");
 

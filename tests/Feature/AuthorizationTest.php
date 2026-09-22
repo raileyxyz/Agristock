@@ -1,8 +1,9 @@
 <?php
 
-use App\Models\User;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
+use App\Models\User;
 
 // ── Product Management ──────────────────────────────────────
 
@@ -40,15 +41,26 @@ it('forbids manager from updating or deleting a supplier', function () {
     $manager = User::factory()->manager()->create();
     $supplier = Supplier::factory()->create();
 
-    $this->actingAs($manager)->get("/suppliers/{$supplier->id}/edit")->assertForbidden();
+    $this->actingAs($manager)->put("/suppliers/{$supplier->id}", [])->assertForbidden();
     $this->actingAs($manager)->delete("/suppliers/{$supplier->id}")->assertForbidden();
 });
 
 it('allows admin to update and delete a supplier', function () {
     $admin = User::factory()->admin()->create();
+    $category = Category::factory()->create();
     $supplier = Supplier::factory()->create();
 
-    $this->actingAs($admin)->get("/suppliers/{$supplier->id}/edit")->assertOk();
+    $response = $this->actingAs($admin)->put("/suppliers/{$supplier->id}", [
+        'company_name' => 'Updated Supplier Co.',
+        'contact_person' => 'Juan Dela Cruz',
+        'phone' => '09171234567',
+        'status' => 'Active',
+        'supply_categories' => [$category->id],
+    ]);
+
+    $response->assertRedirect();
+    $response->assertSessionHasNoErrors();
+
     $this->actingAs($admin)->delete("/suppliers/{$supplier->id}")->assertRedirect();
 });
 

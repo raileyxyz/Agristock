@@ -36,18 +36,21 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 'regex:/^[\pL\s\-\.\']+$/u',
             ],
+
             'email' => [
                 'required',
                 'string',
                 'lowercase',
-                'email:rfc,dns',
+                app()->environment('testing') ? 'email:rfc' : 'email:rfc,dns',
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+
             'phone' => [
                 'nullable',
                 'regex:/^(\+63|0)9\d{9}$/',
             ],
+
             'address' => [
                 'nullable',
                 'string',

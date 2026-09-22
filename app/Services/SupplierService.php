@@ -22,7 +22,7 @@ class SupplierService
     public function getDirectory()
     {
         return Supplier::with('categories')
-            ->orderByRaw(sprintf("FIELD(status, '%s', '%s')", Status::ACTIVE->value, Status::ARCHIVED->value))
+            ->orderByRaw("CASE WHEN status = 'Active' THEN 0 ELSE 1 END")
             ->orderBy('company_name')
             ->paginate(15)
             ->withQueryString();

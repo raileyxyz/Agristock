@@ -94,11 +94,11 @@ class UserManagementService
                 event(new \App\Events\UserRoleChanged($user, $oldRole, $user->role->value, $actor));
             }
 
-            if ($oldStatus === 'Archived' && $user->status === 'Active') {
+            if ($oldStatus === \App\Enums\Status::ARCHIVED && $user->status === \App\Enums\Status::ACTIVE) {
                 event(new \App\Events\UserAccountRestored($user, $actor));
             }
 
-            if ($oldStatus === 'Active' && $user->status === 'Archived') {
+            if ($oldStatus === \App\Enums\Status::ACTIVE && $user->status === \App\Enums\Status::ARCHIVED) {
                 event(new \App\Events\UserAccountArchived($user, $actor));
             }
 
