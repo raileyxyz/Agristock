@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\Status;
 use App\Models\Category;
 use App\Models\Inventory;
 use App\Models\Product;
@@ -26,9 +27,9 @@ class DashboardService
         $expirySummary = $this->reportService->getExpirySummary();
 
         return [
-            'total_products' => Product::where('status', 'Active')->count(),
-            'total_products_archived' => Product::where('status', 'Archived')->count(),
-            'total_categories' => Category::where('status', 'Active')->count(),
+            'total_products' => Product::where('status', Status::ACTIVE->value)->count(),
+            'total_products_archived' => Product::where('status', Status::ARCHIVED->value)->count(),
+            'total_categories' => Category::where('status', Status::ACTIVE->value)->count(),
             'low_stock_count' => $lowStockProducts->count(),
             'low_stock_critical' => $criticalCount,
             'expiring_soon_count' => $expirySummary['within_30'] + $expirySummary['within_60'],

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\Status;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\StockAdjustment;
@@ -16,7 +17,7 @@ class ReportService
     public function getStockSummary(): array
     {
         $products = Product::query()
-            ->where('status', 'Active')
+            ->where('status', Status::ACTIVE->value)
             ->withSum('inventories', 'remaining_quantity')
             ->get();
 
@@ -51,7 +52,7 @@ class ReportService
     public function getStockByCategory(): array
     {
         $rows = Product::query()
-            ->where('products.status', 'Active')
+            ->where('products.status', Status::ACTIVE->value)
             ->join('categories', 'categories.id', '=', 'products.category_id')
             ->leftJoin('inventories', 'inventories.product_id', '=', 'products.id')
             ->groupBy('categories.id', 'categories.name', 'categories.icon_color')
@@ -199,11 +200,11 @@ class ReportService
     /**
      * Active, expiry-tracked inventory batches with an expiry date set.
      */
-    private function trackedExpiryBatches()
+    public function trackedExpiryBatches()
     {
         return Inventory::query()
             ->whereNotNull('expiry_date')
-            ->whereHas('product', fn ($q) => $q->where('status', 'Active')->where('expiry_track', true))
+            ->whereHas('product', fn ($q) => $q->where('status', Status::ACTIVE->value)->where('expiry_track', true))
             ->with(['product.category', 'product.unit'])
             ->orderBy('expiry_date')
             ->get();

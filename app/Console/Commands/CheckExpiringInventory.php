@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Inventory;
 use App\Services\NotificationDispatchService;
+use App\Services\ReportService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -13,13 +13,9 @@ class CheckExpiringInventory extends Command
 
     protected $description = 'Check inventory batches for expiring/expired status and send notifications';
 
-    public function handle(NotificationDispatchService $dispatchService): int
+    public function handle(ReportService $reportService, NotificationDispatchService $dispatchService): int
     {
-        $batches = Inventory::query()
-            ->whereNotNull('expiry_date')
-            ->whereHas('product', fn ($q) => $q->where('status', 'Active')->where('expiry_track', true))
-            ->with('product')
-            ->get();
+        $batches = $reportService->trackedExpiryBatches();
 
         $expiredCount = 0;
         $expiringSoonCount = 0;

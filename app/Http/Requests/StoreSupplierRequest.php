@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Status;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -80,7 +81,7 @@ class StoreSupplierRequest extends FormRequest
             ],
 
             'supply_categories.*' => [
-                Rule::exists('categories', 'id')->where('status', 'Active'),
+                Rule::exists('categories', 'id')->where('status', Status::ACTIVE->value),
             ],
 
             'notes' => [

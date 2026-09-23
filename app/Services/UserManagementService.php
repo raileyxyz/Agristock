@@ -58,7 +58,7 @@ class UserManagementService
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
                 'role' => $data['role'],
-                'status' => 'Active',
+                'status' => Status::ACTIVE->value,
             ]);
 
             event(new \App\Events\NewUserAdded($user, $actor));
@@ -108,7 +108,7 @@ class UserManagementService
 
     public function archive(User $user, User $actor): void
     {
-        $user->update(['status' => 'Archived']);
+        $user->update(['status' => Status::ARCHIVED]);
 
         event(new \App\Events\UserAccountArchived($user, $actor));
     }
