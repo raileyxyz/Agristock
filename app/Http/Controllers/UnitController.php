@@ -39,12 +39,8 @@ class UnitController extends Controller
 
     public function destroy(Unit $unit)
     {
-        try {
-            $this->unitService->delete($unit);
-        } catch (\Exception $e) {
-            return redirect()->route('units.index')->with('error', $e->getMessage());
-        }
+        $result = $this->unitService->delete($unit);
 
-        return redirect()->route('units.index')->with('success', "{$unit->name} deleted successfully.");
+        return redirect()->route('units.index')->with($result['success'] ? 'success' : 'error', $result['message']);
     }
 }

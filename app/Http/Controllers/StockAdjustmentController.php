@@ -23,13 +23,8 @@ class StockAdjustmentController extends Controller
 
     public function store(StoreStockAdjustmentRequest $request)
     {
-        try {
-            $this->stockAdjustmentService->create($request->validated(), Auth::user());
+        $result = $this->stockAdjustmentService->create($request->validated(), Auth::user());
 
-            return redirect()->route('stock-adjustments.create')->with('success', 'Stock adjustment recorded successfully.');
-
-        } catch (\Exception $e) {
-            return redirect()->route('stock-adjustments.create')->with('error', $e->getMessage());
-        }
+        return redirect()->route('stock-adjustments.create')->with($result['success'] ? 'success' : 'error', $result['message']);
     }
 }

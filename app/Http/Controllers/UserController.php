@@ -48,10 +48,7 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
 
-        return view('users.create', [
-            'roles' => UserRole::values(),
-            'permissions' => config('permissions'),
-        ]);
+        return view('users.create', ['roles' => UserRole::values(), 'permissions' => config('permissions'),]);
     }
 
     /**
@@ -79,11 +76,7 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
-        return view('users.edit', [
-            'user' => $user,
-            'roles' => UserRole::values(),
-            'permissions' => config('permissions'),
-        ]);
+        return view('users.edit', ['user' => $user, 'roles' => UserRole::values(),'permissions' => config('permissions'),]);
     }
 
     /**

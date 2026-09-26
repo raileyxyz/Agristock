@@ -41,34 +41,38 @@ class StockAdjustmentService
         return $stockData;
     }
 
-    public function create(array $data, User $actor): StockAdjustment
+    public function create(array $data, User $actor): array
     {
-        return DB::transaction(function () use ($data, $actor) {
-            $inventory = Inventory::findOrFail($data['inventory_id']);
-            $product = $inventory->product;
+        try {
+            DB::transaction(function () use ($data, $actor) {
+                $inventory = Inventory::findOrFail($data['inventory_id']);
+                $product = $inventory->product;
 
-            $remainingBefore = $product->inventories()->sum('remaining_quantity');
+                $remainingBefore = $product->inventories()->sum('remaining_quantity');
 
-            $systemQuantity = $inventory->remaining_quantity;
+                $systemQuantity = $inventory->remaining_quantity;
 
-            $inventory->remaining_quantity = $data['actual_quantity'];
-            $inventory->save();
+                $inventory->remaining_quantity = $data['actual_quantity'];
+                $inventory->save();
 
-            $adjustment = StockAdjustment::create([
-                'inventory_id' => $inventory->id,
-                'user_id' => $actor->id,
-                'system_quantity' => $systemQuantity,
-                'actual_quantity' => $data['actual_quantity'],
-                'reason' => $data['reason'],
-                'notes' => $data['notes'] ?? null,
-            ]);
+                $adjustment = StockAdjustment::create([
+                    'inventory_id' => $inventory->id,
+                    'user_id' => $actor->id,
+                    'system_quantity' => $systemQuantity,
+                    'actual_quantity' => $data['actual_quantity'],
+                    'reason' => $data['reason'],
+                    'notes' => $data['notes'] ?? null,
+                ]);
 
-            event(new \App\Events\StockAdjusted($adjustment, $actor));
+                event(new \App\Events\StockAdjusted($adjustment, $actor));
 
-            $remainingAfter = $product->inventories()->sum('remaining_quantity');
-            event(new \App\Events\StockLevelChanged($product->fresh(), $remainingBefore, $remainingAfter, $actor));
+                $remainingAfter = $product->inventories()->sum('remaining_quantity');
+                event(new \App\Events\StockLevelChanged($product->fresh(), $remainingBefore, $remainingAfter, $actor));
+            });
 
-            return $adjustment;
-        });
+            return ['success' => true, 'message' => 'Stock adjustment recorded successfully.'];
+        } catch (\Exception $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
     }
 }

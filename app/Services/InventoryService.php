@@ -71,20 +71,24 @@ class InventoryService
         });
     }
 
-    public function update(Inventory $inventory, array $data): Inventory
+    public function update(Inventory $inventory, array $data): array
     {
-        unset($data['quantity'], $data['remaining_quantity']);
+        try {
+            unset($data['quantity'], $data['remaining_quantity']);
 
-        if ($inventory->has_movement) {
-            unset($data['product_id'], $data['location']);
+            if ($inventory->has_movement) {
+                unset($data['product_id'], $data['location']);
+            }
+
+            if (empty($data['batch_number'])) {
+                $data['batch_number'] = $this->batchNumberGenerator->generate();
+            }
+
+            $inventory->update($data);
+
+            return ['success' => true, 'message' => 'Stock updated successfully.'];
+        } catch (\Exception $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
         }
-
-        if (empty($data['batch_number'])) {
-            $data['batch_number'] = $this->batchNumberGenerator->generate();
-        }
-
-        $inventory->update($data);
-
-        return $inventory;
     }
 }

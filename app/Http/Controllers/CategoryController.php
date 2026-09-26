@@ -38,26 +38,15 @@ class CategoryController extends Controller
             unset($data['status']);
         }
 
-        try {
-            $this->categoryService->update($category, $data);
+        $result = $this->categoryService->update($category, $data);
 
-            return redirect()->route('categories.index')->with('success', "{$category->name} updated successfully.");
-
-        } catch (\Exception $e) {
-            return redirect()->route('categories.index')->with('error', $e->getMessage());
-        }
+        return redirect()->route('categories.index')->with($result['success'] ? 'success' : 'error', $result['message']);
     }
 
     public function destroy(Category $category)
     {
-        try {
-            $this->categoryService->archive($category);
+        $result = $this->categoryService->archive($category);
 
-            return redirect()->route('categories.index')->with('success', "{$category->name} archived successfully.");
-
-        } catch (\Exception $e) {
-            return redirect()->route('categories.index')->with('error', $e->getMessage());
-        }
+        return redirect()->route('categories.index')->with($result['success'] ? 'success' : 'error', $result['message']);
     }
-
 }

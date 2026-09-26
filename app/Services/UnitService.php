@@ -27,12 +27,18 @@ class UnitService
         return $unit->update($data);
     }
 
-    public function delete(Unit $unit)
+    public function delete(Unit $unit): array
     {
-        if ($unit->products()->exists()) {
-            throw new \Exception("Cannot delete \"{$unit->name}\" — it is still used by one or more products.");
-        }
+        try {
+            if ($unit->products()->exists()) {
+                throw new \Exception("Cannot delete \"{$unit->name}\" — it is still used by one or more products.");
+            }
 
-        return $unit->delete();
+            $unit->delete();
+
+            return ['success' => true, 'message' => "{$unit->name} deleted successfully."];
+        } catch (\Exception $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
     }
 }
