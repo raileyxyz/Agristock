@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Inventory;
 
+use App\Http\Controllers\Controller;
 use App\Services\StockOutService;
 use App\Http\Requests\StoreStockOutRequest;
 use Illuminate\Http\Request;

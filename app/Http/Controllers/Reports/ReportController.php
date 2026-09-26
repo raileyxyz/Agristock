@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Reports;
 
+use App\Http\Controllers\Controller;
 use App\Services\ReportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

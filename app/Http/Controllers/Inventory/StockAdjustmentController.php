@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Inventory;
 
+use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Services\StockAdjustmentService;
 use App\Http\Requests\StoreStockAdjustmentRequest;

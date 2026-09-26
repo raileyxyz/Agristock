@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Suppliers;
 
+use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Supplier;
 use Illuminate\Http\Request;

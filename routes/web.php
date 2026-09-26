@@ -1,20 +1,20 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\UnitController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\InventoryController;
-use App\Http\Controllers\InventoryHistoryController;
-use App\Http\Controllers\LowStockController;
-use App\Http\Controllers\StockOutController;
-use App\Http\Controllers\StockAdjustmentController;
-use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\NotificationPreferenceController;
-use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Products\CategoryController;
+use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Products\UnitController;
+use App\Http\Controllers\Products\ProductController;
+use App\Http\Controllers\Inventory\InventoryController;
+use App\Http\Controllers\Inventory\InventoryHistoryController;
+use App\Http\Controllers\Inventory\LowStockController;
+use App\Http\Controllers\Inventory\StockOutController;
+use App\Http\Controllers\Inventory\StockAdjustmentController;
+use App\Http\Controllers\Suppliers\SupplierController;
+use App\Http\Controllers\Users\UserController;
+use App\Http\Controllers\Reports\ReportController;
+use App\Http\Controllers\Notifications\NotificationPreferenceController;
+use App\Http\Controllers\Notifications\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
