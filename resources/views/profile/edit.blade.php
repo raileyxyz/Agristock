@@ -1,9 +1,9 @@
 <x-app-layout>
     <div x-data="{
         activeTab: '{{
-            in_array(session('status'), ['notifications-updated', 'notifications-unchanged'])
+            request('tab') === 'notifications' || in_array(session('status'), ['notifications-updated', 'notifications-unchanged'])
                 ? 'notifications'
-                : (session('status') === 'password-updated' || $errors->updatePassword->isNotEmpty() || $errors->userDeletion->isNotEmpty()
+                : (request('tab') === 'security' || session('status') === 'password-updated' || $errors->updatePassword->isNotEmpty() || $errors->userDeletion->isNotEmpty()
                     ? 'security'
                     : 'profile')
         }}',

@@ -46,11 +46,6 @@ class InventoryController extends Controller
         return redirect()->route('inventories.create')->with('success', 'Stock in recorded successfully.');
     }
 
-    public function edit(string $id)
-    {
-        //
-    }
-
     public function update(UpdateInventoryRequest $request, Inventory $inventory)
     {
         $result = $this->inventoryService->update($inventory, $request->validated());

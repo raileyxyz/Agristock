@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Inventory;
 use App\Http\Controllers\Controller;
 use App\Services\StockOutService;
 use App\Http\Requests\StoreStockOutRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class StockOutController extends Controller
@@ -13,14 +12,6 @@ class StockOutController extends Controller
     public function __construct(
         private StockOutService $stockOutService
     ) {}
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -40,37 +31,5 @@ class StockOutController extends Controller
         $this->stockOutService->create($request->validated(), Auth::user());
 
         return redirect()->route('stock-outs.create')->with('success', 'Stock out recorded successfully.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }
