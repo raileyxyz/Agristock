@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Products\CategoryController;
+use App\Http\Controllers\Chatbot\ChatbotController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Products\UnitController;
 use App\Http\Controllers\Products\ProductController;
@@ -112,6 +113,12 @@ Route::middleware('auth')->group(function () {
 
     Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])
         ->name('notifications.read-all');
+
+    Route::prefix('chatbot')->name('chatbot.')->group(function () {
+    Route::get('/messages', [ChatbotController::class, 'index'])->name('messages.index');
+    Route::post('/messages', [ChatbotController::class, 'store'])->middleware('throttle:6,1')->name('messages.store');
+    Route::delete('/messages', [ChatbotController::class, 'destroy'])->name('messages.destroy');
+});
 });
 
 require __DIR__.'/auth.php';
