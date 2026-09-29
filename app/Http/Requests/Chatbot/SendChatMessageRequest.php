@@ -21,8 +21,8 @@ class SendChatMessageRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'message.required' => 'Mag-type muna ng tanong.',
-            'message.max' => 'Masyadong mahaba ang mensahe (max 500 characters).',
+            'message.required' => 'Please enter a question first.',
+            'message.max' => 'The message is too long (maximum of 500 characters).',
         ];
     }
 }

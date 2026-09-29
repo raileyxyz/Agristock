@@ -31,7 +31,7 @@ class ChatbotService
                 if ($response->status() === 429) {
                     return [
                         'success' => false,
-                        'message' => 'Busy ang AI ngayon (limit reached). Subukan ulit maya-maya.',
+                        'message' => 'The AI is currently busy (rate limit reached). Please try again later.',
                     ];
                 }
 
@@ -43,7 +43,7 @@ class ChatbotService
 
                     return [
                         'success' => false,
-                        'message' => 'Hindi makakonekta sa AI ngayon. Subukan ulit mamaya.',
+                        'message' => 'Unable to connect to the AI right now. Please try again later.',
                     ];
                 }
 
@@ -52,20 +52,19 @@ class ChatbotService
                 if (! $assistant) {
                     return [
                         'success' => false,
-                        'message' => 'Walang sagot na natanggap mula sa AI. Subukan ulit.',
+                        'message' => 'No response was received from the AI. Please try again.',
                     ];
                 }
 
                 $toolCalls = $assistant['tool_calls'] ?? [];
 
-                // Walang hiningi na tool = final answer na ito.
                 if (empty($toolCalls)) {
                     $reply = trim((string) ($assistant['content'] ?? ''));
 
                     if ($reply === '') {
                         return [
                             'success' => false,
-                            'message' => 'Walang sagot na natanggap mula sa AI. Subukan ulit.',
+                            'message' => 'No response was received from the AI. Please try again.',
                         ];
                     }
 
@@ -75,7 +74,6 @@ class ChatbotService
                     return ['success' => true, 'message' => $reply];
                 }
 
-                // Ibalik muna ang assistant message na may tool_calls, tapos ang bawat tool result.
                 $messages[] = $assistant;
 
                 foreach ($toolCalls as $call) {
@@ -92,14 +90,14 @@ class ChatbotService
 
             return [
                 'success' => false,
-                'message' => 'Hindi ko natapos ang sagot. Subukan mong gawing mas simple ang tanong.',
+                'message' => 'I could not complete the response. Please try making your question simpler.',
             ];
         } catch (Throwable $e) {
             Log::error('Chatbot error', ['exception' => $e->getMessage()]);
 
             return [
                 'success' => false,
-                'message' => 'May error sa chatbot. Subukan ulit mamaya.',
+                'message' => 'There was an error with the chatbot. Please try again later.',
             ];
         }
     }
@@ -145,16 +143,16 @@ class ChatbotService
     private function systemPrompt(): string
     {
         return <<<PROMPT
-You are the AgriStock assistant, built into an agriculture inventory system.
-You answer questions about product stock, low-stock items, and suppliers.
+        You are the AgriStock assistant, built into an agriculture inventory system.
+        You answer questions about product stock, low-stock items, and suppliers.
 
-Rules:
-- Use the provided tools to get data. Answer ONLY from tool results.
-- If a tool returns no data, say so. Never guess or invent products, quantities, or suppliers.
-- If the question is not about this inventory system, politely say you can only help with inventory questions.
-- Reply in the same language as the user (English, Tagalog, or Taglish). Keep answers short and clear.
-- Use plain text only. Do not use markdown (no asterisks, no bold, no headers). For lists, put each item on its own line starting with "- ".
-PROMPT;
+        Rules:
+        - Use the provided tools to get data. Answer ONLY from tool results.
+        - If a tool returns no data, say so. Never guess or invent products, quantities, or suppliers.
+        - If the question is not about this inventory system, politely say you can only help with inventory questions.
+        - Reply in the same language as the user (English, Tagalog, or Taglish). Keep answers short and clear.
+        - Use plain text only. Do not use markdown (no asterisks, no bold, no headers). For lists, put each item on its own line starting with "- ".
+        PROMPT;
     }
 
     private function saveExchange(User $user, string $userMessage, string $reply): void
