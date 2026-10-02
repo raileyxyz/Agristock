@@ -124,80 +124,69 @@
     </div>
 
     <!-- Hero -->
-    <section id="top" class="relative overflow-x-hidden bg-cover bg-center"
+    <section id="top" class="relative overflow-hidden bg-cover bg-center min-h-[560px] sm:min-h-[640px] lg:min-h-[720px] flex items-center"
             style="background-image: url('{{ asset('images/login-farm.jpg') }}');">
 
-        <!-- Dark green overlay -->
-        <div class="absolute inset-0 bg-gradient-to-br from-green-950/90 via-green-900/85 to-green-800/80"></div>
+        <!-- Directional Overlay: Darkens the left side for high text contrast while letting the farm image shine through on the right -->
+        <div class="absolute inset-0 bg-gradient-to-r from-green-950/95 via-green-950/80 to-green-950/40 lg:from-green-950/95 lg:via-green-950/75 lg:to-green-950/25"></div>
 
-        <div class="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-12 sm:py-20 lg:py-28 grid lg:grid-cols-2 gap-8 sm:gap-16 items-center">
+        <div class="relative w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24 flex justify-start">
 
-            <div class="min-w-0">
-                <span class="inline-flex max-w-full items-center gap-2 bg-green-800/60 border border-green-600/40 text-green-100 text-[11px] sm:text-xs font-medium px-3 sm:px-3.5 py-1.5 rounded-full mb-4 sm:mb-7">
-                    <span class="w-1.5 h-1.5 rounded-full bg-green-400 shrink-0"></span>
-                    <span class="truncate">Agriculture Inventory System</span>
+            <!-- Left-aligned Hero Content Container -->
+            <div class="w-full md:max-w-xl lg:max-w-2xl min-w-0 text-left">
+
+                <!-- Category Label -->
+                <span class="inline-flex items-center gap-2 bg-green-900/60 border border-green-500/30 text-green-200 text-xs font-semibold px-3.5 py-1.5 rounded-full mb-6 backdrop-blur-sm">
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse shrink-0"></span>
+                    <span class="tracking-wide">Agriculture Inventory System</span>
                 </span>
 
-                <h1 class="font-display text-[28px] sm:text-5xl lg:text-6xl font-bold leading-[1.15] sm:leading-[1.05] text-white mb-0.5 sm:mb-2 break-words">
+                <!-- Heading -->
+                <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-2 leading-[1.1] sm:leading-[1.08]">
                     Farm Smarter.
                 </h1>
-                <h1 class="font-display text-[28px] sm:text-5xl lg:text-6xl font-bold leading-[1.15] sm:leading-[1.05] text-green-400 mb-3 sm:mb-6 break-words">
+                <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-green-400 mb-6 leading-[1.1] sm:leading-[1.08]">
                     Stock Wiser.
                 </h1>
 
-                <p class="text-green-100/90 text-sm sm:text-lg leading-relaxed mb-6 sm:mb-8 max-w-lg">
+                <!-- Description -->
+                <p class="text-green-100/90 text-base sm:text-lg lg:text-xl font-normal leading-relaxed mb-8 max-w-xl">
                     AgriStock gives farm managers full visibility over every input from seeds to fertilizers to equipment with real-time alerts, expiration tracking, and supplier management in one clean system.
                 </p>
 
-                <div class="flex flex-col sm:flex-row gap-3 mb-6 sm:mb-8">
+                <!-- Primary & Secondary CTA Buttons -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 mb-8">
                     <a href="{{ route('login') }}"
-                        class="group w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg">
+                        class="group bg-green-600 hover:bg-green-500 text-white px-7 py-3.5 rounded-lg text-base font-semibold flex items-center justify-center gap-2.5 transition-all duration-300 ease-out hover:-translate-y-0.5 shadow-lg shadow-green-950/50 hover:shadow-green-600/30">
                         <span>Launch Dashboard</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1"></i>
+                        <i data-lucide="arrow-right" class="w-5 h-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1"></i>
                     </a>
                     <a href="#features"
-                        class="w-full sm:w-auto bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg">
+                        class="bg-white/10 hover:bg-white/20 border border-white/25 text-white px-7 py-3.5 rounded-lg text-base font-semibold flex items-center justify-center gap-2 transition-all duration-300 ease-out hover:-translate-y-0.5 backdrop-blur-sm">
                         <span>Explore Features</span>
                     </a>
                 </div>
 
-                <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-x-4 gap-y-2.5 sm:gap-x-6 sm:gap-y-2 text-xs sm:text-sm text-green-200">
-                    <span class="flex items-center gap-1.5 min-w-0"><i data-lucide="check-circle" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-400 shrink-0"></i> <span class="truncate">Low Stock Alerts</span></span>
-                    <span class="flex items-center gap-1.5 min-w-0"><i data-lucide="check-circle" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-400 shrink-0"></i> <span class="truncate">Expiry Monitoring</span></span>
-                    <span class="flex items-center gap-1.5 min-w-0"><i data-lucide="check-circle" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-400 shrink-0"></i> <span class="truncate">Purchase Orders</span></span>
-                    <span class="flex items-center gap-1.5 min-w-0"><i data-lucide="check-circle" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-400 shrink-0"></i> <span class="truncate">Inventory History</span></span>
-                    <span class="flex items-center gap-1.5 min-w-0 col-span-2 sm:col-span-1"><i data-lucide="check-circle" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-400 shrink-0"></i> <span class="truncate">Multi-user Access</span></span>
+                <!-- Feature Highlights -->
+                <div class="flex flex-wrap items-center gap-x-6 gap-y-3 text-xs sm:text-sm font-medium text-green-100/90">
+                    <span class="flex items-center gap-2">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-green-400 shrink-0"></i>
+                        <span>Low Stock Alerts</span>
+                    </span>
+                    <span class="flex items-center gap-2">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-green-400 shrink-0"></i>
+                        <span>Expiry Monitoring</span>
+                    </span>
+                    <span class="flex items-center gap-2">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-green-400 shrink-0"></i>
+                        <span>Inventory History</span>
+                    </span>
+                    <span class="flex items-center gap-2">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-green-400 shrink-0"></i>
+                        <span>Multi-user Access</span>
+                    </span>
                 </div>
-            </div>
 
-            <!-- Live inventory snapshot card -->
-            <div class="min-w-0 bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 sm:p-6 shadow-2xl">
-                <p class="text-xs font-semibold tracking-wider text-green-200 uppercase mb-4">Live Inventory Snapshot</p>
-
-                <div class="space-y-2.5">
-                    @php
-                        $items = [
-                            ['name' => 'Hybrid Maize Seeds DK-8031', 'qty' => '42 kg', 'status' => 'Low Stock', 'dot' => 'bg-amber-400', 'badge' => 'bg-amber-400/20 text-amber-300'],
-                            ['name' => 'Urea 46% N', 'qty' => '95 bags', 'status' => 'In Stock', 'dot' => 'bg-green-400', 'badge' => 'bg-green-400/20 text-green-300'],
-                            ['name' => 'Imidacloprid 70WS', 'qty' => '5 kg', 'status' => 'Critical', 'dot' => 'bg-red-400', 'badge' => 'bg-red-400/20 text-red-300'],
-                            ['name' => 'Drip Tape 1.6mm', 'qty' => '800 m', 'status' => 'In Stock', 'dot' => 'bg-green-400', 'badge' => 'bg-green-400/20 text-green-300'],
-                            ['name' => 'Chlorpyrifos EC', 'qty' => '60 L', 'status' => 'Expiring', 'dot' => 'bg-orange-400', 'badge' => 'bg-orange-400/20 text-orange-300'],
-                        ];
-                    @endphp
-
-                    @foreach($items as $item)
-                        <div class="flex items-center justify-between gap-2 bg-white/5 rounded-lg px-3 sm:px-4 py-3">
-                            <span class="flex items-center gap-2.5 text-sm text-white min-w-0 truncate">
-                                <span class="w-2 h-2 rounded-full {{ $item['dot'] }} shrink-0"></span>
-                                <span class="truncate">{{ $item['name'] }}</span>
-                            </span>
-                            <span class="flex items-center gap-2 sm:gap-3 shrink-0">
-                                <span class="text-sm text-green-200/80 whitespace-nowrap">{{ $item['qty'] }}</span>
-                                <span class="text-xs font-medium px-2 py-1 rounded-md whitespace-nowrap {{ $item['badge'] }}">{{ $item['status'] }}</span>
-                            </span>
-                        </div>
-                    @endforeach
-                </div>
             </div>
 
         </div>
@@ -213,7 +202,7 @@
                 Everything your farm inventory needs
             </h2>
             <p class="text-gray-500 text-base sm:text-lg max-w-2xl mx-auto">
-                From tracking seed batches to managing purchase orders, AgriStock covers the full lifecycle of your agricultural inputs.
+                From tracking seed batches to monitoring expiry dates and managing suppliers, AgriStock covers the full lifecycle of your agricultural inputs.
             </p>
         </div>
 
@@ -224,7 +213,7 @@
                     ['icon' => 'bar-chart-3', 'title' => 'Inventory Tracking', 'desc' => 'Real-time stock monitoring with Stock In, Stock Out, and Adjustment workflows. Every movement is logged with reference and user.'],
                     ['icon' => 'triangle-alert', 'title' => 'Low Stock Alerts', 'desc' => 'Automatic alerts when items drop below reorder points. Never face planting season without critical inputs again.'],
                     ['icon' => 'clock', 'title' => 'Expiration Monitor', 'desc' => 'Track expiry dates on seeds, pesticides, and biologicals get ahead of spoilage before it costs you.'],
-                    ['icon' => 'shield', 'title' => 'Supplier Management', 'desc' => 'Keep a directory of suppliers, contacts, and purchase history all in one searchable place.'],
+                    ['icon' => 'shield', 'title' => 'Supplier Management', 'desc' => 'Keep a directory of suppliers and their contact details all in one searchable place.'],
                     ['icon' => 'users', 'title' => 'User and Role Control', 'desc' => 'Give staff the right level of access admin, manager, or field staff with clear permission boundaries.'],
                 ];
             @endphp
@@ -254,7 +243,7 @@
                     ['num' => '01', 'title' => 'Build Your Catalog', 'desc' => 'Add products with categories, units, and reorder thresholds. No stock quantities here just your product master list.'],
                     ['num' => '02', 'title' => 'Receive and Move Stock', 'desc' => 'Use Stock In when supplies arrive and Stock Out when used in the field. Every transaction logs user, date, and reference.'],
                     ['num' => '03', 'title' => 'Get Alerts', 'desc' => 'The dashboard flags low stock, critical levels, and items nearing expiry so you always act before there\'s a crisis.'],
-                    ['num' => '04', 'title' => 'Order and Analyze', 'desc' => 'Create purchase orders, track supplier deliveries, and review reports to spot trends and optimize spending.'],
+                    ['num' => '04', 'title' => 'Review and Report', 'desc' => 'Check movement history and generate stock, movement, and expiry reports to spot trends and plan your next restock.'],
                 ];
             @endphp
 
@@ -307,7 +296,7 @@
                 </h2>
 
                 <p class="text-gray-500 text-base leading-relaxed mb-4">
-                    AgriStock was designed from the ground up for farm managers who need more than a spreadsheet — but less than an enterprise ERP. It handles the entire lifecycle of agri-inputs: from catalog setup and stock receiving, through daily movements and batch expiry monitoring, to purchase orders and supplier records.
+                    AgriStock was designed from the ground up for farm managers who need more than a spreadsheet — but less than an enterprise ERP. It handles the entire lifecycle of agri-inputs: from catalog setup and stock receiving, through daily movements and batch expiry monitoring, to supplier records and reports.
                 </p>
                 <p class="text-gray-500 text-base leading-relaxed mb-8">
                     Whether you're managing a single farm or coordinating across multiple locations, AgriStock gives every team member — from admin to field staff — exactly the access they need to keep operations running without stockouts or waste.
@@ -320,7 +309,7 @@
                             ['icon' => 'zap', 'text' => 'Real-time alerts when stock drops below reorder thresholds'],
                             ['icon' => 'clock', 'text' => 'Batch expiry tracking prevents costly disposal of inputs'],
                             ['icon' => 'globe', 'text' => 'Multi-location stock visibility from one dashboard'],
-                            ['icon' => 'trending-down', 'text' => 'Movement history and reports reduce guesswork in procurement'],
+                            ['icon' => 'trending-down', 'text' => 'Movement history and reports reduce guesswork when restocking'],
                         ];
                     @endphp
 
@@ -407,29 +396,21 @@
             <div>
                 <p class="text-white font-semibold text-sm mb-4">Company</p>
                 <ul class="space-y-2.5 text-sm text-green-300">
-                    <li><a href="#about" class="hover:text-white transition-colors">About</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                    <li><a href="#about" class="hover:text-white transition-colors">About Us</a></li>
+                    <li><a href="#top" class="hover:text-white transition-colors">Back to top</a></li>
                 </ul>
             </div>
 
         </div>
 
-        <div class="border-t border-green-800/60">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <p class="text-green-400 text-xs text-center sm:text-left">© {{ date('Y') }} AgriStock · Agriculture Inventory Management System</p>
-                <div class="flex items-center gap-4">
-                    <a href="#" class="text-green-400 hover:text-white transition-colors"><i data-lucide="facebook" class="w-4 h-4"></i></a>
-                    <a href="#" class="text-green-400 hover:text-white transition-colors"><i data-lucide="mail" class="w-4 h-4"></i></a>
-                    <a href="#" class="text-green-400 hover:text-white transition-colors"><i data-lucide="phone" class="w-4 h-4"></i></a>
-                </div>
-            </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 border-t border-green-900 flex flex-col sm:flex-row items-center justify-between text-xs text-green-400 gap-4">
+            <p>&copy; {{ date('Y') }} AgriStock. All rights reserved.</p>
+            <p>Agriculture Inventory System</p>
         </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => lucide.createIcons());
-        document.addEventListener('alpine:updated', () => lucide.createIcons());
+        lucide.createIcons();
     </script>
 </body>
 </html>

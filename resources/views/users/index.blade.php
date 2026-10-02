@@ -49,9 +49,10 @@
             @endif
         ">
 
-        <div class="flex items-center justify-between mb-1">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">All Users</h1>
+        <!-- Header -->
+        <div class="flex items-center justify-between gap-3 mb-1">
+            <div class="min-w-0">
+                <h1 class="text-xl sm:text-2xl font-bold text-gray-800">All Users</h1>
                 <p class="mt-1 text-xs sm:text-sm text-gray-500 flex flex-wrap items-center gap-x-2 gap-y-0.5">
                     <span>{{ $statistics['total'] }} Users</span>
 
@@ -69,11 +70,11 @@
                 </p>
             </div>
             @can('create', \App\Models\User::class)
-            <a href="{{ route('users.create') }}"
-               class="bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
-                <i data-lucide="plus" class="w-4 h-4"></i>
-                Add User
-            </a>
+                <a href="{{ route('users.create') }}"
+                   class="bg-green-600 hover:bg-green-700 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                    Add User
+                </a>
             @endcan
         </div>
 
@@ -84,17 +85,17 @@
                   clearTimeout(window._userSearchDebounce);
                   window._userSearchDebounce = setTimeout(() => $el.submit(), 500);
               })"
-              class="flex flex-col sm:flex-row gap-3 mt-6">
+              class="flex flex-col sm:flex-row sm:flex-wrap gap-3 mt-6">
 
-            <div class="relative flex-1">
+            <div class="relative flex-1 min-w-0 sm:min-w-[200px]">
                 <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
                 <input type="text" name="search" x-model="search" placeholder="Search by name or email..."
                        class="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
             </div>
 
-            <div class="relative">
+            <div class="relative w-full sm:w-auto">
                 <select name="role" onchange="this.form.submit()"
-                        class="appearance-none border border-gray-300 rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        class="w-full sm:w-auto appearance-none border border-gray-300 rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                     <option value="">All Roles</option>
                     @foreach($roles as $roleOption)
                         <option value="{{ $roleOption }}" {{ request('role') === $roleOption ? 'selected' : '' }}>
@@ -115,12 +116,12 @@
                 <table class="w-full text-sm min-w-[850px]">
                     <thead>
                         <tr class="bg-gray-50 border-b border-gray-200 text-left text-gray-500">
-                            <th class="px-4 py-3 font-medium whitespace-nowrap">User</th>
-                            <th class="px-4 py-3 font-medium whitespace-nowrap">Email</th>
-                            <th class="px-4 py-3 font-medium whitespace-nowrap">Role</th>
-                            <th class="px-4 py-3 font-medium whitespace-nowrap">Last Login</th>
-                            <th class="px-4 py-3 font-medium whitespace-nowrap">Status</th>
-                            <th class="px-4 py-3 font-medium text-right whitespace-nowrap">Actions</th>
+                            <th class="px-3 py-2.5 font-medium whitespace-nowrap">User</th>
+                            <th class="px-3 py-2.5 font-medium whitespace-nowrap">Email</th>
+                            <th class="px-3 py-2.5 font-medium whitespace-nowrap">Role</th>
+                            <th class="px-3 py-2.5 font-medium whitespace-nowrap">Last Login</th>
+                            <th class="px-3 py-2.5 font-medium whitespace-nowrap">Status</th>
+                            <th class="px-3 py-2.5 font-medium text-right whitespace-nowrap">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -133,7 +134,7 @@
                                 };
                             @endphp
                             <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-4 py-3 whitespace-nowrap">
+                                <td class="px-3 py-2.5 whitespace-nowrap">
                                     <div class="flex items-center gap-2.5">
                                         <div class="relative shrink-0">
                                             <x-avatar :user="$user" size="w-8 h-8" text-size="text-xs" />
@@ -143,27 +144,29 @@
                                                 </div>
                                             @endif
                                         </div>
-                                        <span class="font-medium text-gray-800">{{ $user->name }}</span>
+                                        <span class="font-medium text-gray-800 max-w-[200px] truncate" title="{{ $user->name }}">{{ $user->name }}</span>
                                     </div>
                                 </td>
-                                <td class="px-4 py-3 text-gray-500 whitespace-nowrap">{{ $user->email }}</td>
-                                <td class="px-4 py-3 whitespace-nowrap">
+                                <td class="px-3 py-2.5 text-gray-500 whitespace-nowrap">{{ $user->email }}</td>
+                                <td class="px-3 py-2.5 whitespace-nowrap">
                                     <span class="text-xs font-bold px-2.5 py-1 rounded-full {{ $roleBadge }}">{{ $user->role->value }}</span>
                                 </td>
-                                <td class="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">
+                                <td class="px-3 py-2.5 text-gray-400 text-xs whitespace-nowrap">
                                     {{ $user->last_login_at?->format('Y-m-d H:i') ?? 'Never' }}
                                 </td>
-                                <td class="px-4 py-3 whitespace-nowrap">
+                                <td class="px-3 py-2.5 whitespace-nowrap">
                                     <span class="text-xs font-medium px-2.5 py-1 rounded-full
                                         {{ $user->status === \App\Enums\Status::ACTIVE ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">
                                         {{ $user->status->value }}
                                     </span>
                                 </td>
 
-                                <td class="px-4 py-3 whitespace-nowrap text-right">
+                                <!-- Actions Dropdown Column -->
+                                <td class="px-3 py-2.5 whitespace-nowrap text-right">
                                     <div x-data="{ open: false }" class="relative inline-block text-left">
                                         <button @click="open = !open"
                                                 @click.outside="open = false"
+                                                title="Options"
                                                 class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-1.5 rounded-lg transition-colors">
                                             <i data-lucide="more-vertical" class="w-4 h-4"></i>
                                         </button>
@@ -217,7 +220,7 @@
                                             @if($user->id !== auth()->id() && $user->status === \App\Enums\Status::ACTIVE)
                                                 @can('delete', $user)
                                                     <button @click="open = false; openArchive({{ $user->id }}, '{{ addslashes($user->name) }}')"
-                                                            class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                                            class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-red-600 hover:bg-red-50 transition-colors">
                                                         <i data-lucide="archive" class="w-3.5 h-3.5"></i>
                                                         Archive
                                                     </button>
@@ -232,6 +235,7 @@
                                 <td colspan="6" class="px-5 py-14 text-center">
                                     <i data-lucide="users" class="w-8 h-8 text-gray-300 mx-auto mb-2"></i>
                                     <p class="text-gray-500 text-sm">No users found.</p>
+                                    <p class="text-gray-400 text-xs mt-1">Try a different search or role filter.</p>
                                 </td>
                             </tr>
                         @endforelse
@@ -245,7 +249,6 @@
         @endif
 
         <!-- View User Modal -->
-
         <div x-show="showViewModal"
             x-transition:enter="transition-opacity ease-out duration-200"
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
@@ -255,101 +258,106 @@
             style="display: none;" x-cloak>
 
             <div @click.outside="showViewModal = false"
+                x-show="showViewModal"
                 x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-2"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                class="bg-white rounded-2xl shadow-xl border border-gray-100 w-full max-w-sm overflow-hidden">
+                class="bg-white rounded-2xl shadow-xl border border-gray-100 w-full max-w-sm overflow-hidden max-h-[90vh] flex flex-col">
 
                 <!-- Top Action Bar -->
-                <div class="flex items-center justify-between px-6 pt-5 pb-4 shrink-0 border-b border-gray-100">
-                    <div class="flex items-center gap-3">
+                <div class="flex items-center justify-between gap-3 px-4 sm:px-6 pt-5 pb-4 shrink-0 border-b border-gray-100">
+                    <div class="flex items-center gap-3 min-w-0">
                         <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center shrink-0">
                             <i data-lucide="user" class="w-4.5 h-4.5"></i>
                         </div>
-                        <div>
+                        <div class="min-w-0">
                             <h2 class="font-semibold text-gray-900 text-base leading-tight">User Details</h2>
-                            <p class="text-xs text-gray-500 mt-0.5">View user profile information</p>
+                            <p class="text-xs text-gray-500 mt-0.5 truncate">View user profile information</p>
                         </div>
                     </div>
                     <button type="button" @click="showViewModal = false"
-                            class="text-gray-400 hover:text-gray-600 hover:bg-gray-100/80 rounded-lg p-1.5 transition-colors">
+                            class="text-gray-400 hover:text-gray-600 hover:bg-gray-100/80 rounded-lg p-1.5 transition-colors shrink-0">
                         <i data-lucide="x" class="w-4.5 h-4.5"></i>
                     </button>
                 </div>
 
-                <!-- Profile Hero Section -->
-                <div class="px-6 pb-5 pt-2 flex flex-col items-center text-center border-b border-gray-100">
-                    <div class="relative mb-3">
-                        <template x-if="viewTarget.avatar">
-                            <img :src="viewTarget.avatar" class="w-16 h-16 rounded-full object-cover ring-2 ring-gray-100 shadow-sm">
-                        </template>
+                <!-- Scrollable content -->
+                <div class="overflow-y-auto flex-1 min-h-0">
 
-                        <!-- Green Avatar Background (When avatar is null) -->
-                        <template x-if="!viewTarget.avatar">
-                            <div class="w-16 h-16 rounded-full bg-green-600 text-white flex items-center justify-center text-lg font-semibold ring-2 ring-emerald-100 shadow-sm"
-                                x-text="viewTarget.name ? viewTarget.name.substring(0, 2).toUpperCase() : ''"></div>
-                        </template>
+                    <!-- Profile Hero Section -->
+                    <div class="px-4 sm:px-6 pb-5 pt-4 flex flex-col items-center text-center border-b border-gray-100">
+                        <div class="relative mb-3">
+                            <template x-if="viewTarget.avatar">
+                                <img :src="viewTarget.avatar" class="w-16 h-16 rounded-full object-cover ring-2 ring-gray-100 shadow-sm">
+                            </template>
+
+                            <!-- Green Avatar Background (When avatar is null) -->
+                            <template x-if="!viewTarget.avatar">
+                                <div class="w-16 h-16 rounded-full bg-green-600 text-white flex items-center justify-center text-lg font-semibold ring-2 ring-emerald-100 shadow-sm"
+                                    x-text="viewTarget.name ? viewTarget.name.substring(0, 2).toUpperCase() : ''"></div>
+                            </template>
+                        </div>
+
+                        <h3 class="font-semibold text-gray-900 text-base leading-snug max-w-full break-words" x-text="viewTarget.name"></h3>
+                        <p class="text-xs text-gray-500 mt-0.5 max-w-full break-all" x-text="viewTarget.email"></p>
+
+                        <!-- Status & Role Badges -->
+                        <div class="flex flex-wrap items-center justify-center gap-2 mt-3">
+                            <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset"
+                                :class="viewTarget.status === 'Active'
+                                    ? 'bg-green-50 text-green-600 ring-green-600/20'
+                                    : 'bg-gray-50 text-gray-600 ring-gray-500/10'">
+                                <span class="h-1.5 w-1.5 rounded-full"
+                                    :class="viewTarget.status === 'Active' ? 'bg-green-600' : 'bg-gray-400'"></span>
+                                <span x-text="viewTarget.status"></span>
+                            </span>
+
+                            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ring-inset"
+                                :class="viewTarget.role === 'Admin' ? 'bg-purple-100 text-purple-700 ring-purple-700/10' :
+                                        (viewTarget.role === 'Manager' ? 'bg-blue-100 text-blue-700 ring-blue-700/10' : 'bg-gray-100 text-gray-600 ring-gray-500/10')"
+                                x-text="viewTarget.role">
+                            </span>
+                        </div>
                     </div>
 
-                    <h3 class="font-semibold text-gray-900 text-base leading-snug" x-text="viewTarget.name"></h3>
-                    <p class="text-xs text-gray-500 mt-0.5" x-text="viewTarget.email"></p>
+                    <!-- Details List -->
+                    <div class="px-4 sm:px-6 py-5 bg-gray-50/50 space-y-3.5">
+                        <div class="flex items-center justify-between gap-3 text-xs">
+                            <span class="text-gray-500 flex items-center gap-2 shrink-0">
+                                <i data-lucide="phone" class="w-3.5 h-3.5 text-gray-400"></i>
+                                Phone
+                            </span>
+                            <span class="text-gray-900 font-medium text-right min-w-0 truncate" x-text="viewTarget.phone || '—'"></span>
+                        </div>
 
-                    <!-- Status & Role Badges -->
-                    <div class="flex items-center gap-2 mt-3">
-                        <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset"
-                            :class="viewTarget.status === 'Active'
-                                ? 'bg-green-50 text-green-600 ring-green-600/20'
-                                : 'bg-gray-50 text-gray-600 ring-gray-500/10'">
-                            <span class="h-1.5 w-1.5 rounded-full"
-                                :class="viewTarget.status === 'Active' ? 'bg-green-600' : 'bg-gray-400'"></span>
-                            <span x-text="viewTarget.status"></span>
-                        </span>
+                        <div class="flex items-center justify-between gap-3 text-xs">
+                            <span class="text-gray-500 flex items-center gap-2 shrink-0">
+                                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gray-400"></i>
+                                Address
+                            </span>
+                            <span class="text-gray-900 font-medium text-right min-w-0 truncate" x-text="viewTarget.address || '—'"></span>
+                        </div>
 
-                        <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ring-inset"
-                            :class="viewTarget.role === 'Admin' ? 'bg-purple-100 text-purple-700 ring-purple-700/10' :
-                                    (viewTarget.role === 'Manager' ? 'bg-blue-100 text-blue-700 ring-blue-700/10' : 'bg-gray-100 text-gray-600 ring-gray-500/10')"
-                            x-text="viewTarget.role">
-                        </span>
-                    </div>
-                </div>
+                        <div class="flex items-center justify-between gap-3 text-xs">
+                            <span class="text-gray-500 flex items-center gap-2 shrink-0">
+                                <i data-lucide="clock" class="w-3.5 h-3.5 text-gray-400"></i>
+                                Last Activity
+                            </span>
+                            <span class="text-gray-900 font-medium text-right min-w-0" x-text="viewTarget.last_login_at || 'Never'"></span>
+                        </div>
 
-                <!-- Details List -->
-                <div class="p-6 bg-gray-50/50 space-y-3.5">
-                    <div class="flex items-center justify-between text-xs">
-                        <span class="text-gray-500 flex items-center gap-2">
-                            <i data-lucide="phone" class="w-3.5 h-3.5 text-gray-400"></i>
-                            Phone
-                        </span>
-                        <span class="text-gray-900 font-medium" x-text="viewTarget.phone || '—'"></span>
-                    </div>
-
-                    <div class="flex items-center justify-between text-xs">
-                        <span class="text-gray-500 flex items-center gap-2">
-                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gray-400"></i>
-                            Address
-                        </span>
-                        <span class="text-gray-900 font-medium text-right max-w-[180px] truncate" x-text="viewTarget.address || '—'"></span>
-                    </div>
-
-                    <div class="flex items-center justify-between text-xs">
-                        <span class="text-gray-500 flex items-center gap-2">
-                            <i data-lucide="clock" class="w-3.5 h-3.5 text-gray-400"></i>
-                            Last Activity
-                        </span>
-                        <span class="text-gray-900 font-medium" x-text="viewTarget.last_login_at || 'Never'"></span>
-                    </div>
-
-                    <div class="flex items-center justify-between text-xs">
-                        <span class="text-gray-500 flex items-center gap-2">
-                            <i data-lucide="calendar" class="w-3.5 h-3.5 text-gray-400"></i>
-                            Member Since
-                        </span>
-                        <span class="text-gray-900 font-medium" x-text="viewTarget.created_at"></span>
+                        <div class="flex items-center justify-between gap-3 text-xs">
+                            <span class="text-gray-500 flex items-center gap-2 shrink-0">
+                                <i data-lucide="calendar" class="w-3.5 h-3.5 text-gray-400"></i>
+                                Member Since
+                            </span>
+                            <span class="text-gray-900 font-medium text-right min-w-0" x-text="viewTarget.created_at"></span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Footer -->
-                <div class="p-4 bg-white border-t border-gray-100 flex justify-end">
+                <div class="px-4 sm:px-6 py-4 bg-white border-t border-gray-100 shrink-0">
                     <button type="button" @click="showViewModal = false"
                             class="w-full h-9 rounded-lg text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200/80 transition-colors">
                         Done
@@ -380,24 +388,24 @@
                         @method('PUT')
 
                         <!-- Header -->
-                        <div class="flex items-start justify-between px-6 pt-6 pb-5 shrink-0">
-                            <div class="flex items-center gap-3">
+                        <div class="flex items-start justify-between gap-3 px-4 sm:px-6 pt-6 pb-5 shrink-0">
+                            <div class="flex items-center gap-3 min-w-0">
                                 <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center shrink-0">
                                     <i data-lucide="pencil" class="w-4.5 h-4.5"></i>
                                 </div>
-                                <div>
+                                <div class="min-w-0">
                                     <h2 class="font-semibold text-gray-800 text-base leading-tight">Edit user</h2>
                                     <p class="text-xs text-gray-400 mt-0.5">Update this user's account details</p>
                                 </div>
                             </div>
                             <button type="button" @click="closeEdit()"
-                                    class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 -mt-1 -mr-1 transition-colors">
+                                    class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 -mt-1 -mr-1 transition-colors shrink-0">
                                 <i data-lucide="x" class="w-4.5 h-4.5"></i>
                             </button>
                         </div>
 
                         <!-- Body -->
-                        <div class="px-6 pb-6 space-y-4 overflow-y-auto">
+                        <div class="px-4 sm:px-6 pb-6 space-y-4 overflow-y-auto">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">Full Name</label>
                                 <input type="text" name="name" x-model="editForm.name"
@@ -434,7 +442,7 @@
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1.5">
-                                    New Password <span class="text-gray-400 font-normal">(leave blank to keep current)</span>
+                                    New Password <span class="text-gray-400 font-normal block sm:inline">(leave blank to keep current)</span>
                                 </label>
                                 <input type="password" name="password" x-model="editForm.password" placeholder="Min 8 characters"
                                     class="w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 transition-colors"
@@ -447,15 +455,15 @@
                             <template x-if="editForm.id !== {{ auth()->id() }}">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1.5">Status</label>
-                                    <div class="flex items-center gap-1.5 bg-gray-50 border border-gray-200 p-1 rounded-lg w-fit">
+                                    <div class="flex items-center gap-1.5 bg-gray-50 border border-gray-200 p-1 rounded-lg w-full sm:w-fit">
                                         <button type="button" @click="editForm.status = 'Active'"
                                                 :class="editForm.status === 'Active' ? 'bg-green-600 text-white' : 'text-gray-500 hover:text-gray-700'"
-                                                class="px-4 py-1.5 rounded-md text-xs font-medium transition-colors">
+                                                class="flex-1 sm:flex-none px-4 py-1.5 rounded-md text-xs font-medium transition-colors">
                                             Active
                                         </button>
                                         <button type="button" @click="editForm.status = 'Archived'"
                                                 :class="editForm.status === 'Archived' ? 'bg-gray-600 text-white' : 'text-gray-500 hover:text-gray-700'"
-                                                class="px-4 py-1.5 rounded-md text-xs font-medium transition-colors">
+                                                class="flex-1 sm:flex-none px-4 py-1.5 rounded-md text-xs font-medium transition-colors">
                                             Archived
                                         </button>
                                     </div>
@@ -465,15 +473,15 @@
                         </div>
 
                         <!-- Footer -->
-                        <div class="flex items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100 shrink-0">
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-4 sm:px-6 py-4 bg-gray-50 border-t border-gray-100 shrink-0">
                             <button type="button" @click="closeEdit()"
-                                    class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                    class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
                                 Cancel
                             </button>
                             <button type="submit"
                                     :disabled="!hasChanges()"
                                     :class="hasChanges() ? 'bg-green-600 hover:bg-green-700 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
-                                    class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                                    class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm order-1 sm:order-2">
                                 Save changes
                             </button>
                         </div>
@@ -502,18 +510,18 @@
                     </div>
                     <h2 class="font-semibold text-gray-800 text-base mb-1.5">Archive user?</h2>
                     <p class="text-sm text-gray-500 leading-relaxed">
-                        <span class="font-medium text-gray-700" x-text="archiveTarget.name"></span> will no longer be able to log in.
+                        <span class="font-medium text-gray-700 break-words" x-text="archiveTarget.name"></span> will no longer be able to log in.
                     </p>
                 </div>
                 <form method="POST" :action="`/users/${archiveTarget.id}`"
-                      class="flex items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100">
+                      class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 border-t border-gray-100">
                     @csrf @method('DELETE')
                     <button type="button" @click="showArchiveModal = false"
-                            class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            class="text-gray-600 hover:bg-gray-200/70 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
                         Cancel
                     </button>
                     <button type="submit"
-                            class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                            class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm order-1 sm:order-2">
                         Archive
                     </button>
                 </form>
@@ -543,7 +551,7 @@
                 </div>
                 <div class="flex items-center justify-center px-6 py-4 bg-gray-50 border-t border-gray-100">
                     <button @click="showSuccessModal = false"
-                            class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                            class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                         Got it
                     </button>
                 </div>

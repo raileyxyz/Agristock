@@ -8,7 +8,7 @@
         $oldCategories = array_map('intval', old('supply_categories', []));
     @endphp
 
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6"
+    <div
         x-data='{
             selected: @json($oldCategories),
             showSuccessModal: false,

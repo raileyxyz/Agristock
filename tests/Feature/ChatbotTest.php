@@ -17,7 +17,6 @@ beforeEach(function () {
         'services.openrouter.model' => 'test-model',
     ]);
 
-    // Kapag may request na hindi naka-fake, mag-e-error ang test at HINDI tatawag sa totoong OpenRouter.
     Http::preventStrayRequests();
 });
 
@@ -103,7 +102,6 @@ it('runs a tool call and then returns the final answer', function () {
         ->and($result['message'])->toBe('Walang low stock ngayon.');
 
     Http::assertSentCount(2);
-    // Ang ikalawang request ay dapat may 'tool' message (result ng tool).
     Http::assertSent(fn ($request) => collect($request['messages'])->contains('role', 'tool'));
 });
 
@@ -130,7 +128,6 @@ it('handles an OpenRouter server error and saves nothing', function () {
 });
 
 it('stops after the max number of tool rounds', function () {
-    // Laging tool call ang sagot ng model = hindi matatapos kung walang limit.
     Http::fake(['openrouter.ai/*' => Http::response(chatToolCallResponse())]);
     $user = User::factory()->staff()->create();
 
@@ -151,7 +148,6 @@ it('sends only the last 10 history messages to the model', function () {
 
     app(ChatbotService::class)->ask($user, 'latest');
 
-    // 1 system + 10 history + 1 bagong tanong = 12
     Http::assertSent(fn ($request) => count($request['messages']) === 12);
 });
 

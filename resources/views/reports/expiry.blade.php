@@ -1,129 +1,137 @@
 <x-app-layout>
-    <div class="max-w-6xl">
+    <div class="space-y-5 sm:space-y-6">
 
-        <!-- Header -->
-        <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
+        <!-- Header Section -->
+        <div class="pb-4 sm:pb-5 border-b border-gray-200">
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-800 tracking-tight">Expiry Report</h1>
+            <p class="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">
+                {{ $summary['tracked'] }} tracked · <span class="text-red-600 font-medium">{{ $summary['expired'] }} expired</span> · <span class="text-amber-600 font-medium">{{ $summary['within_30'] + $summary['within_60'] }} expiring soon</span>
+            </p>
+        </div>
+
+        <!-- Summary KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+            <!-- Expired Items -->
+            <div class="bg-white border border-gray-200/80 rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">Expiry Report</h1>
-                    <p class="text-gray-400 text-sm mt-0.5">
-                        {{ $summary['tracked'] }} tracked · {{ $summary['expired'] }} expired · {{ $summary['within_30'] + $summary['within_60'] }} expiring soon
-                    </p>
+                    <p class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-red-600">Expired Items</p>
+                    <p class="text-xl sm:text-2xl font-bold text-gray-900 mt-1 sm:mt-1.5">{{ $summary['expired'] }}</p>
+                    <p class="text-[11px] sm:text-xs text-gray-500 mt-0.5">Past expiration date</p>
+                </div>
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center shrink-0">
+                    <i data-lucide="circle-x" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                </div>
+            </div>
+
+            <!-- Critical (Within 30 Days) -->
+            <div class="bg-white border border-gray-200/80 rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
+                <div>
+                    <p class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-red-500">Critical (&le; 30 Days)</p>
+                    <p class="text-xl sm:text-2xl font-bold text-gray-900 mt-1 sm:mt-1.5">{{ $summary['within_30'] }}</p>
+                    <p class="text-[11px] sm:text-xs text-gray-500 mt-0.5">Requires immediate action</p>
+                </div>
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-red-50 text-red-500 flex items-center justify-center shrink-0">
+                    <i data-lucide="alarm-clock" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                </div>
+            </div>
+
+            <!-- Warning (31 to 60 Days) -->
+            <div class="bg-white border border-gray-200/80 rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
+                <div>
+                    <p class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-amber-600">Warning (31-60 Days)</p>
+                    <p class="text-xl sm:text-2xl font-bold text-gray-900 mt-1 sm:mt-1.5">{{ $summary['within_60'] }}</p>
+                    <p class="text-[11px] sm:text-xs text-gray-500 mt-0.5">Plan for stock rotation</p>
+                </div>
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                    <i data-lucide="clock" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                </div>
+            </div>
+
+            <!-- Safe (Over 60 Days) -->
+            <div class="bg-white border border-gray-200/80 rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
+                <div>
+                    <p class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-emerald-600">Good (&gt; 60 Days)</p>
+                    <p class="text-xl sm:text-2xl font-bold text-gray-900 mt-1 sm:mt-1.5">{{ $summary['safe'] }}</p>
+                    <p class="text-[11px] sm:text-xs text-gray-500 mt-0.5">Sufficient shelf life</p>
+                </div>
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                    <i data-lucide="shield-check" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                 </div>
             </div>
         </div>
 
-        <!-- Summary Cards (Pinanatili ang mas malinaw na UI) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div class="bg-white border border-gray-200/80 rounded-xl p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-red-600">Expired Items</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ $summary['expired'] }}</p>
-                    <p class="text-xs text-gray-500 mt-0.5">Past expiration date</p>
-                </div>
-                <div class="w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="circle-x" class="w-6 h-6"></i>
-                </div>
-            </div>
-
-            <div class="bg-white border border-gray-200/80 rounded-xl p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-red-500">Critical (Within 30 Days)</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ $summary['within_30'] }}</p>
-                    <p class="text-xs text-gray-500 mt-0.5">Requires immediate action</p>
-                </div>
-                <div class="w-12 h-12 rounded-xl bg-red-50 text-red-500 flex items-center justify-center shrink-0">
-                    <i data-lucide="alarm-clock" class="w-6 h-6"></i>
-                </div>
-            </div>
-
-            <div class="bg-white border border-gray-200/80 rounded-xl p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-amber-600">Warning (31 to 60 Days)</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ $summary['within_60'] }}</p>
-                    <p class="text-xs text-gray-500 mt-0.5">Plan for stock rotation</p>
-                </div>
-                <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="clock" class="w-6 h-6"></i>
-                </div>
-            </div>
-
-            <div class="bg-white border border-gray-200/80 rounded-xl p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-emerald-600">Good (Over 60 Days)</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ $summary['safe'] }}</p>
-                    <p class="text-xs text-gray-500 mt-0.5">Sufficient shelf life</p>
-                </div>
-                <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                    <i data-lucide="shield-check" class="w-6 h-6"></i>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sections & Table (Ibinalik sa Orihinal) -->
+        <!-- Grouped Expiry Sections -->
         @php
             $sections = [
                 'expired' => ['label' => 'Expired', 'dot' => 'bg-red-500', 'text' => 'text-red-600'],
                 'within_60' => ['label' => 'Expiring within 60 days', 'dot' => 'bg-amber-500', 'text' => 'text-amber-600'],
-                'safe' => ['label' => 'Safe Over 60 days', 'dot' => 'bg-green-500', 'text' => 'text-green-600'],
+                'safe' => ['label' => 'Safe (Over 60 days)', 'dot' => 'bg-emerald-500', 'text' => 'text-emerald-600'],
             ];
         @endphp
 
-        @foreach($sections as $key => $section)
-            @if(count($batches[$key]) > 0)
-                <div class="mb-6">
-                    <div class="flex items-center gap-2 mb-3">
-                        <span class="w-2 h-2 rounded-full {{ $section['dot'] }}"></span>
-                        <h2 class="text-sm font-semibold {{ $section['text'] }}">
-                            {{ $section['label'] }} ({{ count($batches[$key]) }})
-                        </h2>
-                    </div>
+        <div class="space-y-6">
+            @foreach($sections as $key => $section)
+                @if(isset($batches[$key]) && count($batches[$key]) > 0)
+                    <div>
+                        <!-- Section Heading -->
+                        <div class="flex items-center gap-2 mb-2.5">
+                            <span class="w-2 h-2 rounded-full {{ $section['dot'] }}"></span>
+                            <h2 class="text-xs sm:text-sm font-semibold {{ $section['text'] }}">
+                                {{ $section['label'] }} ({{ count($batches[$key]) }})
+                            </h2>
+                        </div>
 
-                    <div class="bg-white border border-gray-200/80 rounded-xl overflow-hidden shadow-sm">
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm min-w-[700px]">
-                                <thead>
-                                    <tr class="bg-gray-50 border-b border-gray-200 text-left text-gray-500">
-                                        <th class="px-4 py-3 font-medium whitespace-nowrap">Product</th>
-                                        <th class="px-4 py-3 font-medium whitespace-nowrap">Category</th>
-                                        <th class="px-4 py-3 font-medium whitespace-nowrap">Qty</th>
-                                        <th class="px-4 py-3 font-medium whitespace-nowrap">Batch</th>
-                                        <th class="px-4 py-3 font-medium whitespace-nowrap">Expiry Date</th>
-                                        <th class="px-4 py-3 font-medium text-right whitespace-nowrap">Days</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-100">
-                                    @foreach($batches[$key] as $row)
-                                        <tr class="hover:bg-gray-50 transition-colors">
-                                            <td class="px-4 py-3 font-medium text-gray-800">{{ $row['product_name'] }}</td>
-                                            <td class="px-4 py-3 whitespace-nowrap">
-                                                <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full text-white"
-                                                      style="background-color: {{ $row['category_color'] }}">
-                                                    {{ $row['category_icon'] }}
-                                                    {{ $row['category_name'] }}
-                                                </span>
-                                            </td>
-                                            <td class="px-4 py-3 text-gray-600 whitespace-nowrap">{{ $row['quantity'] }} {{ $row['unit_abbr'] }}</td>
-                                            <td class="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">{{ $row['batch_number'] }}</td>
-                                            <td class="px-4 py-3 text-gray-600 whitespace-nowrap">{{ $row['expiry_date'] }}</td>
-                                            <td class="px-4 py-3 text-right whitespace-nowrap">
-                                                @if($row['days'] < 0)
-                                                    <span class="text-xs font-bold text-red-600">EXPIRED</span>
-                                                @elseif($row['days'] <= 60)
-                                                    <span class="text-xs font-bold text-amber-600">{{ $row['days'] }}d</span>
-                                                @else
-                                                    <span class="text-xs font-bold text-green-600">{{ $row['days'] }}d</span>
-                                                @endif
-                                            </td>
+                        <!-- Data Table Container -->
+                        <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-xs sm:text-sm min-w-[750px]">
+                                    <thead>
+                                        <tr class="bg-gray-50 border-b border-gray-200 text-left text-gray-500">
+                                            <th class="px-3.5 sm:px-4 py-2.5 sm:py-3 font-medium whitespace-nowrap">Product</th>
+                                            <th class="px-3.5 sm:px-4 py-2.5 sm:py-3 font-medium whitespace-nowrap">Category</th>
+                                            <th class="px-3.5 sm:px-4 py-2.5 sm:py-3 font-medium whitespace-nowrap">Qty</th>
+                                            <th class="px-3.5 sm:px-4 py-2.5 sm:py-3 font-medium whitespace-nowrap">Batch</th>
+                                            <th class="px-3.5 sm:px-4 py-2.5 sm:py-3 font-medium whitespace-nowrap">Expiry Date</th>
+                                            <th class="px-3.5 sm:px-4 py-2.5 sm:py-3 font-medium text-right whitespace-nowrap">Days Left</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-100">
+                                        @foreach($batches[$key] as $row)
+                                            <tr class="hover:bg-gray-50/80 transition-colors">
+                                                <td class="px-3.5 sm:px-4 py-2.5 sm:py-3 font-medium text-gray-800 whitespace-nowrap">{{ $row['product_name'] }}</td>
+                                                <td class="px-3.5 sm:px-4 py-2.5 sm:py-3 whitespace-nowrap">
+                                                    <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-0.5 rounded-full text-white"
+                                                          style="background-color: {{ $row['category_color'] }}">
+                                                        {{ $row['category_icon'] }}
+                                                        {{ $row['category_name'] }}
+                                                    </span>
+                                                </td>
+                                                <td class="px-3.5 sm:px-4 py-2.5 sm:py-3 text-gray-600 whitespace-nowrap font-medium">
+                                                    {{ $row['quantity'] }} <span class="text-xs text-gray-400 font-normal">{{ $row['unit_abbr'] }}</span>
+                                                </td>
+                                                <td class="px-3.5 sm:px-4 py-2.5 sm:py-3 text-gray-400 text-xs font-mono whitespace-nowrap">{{ $row['batch_number'] }}</td>
+                                                <td class="px-3.5 sm:px-4 py-2.5 sm:py-3 text-gray-600 whitespace-nowrap">{{ $row['expiry_date'] }}</td>
+                                                <td class="px-3.5 sm:px-4 py-2.5 sm:py-3 text-right whitespace-nowrap">
+                                                    @if($row['days'] < 0)
+                                                        <span class="inline-flex items-center text-xs font-semibold px-2 py-0.5 rounded bg-red-50 text-red-600 border border-red-200/60">EXPIRED</span>
+                                                    @elseif($row['days'] <= 30)
+                                                        <span class="inline-flex items-center text-xs font-semibold px-2 py-0.5 rounded bg-red-50 text-red-600 border border-red-200/60">{{ $row['days'] }}d</span>
+                                                    @elseif($row['days'] <= 60)
+                                                        <span class="inline-flex items-center text-xs font-semibold px-2 py-0.5 rounded bg-amber-50 text-amber-600 border border-amber-200/60">{{ $row['days'] }}d</span>
+                                                    @else
+                                                        <span class="inline-flex items-center text-xs font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-600 border border-emerald-200/60">{{ $row['days'] }}d</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endif
-        @endforeach
+                @endif
+            @endforeach
+        </div>
 
     </div>
 </x-app-layout>

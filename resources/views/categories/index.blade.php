@@ -112,17 +112,17 @@
 
             <input type="hidden" name="status" value="{{ request('status', 'all') }}">
 
-            <div class="flex items-center gap-1.5 bg-gray-100 p-1 rounded-lg w-full sm:w-fit overflow-x-auto">
+            <div class="inline-flex items-center rounded-lg border border-slate-200 bg-white p-1 shadow-sm overflow-x-auto w-full sm:w-auto">
                 <a href="{{ request()->fullUrlWithQuery(['status' => 'all', 'page' => null]) }}"
-                class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap shrink-0 {{ request('status', 'all') === 'all' ? 'bg-green-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900' }}">
+                class="px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors flex-1 text-center {{ request('status', 'all') === 'all' ? 'bg-green-600 text-white' : 'text-slate-500 hover:text-slate-900' }}">
                     All
                 </a>
                 <a href="{{ request()->fullUrlWithQuery(['status' => 'Active', 'page' => null]) }}"
-                class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap shrink-0 {{ request('status') === 'Active' ? 'bg-green-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900' }}">
+                class="px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors flex-1 text-center {{ request('status') === 'Active' ? 'bg-green-600 text-white' : 'text-slate-500 hover:text-slate-900' }}">
                     Active
                 </a>
                 <a href="{{ request()->fullUrlWithQuery(['status' => 'Archived', 'page' => null]) }}"
-                class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap shrink-0 {{ request('status') === 'Archived' ? 'bg-green-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900' }}">
+                class="px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors flex-1 text-center {{ request('status') === 'Archived' ? 'bg-green-600 text-white' : 'text-slate-500 hover:text-slate-900' }}">
                     Archived
                 </a>
             </div>

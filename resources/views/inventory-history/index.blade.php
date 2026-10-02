@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="flex items-center justify-between mb-1">
+    <div class="flex items-center justify-between mb-4">
         <div>
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Inventory History</h1>
             <p class="text-gray-400 text-sm mt-1">{{ $movements->total() }} total movement records</p>
@@ -7,7 +7,7 @@
     </div>
 
     <!-- Type filter tabs -->
-    <div class="flex items-center gap-1.5 bg-gray-100 p-1 rounded-lg w-full sm:w-fit mt-6 overflow-x-auto">
+    <div class="inline-flex items-center rounded-lg border border-slate-200 bg-white p-1 shadow-sm overflow-x-auto w-full sm:w-auto">
         @php
             $tabs = [
                 'all' => 'All',
@@ -19,8 +19,7 @@
         @endphp
         @foreach($tabs as $value => $label)
             <a href="{{ request()->fullUrlWithQuery(['type' => $value, 'page' => null]) }}"
-               class="px-3.5 py-1.5 rounded-md text-sm font-medium transition-colors whitespace-nowrap shrink-0
-               {{ request('type', 'all') === $value ? 'bg-green-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900' }}">
+            class="px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors flex-1 text-center {{ request('type', 'all') === $value ? 'bg-green-600 text-white' : 'text-slate-500 hover:text-slate-900' }}">
                 {{ $label }}
             </a>
         @endforeach
