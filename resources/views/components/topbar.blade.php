@@ -46,7 +46,7 @@
                 @endif
             </button>
 
-            <!-- Notification dropdown -->
+            <!-- Notification dropdown: centered under the header on mobile, anchored to the bell on sm+ -->
             <div x-show="notifOpen"
                 @click.outside="notifOpen = false"
                 x-transition:enter="transition ease-out duration-150"
@@ -55,7 +55,9 @@
                 x-transition:leave="transition ease-in duration-100"
                 x-transition:leave-start="opacity-100 scale-100"
                 x-transition:leave-end="opacity-0 scale-95"
-                class="absolute top-full right-0 mt-2 w-80 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-50"
+                class="fixed inset-x-3 top-[4.5rem] origin-top
+                       sm:absolute sm:inset-x-auto sm:top-full sm:right-0 sm:mt-2 sm:w-80 sm:origin-top-right
+                       bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden z-50"
                 style="display: none;">
 
                 <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
@@ -70,7 +72,7 @@
                     @endif
                 </div>
 
-                <div class="max-h-80 overflow-y-auto divide-y divide-gray-100">
+                <div class="max-h-[60vh] sm:max-h-80 overflow-y-auto divide-y divide-gray-100">
                     @forelse($topbarNotifications->take(8) as $notification)
                         <div class="flex items-start gap-3 px-4 py-3 {{ $notification->read_at ? '' : 'bg-green-50/40' }}">
                             <x-notification-icon :type="$notification->data['type']" />
