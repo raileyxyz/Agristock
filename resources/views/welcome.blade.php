@@ -5,18 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AgriStock</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700|playfair-display:700,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         body { font-family: 'Figtree', sans-serif; }
-        h1, h2, h3, .font-display { font-family: 'Playfair Display', serif; }
         [x-cloak] { display: none !important; }
         section[id] { scroll-margin-top: 5rem; }
     </style>
 </head>
-<body class="bg-white text-gray-800"
+<body class="bg-white text-gray-800 font-sans"
     x-data="{ mobileMenuOpen: false, scrolled: false }"
     x-effect="document.body.style.overflow = mobileMenuOpen ? 'hidden' : ''"
     @scroll.window="scrolled = window.scrollY > 8"
@@ -30,10 +29,10 @@
                 <div class="w-8 h-8 sm:w-9 sm:h-9 bg-green-600 rounded-lg flex items-center justify-center transition-all duration-300 ease-out group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-md group-hover:shadow-green-700/30">
                     <i data-lucide="leaf" class="w-4.5 h-4.5 sm:w-5 sm:h-5 text-white"></i>
                 </div>
-                <span class="font-display font-bold text-base sm:text-lg text-gray-900 transition-colors duration-300 group-hover:text-green-700">AgriStock</span>
+                <span class="font-bold text-base sm:text-lg text-gray-900 transition-colors duration-300 group-hover:text-green-700">AgriStock</span>
             </a>
 
-            <nav class="hidden md:flex items-center gap-10 text-sm text-gray-600">
+            <nav class="hidden md:flex items-center gap-10 text-sm font-medium text-gray-600">
                 <a href="#features" class="relative py-1 hover:text-gray-900 transition-colors after:absolute after:left-0 after:-bottom-0.5 after:h-0.5 after:w-0 after:bg-green-600 after:transition-all after:duration-300 hover:after:w-full">Features</a>
                 <a href="#how-it-works" class="relative py-1 hover:text-gray-900 transition-colors after:absolute after:left-0 after:-bottom-0.5 after:h-0.5 after:w-0 after:bg-green-600 after:transition-all after:duration-300 hover:after:w-full">How It Works</a>
                 <a href="#about" class="relative py-1 hover:text-gray-900 transition-colors after:absolute after:left-0 after:-bottom-0.5 after:h-0.5 after:w-0 after:bg-green-600 after:transition-all after:duration-300 hover:after:w-full">About</a>
@@ -88,7 +87,7 @@
                     <div class="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
                         <i data-lucide="leaf" class="w-4 h-4 text-white"></i>
                     </div>
-                    <span class="font-display font-bold text-base text-gray-900">AgriStock</span>
+                    <span class="font-bold text-base text-gray-900">AgriStock</span>
                 </span>
                 <button @click="mobileMenuOpen = false" aria-label="Close menu"
                         class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg p-1.5 transition-colors">
@@ -127,7 +126,7 @@
     <section id="top" class="relative overflow-hidden bg-cover bg-center min-h-[560px] sm:min-h-[640px] lg:min-h-[720px] flex items-center"
             style="background-image: url('{{ asset('images/login-farm.jpg') }}');">
 
-        <!-- Directional Overlay: Darkens the left side for high text contrast while letting the farm image shine through on the right -->
+        <!-- Directional Overlay -->
         <div class="absolute inset-0 bg-gradient-to-r from-green-950/95 via-green-950/80 to-green-950/40 lg:from-green-950/95 lg:via-green-950/75 lg:to-green-950/25"></div>
 
         <div class="relative w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24 flex justify-start">
@@ -142,10 +141,10 @@
                 </span>
 
                 <!-- Heading -->
-                <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-2 leading-[1.1] sm:leading-[1.08]">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-2 leading-[1.1] sm:leading-[1.08]">
                     Farm Smarter.
                 </h1>
-                <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-green-400 mb-6 leading-[1.1] sm:leading-[1.08]">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-green-400 mb-6 leading-[1.1] sm:leading-[1.08]">
                     Stock Wiser.
                 </h1>
 
@@ -179,6 +178,10 @@
                     </span>
                     <span class="flex items-center gap-2">
                         <i data-lucide="check-circle" class="w-4 h-4 text-green-400 shrink-0"></i>
+                        <span>Supplier Management</span>
+                    </span>
+                    <span class="flex items-center gap-2">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-green-400 shrink-0"></i>
                         <span>Inventory History</span>
                     </span>
                     <span class="flex items-center gap-2">
@@ -198,7 +201,7 @@
             <span class="inline-flex items-center gap-2 bg-green-50 text-green-700 text-xs font-semibold px-3.5 py-1.5 rounded-full mb-5 sm:mb-6">
                 <i data-lucide="leaf" class="w-3.5 h-3.5"></i> Built for Philippine Farms
             </span>
-            <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
                 Everything your farm inventory needs
             </h2>
             <p class="text-gray-500 text-base sm:text-lg max-w-2xl mx-auto">
@@ -223,7 +226,7 @@
                     <div class="w-11 h-11 bg-green-50 rounded-lg flex items-center justify-center mb-5 transition-colors duration-300 group-hover:bg-green-100">
                         <i data-lucide="{{ $feature['icon'] }}" class="w-5 h-5 text-green-700 transition-colors duration-300"></i>
                     </div>
-                    <h3 class="font-display font-bold text-lg text-gray-900 mb-2">{!! $feature['title'] !!}</h3>
+                    <h3 class="font-bold text-lg text-gray-900 mb-2">{!! $feature['title'] !!}</h3>
                     <p class="text-gray-500 text-sm leading-relaxed">{{ $feature['desc'] }}</p>
                 </div>
             @endforeach
@@ -233,7 +236,7 @@
     <!-- How It Works -->
     <section id="how-it-works" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-10 bg-gray-50">
         <div class="max-w-4xl mx-auto text-center mb-12 sm:mb-16">
-            <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">How AgriStock Works</h2>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 tracking-tight">How AgriStock Works</h2>
             <p class="text-gray-500 text-base sm:text-lg">A simple 4-step process that keeps your farm operations running smoothly.</p>
         </div>
 
@@ -249,8 +252,8 @@
 
             @foreach($steps as $i => $step)
                 <div class="group bg-white rounded-xl p-6 border border-gray-200 relative transition-all duration-300 hover:border-green-400 hover:-translate-y-1.5 hover:shadow-lg">
-                    <span class="font-display text-4xl font-bold text-green-300 block mb-3 transition-colors duration-300 group-hover:text-green-500">{{ $step['num'] }}</span>
-                    <h3 class="font-display font-bold text-gray-900 mb-2">{!! $step['title'] !!}</h3>
+                    <span class="text-4xl font-extrabold text-green-300 block mb-3 transition-colors duration-300 group-hover:text-green-500">{{ $step['num'] }}</span>
+                    <h3 class="font-bold text-gray-900 mb-2">{!! $step['title'] !!}</h3>
                     <p class="text-gray-500 text-sm leading-relaxed">{{ $step['desc'] }}</p>
 
                     @if($i < count($steps) - 1)
@@ -291,15 +294,15 @@
                     <i data-lucide="sprout" class="w-3.5 h-3.5"></i> About AgriStock
                 </span>
 
-                <h2 class="font-display text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-5">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-5 tracking-tight">
                     Built for the realities of Philippine agriculture
                 </h2>
 
                 <p class="text-gray-500 text-base leading-relaxed mb-4">
-                    AgriStock was designed from the ground up for farm managers who need more than a spreadsheet — but less than an enterprise ERP. It handles the entire lifecycle of agri-inputs: from catalog setup and stock receiving, through daily movements and batch expiry monitoring, to supplier records and reports.
+                    AgriStock was designed from the ground up for farm managers who need more than a spreadsheet but less than an enterprise ERP. It handles the entire lifecycle of agri-inputs from catalog setup and stock receiving, through daily movements and batch expiry monitoring, to supplier records and reports.
                 </p>
                 <p class="text-gray-500 text-base leading-relaxed mb-8">
-                    Whether you're managing a single farm or coordinating across multiple locations, AgriStock gives every team member — from admin to field staff — exactly the access they need to keep operations running without stockouts or waste.
+                    Whether it's the admin, a manager, or field staff, AgriStock gives every team member...
                 </p>
 
                 <!-- Checklist -->
@@ -308,7 +311,7 @@
                         $points = [
                             ['icon' => 'zap', 'text' => 'Real-time alerts when stock drops below reorder thresholds'],
                             ['icon' => 'clock', 'text' => 'Batch expiry tracking prevents costly disposal of inputs'],
-                            ['icon' => 'globe', 'text' => 'Multi-location stock visibility from one dashboard'],
+                            ['icon' => 'globe', 'text' => 'Complete stock visibility from one dashboard'],
                             ['icon' => 'trending-down', 'text' => 'Movement history and reports reduce guesswork when restocking'],
                         ];
                     @endphp
@@ -318,7 +321,7 @@
                             <div class="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center shrink-0">
                                 <i data-lucide="{{ $point['icon'] }}" class="w-4 h-4 text-green-600"></i>
                             </div>
-                            <p class="text-gray-600 text-[15px]">{{ $point['text'] }}</p>
+                            <p class="text-gray-600 text-[15px] font-medium">{{ $point['text'] }}</p>
                         </div>
                     @endforeach
                 </div>
@@ -327,24 +330,24 @@
             <!-- Stat cards -->
             <div class="grid grid-cols-2 gap-4">
                 <div class="bg-green-700 rounded-2xl p-6 sm:p-7">
-                    <p class="font-display text-3xl sm:text-4xl font-bold text-white leading-none mb-3">2,400+</p>
-                    <p class="text-white font-semibold text-sm mb-1">Farms Onboarded</p>
-                    <p class="text-green-200 text-xs leading-relaxed">across Luzon, Visayas &amp; Mindanao</p>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-white leading-none mb-3">3</p>
+                    <p class="text-white font-semibold text-sm mb-1">User Roles</p>
+                    <p class="text-green-200 text-xs leading-relaxed">Admin, Manager &amp; Field Staff access</p>
                 </div>
                 <div class="bg-gray-900 rounded-2xl p-6 sm:p-7">
-                    <p class="font-display text-3xl sm:text-4xl font-bold text-white leading-none mb-3">98%</p>
-                    <p class="text-white font-semibold text-sm mb-1">Stock Accuracy</p>
-                    <p class="text-gray-400 text-xs leading-relaxed">average across active farms</p>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-white leading-none mb-3">100%</p>
+                    <p class="text-white font-semibold text-sm mb-1">Traceable Movements</p>
+                    <p class="text-gray-400 text-xs leading-relaxed">every stock in, out &amp; adjustment is logged</p>
                 </div>
                 <div class="bg-green-50 rounded-2xl p-6 sm:p-7">
-                    <p class="font-display text-3xl sm:text-4xl font-bold text-gray-900 leading-none mb-3">35%</p>
-                    <p class="text-gray-800 font-semibold text-sm mb-1">Waste Reduction</p>
-                    <p class="text-gray-500 text-xs leading-relaxed">avg. reduction in expired inputs</p>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-none mb-3">Auto</p>
+                    <p class="text-gray-800 font-semibold text-sm mb-1">Expiry Alerts</p>
+                    <p class="text-gray-500 text-xs leading-relaxed">items nearing expiry flagged on the dashboard</p>
                 </div>
                 <div class="bg-gray-100 rounded-2xl p-6 sm:p-7">
-                    <p class="font-display text-3xl sm:text-4xl font-bold text-gray-900 leading-none mb-3">180K+</p>
-                    <p class="text-gray-800 font-semibold text-sm mb-1">Movements Logged</p>
-                    <p class="text-gray-500 text-xs leading-relaxed">stock in, out &amp; adjustments</p>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-none mb-3">Live</p>
+                    <p class="text-gray-800 font-semibold text-sm mb-1">Stock Levels</p>
+                    <p class="text-gray-500 text-xs leading-relaxed">low and critical stock at a glance</p>
                 </div>
             </div>
 
@@ -353,11 +356,11 @@
 
     <!-- CTA -->
     <section class="bg-green-700 text-center py-14 sm:py-20 px-4 sm:px-6">
-        <h2 class="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4">
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 tracking-tight">
             Ready to take control of your farm inventory?
         </h2>
         <p class="text-green-100 text-base sm:text-lg max-w-2xl mx-auto mb-8">
-            Join hundreds of farms across the Philippines using AgriStock to eliminate stockouts, reduce waste, and stay on top of every input.
+            Use AgriStock to eliminate stockouts, reduce waste, and stay on top of every input in your business.
         </p>
         <a href="{{ route('login') }}"
             class="group inline-flex items-center gap-2 bg-white hover:bg-green-50 text-green-800 px-7 py-3.5 rounded-lg font-semibold transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg">
@@ -375,7 +378,7 @@
                     <div class="w-9 h-9 bg-green-600 rounded-lg flex items-center justify-center transition-all duration-300 ease-out group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-md group-hover:shadow-green-700/30">
                         <i data-lucide="leaf" class="w-5 h-5 text-white"></i>
                     </div>
-                    <span class="font-display font-bold text-lg text-white transition-colors duration-300 group-hover:text-green-200">
+                    <span class="font-bold text-lg text-white transition-colors duration-300 group-hover:text-green-200">
                         AgriStock
                     </span>
                 </a>
