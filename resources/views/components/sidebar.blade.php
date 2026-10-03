@@ -7,20 +7,20 @@
     x-transition:leave-start="translate-x-0"
     x-transition:leave-end="-translate-x-full"
     @click.outside="sidebarOpen = false"
-    class="fixed lg:static inset-y-0 left-0 z-40 w-66 bg-white border-r border-gray-200 flex flex-col h-screen transform lg:translate-x-0 shrink-0">
+    class="fixed lg:static inset-y-0 left-0 z-40 w-66 bg-white dark:bg-[#0B0F0D] border-r border-gray-200 dark:border-[#27332C] flex flex-col h-screen transform lg:translate-x-0 shrink-0 transition-colors duration-200">
 
     <!-- Logo -->
-    <div class="h-20 px-6 flex items-center justify-between border-b border-gray-100 shrink-0">
+    <div class="h-20 px-6 flex items-center justify-between border-b border-gray-100 dark:border-[#27332C] shrink-0">
         <div class="flex items-center">
             <div class="w-10 h-10 bg-gradient-to-br from-green-600 to-green-700 rounded-xl flex items-center justify-center shadow-sm">
                 <i data-lucide="leaf" class="w-5 h-5 text-white"></i>
             </div>
             <div class="ml-3">
-                <h1 class="font-bold text-lg text-gray-800 leading-tight">AgriStock</h1>
-                <p class="text-xs text-gray-400">Farm Inventory</p>
+                <h1 class="font-bold text-lg text-gray-800 dark:text-gray-100 leading-tight">AgriStock</h1>
+                <p class="text-xs text-gray-400 dark:text-gray-500">Farm Inventory</p>
             </div>
         </div>
-        <button @click="sidebarOpen = false" class="text-gray-400 hover:text-gray-600 lg:hidden">
+        <button @click="sidebarOpen = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 lg:hidden">
             <i data-lucide="x" class="w-5 h-5"></i>
         </button>
     </div>
@@ -42,8 +42,8 @@
             <a href="{{ route('dashboard') }}"
             class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
             {{ request()->routeIs('dashboard')
-                    ? 'bg-green-600 text-white shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900' }}">
+                    ? 'bg-green-600 text-white shadow-sm font-semibold'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#161F1A] hover:text-gray-900 dark:hover:text-white' }}">
                 <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
                 Dashboard
             </a>
@@ -53,7 +53,9 @@
             <div>
                 <button @click="open = (open === 'products' ? '' : 'products')"
                         class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                        {{ request()->routeIs('products.*','categories.*','units.*') ? 'text-green-700 bg-green-100 font-bold' : 'text-gray-700 hover:bg-gray-100' }}">
+                        {{ request()->routeIs('products.*','categories.*','units.*')
+                            ? 'text-green-700 dark:text-green-400 bg-green-100/70 dark:bg-green-950/40 font-bold'
+                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                     <span class="flex items-center gap-3">
                         <i data-lucide="package" class="w-4 h-4"></i>
                         Product Management
@@ -61,22 +63,22 @@
                     <i data-lucide="chevron-right" class="w-4 h-4 transition-transform duration-200" :class="open === 'products' && 'rotate-90'"></i>
                 </button>
 
-                <div x-show="open === 'products'" x-collapse class="mt-1 ml-[1.15rem] pl-4 border-l border-gray-150 space-y-0.5">
+                <div x-show="open === 'products'" x-collapse class="mt-1 ml-[1.15rem] pl-4 border-l border-gray-150 dark:border-[#27332C] space-y-0.5">
                     @can('products.view')
-                    <a href="{{ route('products.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('products.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('products.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('products.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="eye" class="w-3.5 h-3.5"></i> All Products
                     </a>
                     @endcan
                     @can('products.create')
-                    <a href="{{ route('products.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('products.create') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('products.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('products.create') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Product
                     </a>
                     @endcan
                     @can('products.view')
-                    <a href="{{ route('categories.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('categories.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('categories.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('categories.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="tags" class="w-3.5 h-3.5"></i> Manage Categories
                     </a>
-                    <a href="{{ route('units.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('units.*') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('units.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('units.*') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="ruler" class="w-3.5 h-3.5"></i> Units of Measurement
                     </a>
                     @endcan
@@ -90,8 +92,8 @@
                 <button @click="open = (open === 'inventory' ? '' : 'inventory')"
                         class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
                         {{ request()->routeIs('inventories.*', 'stock-outs.*', 'stock-adjustments.*', 'inventory-history.*', 'low-stock.*')
-                            ? 'text-green-700 bg-green-50 font-semibold'
-                            : 'text-gray-600 hover:bg-gray-50' }}">
+                            ? 'text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-950/40 font-semibold'
+                            : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#161F1A]' }}">
                     <span class="flex items-center gap-3 flex-1 min-w-0">
                         <i data-lucide="warehouse" class="w-4 h-4 shrink-0"></i>
                         <span class="truncate">Inventory Management</span>
@@ -103,34 +105,34 @@
                             </span>
                         @endif
                         <i data-lucide="chevron-right"
-                        class="w-3.5 h-3.5 text-gray-400 transition-transform"
+                        class="w-3.5 h-3.5 text-gray-400 dark:text-gray-500 transition-transform"
                         :class="open === 'inventory' && 'rotate-90'"></i>
                     </span>
                 </button>
 
-                <div x-show="open === 'inventory'" x-collapse class="mt-1 ml-[1.15rem] pl-4 border-l border-gray-150 space-y-0.5">
-                    <a href="{{ route('inventories.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('inventories.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                <div x-show="open === 'inventory'" x-collapse class="mt-1 ml-[1.15rem] pl-4 border-l border-gray-150 dark:border-[#27332C] space-y-0.5">
+                    <a href="{{ route('inventories.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('inventories.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="layers" class="w-3.5 h-3.5"></i> Current Stock
                     </a>
                     @can('inventory.stock-in')
-                    <a href="{{ route('inventories.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('inventories.create') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('inventories.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('inventories.create') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="arrow-down-to-line" class="w-3.5 h-3.5"></i> Stock In
                     </a>
                     @endcan
                     @can('inventory.stock-out')
-                    <a href="{{ route('stock-outs.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('stock-outs.create') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('stock-outs.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('stock-outs.create') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="arrow-up-from-line" class="w-3.5 h-3.5"></i> Stock Out
                     </a>
                     @endcan
                     @can('inventory.manage')
-                    <a href="{{ route('stock-adjustments.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('stock-adjustments.create') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('stock-adjustments.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('stock-adjustments.create') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i> Stock Adjustment
                     </a>
                     @endcan
-                    <a href="{{ route('inventory-history.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('inventory-history.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('inventory-history.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('inventory-history.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="history" class="w-3.5 h-3.5"></i> Inventory History
                     </a>
-                    <a href="{{ route('low-stock.index') }}" class="flex items-center justify-between px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('low-stock.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('low-stock.index') }}" class="flex items-center justify-between px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('low-stock.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <span class="flex items-center gap-2.5">
                             <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Low Stock Monitoring
                         </span>
@@ -147,7 +149,9 @@
             <div>
                 <button @click="open = (open === 'suppliers' ? '' : 'suppliers')"
                         class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                        {{ request()->routeIs('suppliers.*') ? 'text-green-700 bg-green-100 font-bold' : 'text-gray-700 hover:bg-gray-100' }}">
+                        {{ request()->routeIs('suppliers.*')
+                            ? 'text-green-700 dark:text-green-400 bg-green-100/70 dark:bg-green-950/40 font-bold'
+                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                     <span class="flex items-center gap-3">
                         <i data-lucide="truck" class="w-4 h-4"></i>
                         Suppliers
@@ -155,19 +159,19 @@
                     <i data-lucide="chevron-right" class="w-4 h-4 transition-transform duration-200" :class="open === 'suppliers' && 'rotate-90'"></i>
                 </button>
 
-                <div x-show="open === 'suppliers'" x-collapse class="mt-0.5 ml-[1.15rem] pl-4 border-l border-gray-150 space-y-0.5">
+                <div x-show="open === 'suppliers'" x-collapse class="mt-0.5 ml-[1.15rem] pl-4 border-l border-gray-150 dark:border-[#27332C] space-y-0.5">
                     @can('suppliers.view')
-                    <a href="{{ route('suppliers.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('suppliers.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('suppliers.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('suppliers.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="list" class="w-3.5 h-3.5"></i> All Suppliers
                     </a>
                     @endcan
                     @can('suppliers.create')
-                    <a href="{{ route('suppliers.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('suppliers.create') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('suppliers.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('suppliers.create') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Add Supplier
                     </a>
                     @endcan
                     @can('suppliers.view')
-                    <a href="{{ route('suppliers.directory') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('suppliers.directory') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('suppliers.directory') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('suppliers.directory') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="book-user" class="w-3.5 h-3.5"></i> Contact Directory
                     </a>
                     @endcan
@@ -175,36 +179,13 @@
             </div>
             @endcanany
 
-            <!-- Purchase Orders -->
-            {{-- <div>
-                <button @click="open = (open === 'orders' ? '' : 'orders')"
-                        class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                        {{ request()->routeIs('purchase-orders.*') ? 'text-green-700' : 'text-gray-700 hover:bg-gray-100' }}">
-                    <span class="flex items-center gap-3">
-                        <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-                        Purchase Orders
-                    </span>
-                    <i data-lucide="chevron-right" class="w-4 h-4 transition-transform duration-200" :class="open === 'orders' && 'rotate-90'"></i>
-                </button>
-
-                <div x-show="open === 'orders'" x-collapse class="mt-0.5 ml-[1.15rem] pl-4 border-l border-gray-150 space-y-0.5">
-                    <a href="" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('purchase-orders.index') ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
-                        <i data-lucide="list-checks" class="w-3.5 h-3.5"></i> All Orders
-                    </a>
-                    <a href="" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('purchase-orders.create') ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
-                        <i data-lucide="file-plus" class="w-3.5 h-3.5"></i> Create PO
-                    </a>
-                    <a href="" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('purchase-orders.history') ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
-                        <i data-lucide="history" class="w-3.5 h-3.5"></i> Order History
-                    </a>
-                </div>
-            </div> --}}
-
             <!-- Reports -->
             <div>
                 <button @click="open = (open === 'reports' ? '' : 'reports')"
                         class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                        {{ request()->routeIs('reports.*') ? 'text-green-700 bg-green-100 font-bold' : 'text-gray-700 hover:bg-gray-100' }}">
+                        {{ request()->routeIs('reports.*')
+                            ? 'text-green-700 dark:text-green-400 bg-green-100/70 dark:bg-green-950/40 font-bold'
+                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                     <span class="flex items-center gap-3">
                         <i data-lucide="chart-column" class="w-4 h-4"></i>
                         Reports
@@ -212,27 +193,22 @@
                     <i data-lucide="chevron-right" class="w-4 h-4 transition-transform duration-200" :class="open === 'reports' && 'rotate-90'"></i>
                 </button>
 
-                <div x-show="open === 'reports'" x-collapse class="mt-0.5 ml-[1.15rem] pl-4 border-l border-gray-150 space-y-0.5">
+                <div x-show="open === 'reports'" x-collapse class="mt-0.5 ml-[1.15rem] pl-4 border-l border-gray-150 dark:border-[#27332C] space-y-0.5">
                     @can('reports.stock')
-                    <a href="{{ route('reports.stock') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('reports.stock') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('reports.stock') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('reports.stock') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="bar-chart-3" class="w-3.5 h-3.5"></i> Stock Report
                     </a>
                     @endcan
                     @can('reports.movement')
-                    <a href="{{ route('reports.movement') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('reports.movement') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('reports.movement') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('reports.movement') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="repeat" class="w-3.5 h-3.5"></i> Movement Report
                     </a>
                     @endcan
                     @can('reports.expiry')
-                    <a href="{{ route('reports.expiry') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('reports.expiry') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('reports.expiry') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('reports.expiry') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="calendar-x" class="w-3.5 h-3.5"></i> Expiry Report
                     </a>
                     @endcan
-                    {{-- @can('reports.purchase')
-                    <a href="" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('reports.purchase') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
-                        <i data-lucide="receipt" class="w-3.5 h-3.5"></i> Purchase Report
-                    </a>
-                    @endcan --}}
                 </div>
             </div>
 
@@ -241,7 +217,9 @@
             <div>
                 <button @click="open = (open === 'users' ? '' : 'users')"
                         class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                        {{ request()->routeIs('users.*') ? 'text-green-700 bg-green-100 font-bold' : 'text-gray-700 hover:bg-gray-100' }}">
+                        {{ request()->routeIs('users.*')
+                            ? 'text-green-700 dark:text-green-400 bg-green-100/70 dark:bg-green-950/40 font-bold'
+                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                     <span class="flex items-center gap-3">
                         <i data-lucide="users" class="w-4 h-4"></i>
                         User Management
@@ -249,19 +227,19 @@
                     <i data-lucide="chevron-right" class="w-4 h-4 transition-transform duration-200" :class="open === 'users' && 'rotate-90'"></i>
                 </button>
 
-                <div x-show="open === 'users'" x-collapse class="mt-0.5 ml-[1.15rem] pl-4 border-l border-gray-150 space-y-0.5">
+                <div x-show="open === 'users'" x-collapse class="mt-0.5 ml-[1.15rem] pl-4 border-l border-gray-150 dark:border-[#27332C] space-y-0.5">
                     @can('viewAny', App\Models\User::class)
-                    <a href="{{ route('users.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('users.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('users.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('users.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="users" class="w-3.5 h-3.5"></i> All Users
                     </a>
                     @endcan
                     @can('create', App\Models\User::class)
-                    <a href="{{ route('users.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('users.create') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('users.create') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('users.create') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Add User
                     </a>
                     @endcan
                     @can('viewAny', App\Models\User::class)
-                    <a href="{{ route('users.roles') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('users.roles') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100' }}">
+                    <a href="{{ route('users.roles') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('users.roles') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Roles &amp; Permissions
                     </a>
                     @endcan
@@ -273,8 +251,8 @@
             <a href="{{ route('profile.edit') }}"
             class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
             {{ request()->routeIs('profile.edit')
-                    ? 'bg-green-600 text-white shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900' }}">
+                    ? 'bg-green-600 text-white shadow-sm font-semibold'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#161F1A] hover:text-gray-900 dark:hover:text-white' }}">
                 <i data-lucide="settings" class="w-4 h-4"></i>
                 Settings
             </a>
@@ -283,19 +261,19 @@
     </nav>
 
     <!-- User -->
-    <div class="border-t border-gray-100 p-4 shrink-0">
+    <div class="border-t border-gray-100 dark:border-[#27332C] p-4 shrink-0">
         <div class="flex items-center gap-3">
             <x-avatar size="w-9 h-9" text-size="text-sm" />
 
             <div class="min-w-0 flex-1">
-                <p class="text-sm font-semibold text-gray-800 truncate">{{ Auth::user()->name }}</p>
-                <p class="text-xs text-gray-500">{{ Auth::user()->role->value }}</p>
+                <p class="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate">{{ Auth::user()->name }}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">{{ Auth::user()->role->value }}</p>
             </div>
 
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" title="Sign out"
-                        class="text-gray-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors shrink-0">
+                        class="text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 p-2 rounded-lg transition-colors shrink-0">
                     <i data-lucide="log-out" class="w-4 h-4"></i>
                 </button>
             </form>

@@ -1,20 +1,27 @@
 <x-guest-layout>
-    <h1 class="font-display text-3xl font-bold text-gray-900 mb-1.5">Forgot password?</h1>
-    <p class="text-gray-500 mb-8">No problem — enter your email and we'll send you a reset link.</p>
+    <!-- Header Section -->
+    <div class="mb-8 text-left">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-[#F1F5F2] mb-2 tracking-tight transition-colors duration-300">
+            Forgot password?
+        </h1>
+        <p class="text-sm text-gray-500 dark:text-[#9AA79F] transition-colors duration-300">
+            No problem enter your email and we'll send you a reset link.
+        </p>
+    </div>
 
     <!-- Session Status -->
     @if(session('status'))
-        <div class="mb-5 bg-green-50 border border-green-200 rounded-xl p-3.5 flex items-start gap-2.5">
-            <i data-lucide="check-circle" class="w-4 h-4 text-green-600 mt-0.5 shrink-0"></i>
-            <p class="text-sm text-green-700">{{ session('status') }}</p>
+        <div class="mb-5 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-900/40 rounded-xl p-3.5 flex items-start gap-3 transition-colors duration-300">
+            <i data-lucide="check-circle" class="w-4 h-4 text-green-600 dark:text-[#22C55E] mt-0.5 shrink-0"></i>
+            <p class="text-xs sm:text-sm text-green-700 dark:text-green-300 font-medium">{{ session('status') }}</p>
         </div>
     @endif
 
     <!-- Validation Errors -->
     @if($errors->any())
-        <div class="mb-5 bg-red-50 border border-red-200 rounded-xl p-3.5 flex items-start gap-2.5">
-            <i data-lucide="circle-alert" class="w-4 h-4 text-red-600 mt-0.5 shrink-0"></i>
-            <p class="text-sm text-red-700">{{ $errors->first() }}</p>
+        <div class="mb-5 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/40 rounded-xl p-3.5 flex items-start gap-3 transition-colors duration-300">
+            <i data-lucide="circle-alert" class="w-4 h-4 text-red-600 dark:text-red-400 mt-0.5 shrink-0"></i>
+            <p class="text-xs sm:text-sm text-red-700 dark:text-red-300 font-medium">{{ $errors->first() }}</p>
         </div>
     @endif
 
@@ -23,19 +30,26 @@
 
         <!-- Email -->
         <div class="mb-6">
-            <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Email Address</label>
-            <input id="email" type="email" name="email" value="{{ old('email') }}" placeholder="demo@agristock.ph" required autofocus
-                   class="block w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 transition-colors">
+            <label for="email" class="block text-sm font-medium text-gray-800 dark:text-[#F1F5F2] mb-2 transition-colors duration-300">
+                Email
+            </label>
+            <input id="email" type="email" name="email" value="{{ old('email') }}"
+                   placeholder="demo@agristock.ph" required autofocus autocomplete="username"
+                   class="block w-full border border-gray-200 dark:border-[#27332C] bg-gray-50 dark:bg-[#1C2621] focus:bg-white dark:focus:bg-[#111714] rounded-xl px-4 py-3.5 text-sm text-gray-900 dark:text-[#F1F5F2] placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-[#22C55E] transition-all">
         </div>
 
+        <!-- Submit Button -->
         <button type="submit"
-                class="w-full bg-green-700 hover:bg-green-800 text-white py-3 rounded-lg font-semibold transition-colors">
+                class="w-full bg-green-600 hover:bg-green-700 active:bg-green-800 dark:bg-green-600 dark:hover:bg-green-500 text-white py-3.5 px-4 rounded-xl font-semibold text-base shadow-sm transition-all duration-150 text-center">
             Email Password Reset Link
         </button>
     </form>
 
-    <p class="text-center text-sm text-gray-500 mt-6">
+    <!-- Back to Sign In Link -->
+    <p class="text-center text-sm text-gray-500 dark:text-[#9AA79F] mt-6 transition-colors duration-300">
         Remember your password?
-        <a href="{{ route('login') }}" class="text-green-700 hover:text-green-800 font-medium">Back to sign in</a>
+        <a href="{{ route('login') }}" class="text-green-700 dark:text-[#22C55E] hover:text-green-800 dark:hover:text-green-400 font-medium transition-colors">
+            Back to sign in
+        </a>
     </p>
 </x-guest-layout>
