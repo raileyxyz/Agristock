@@ -23,7 +23,7 @@
     </script>
 </head>
 
-<body class="font-sans antialiased bg-gray-50 dark:bg-[#0B0F0D] text-gray-900 dark:text-gray-100 transition-colors duration-200 ease-in-out">
+<body class="font-sans antialiased bg-gray-50 dark:bg-[#0B0F0D] text-gray-900 dark:text-gray-100">
 
     <div x-data="{
             sidebarOpen: false,
@@ -37,7 +37,7 @@
         "
         class="flex h-screen overflow-hidden">
 
-        <!-- Backdrop (mobile/tablet only) -->
+        <!-- Backdrop -->
         <div x-show="sidebarOpen"
             x-transition:enter="transition-opacity ease-linear duration-200"
             x-transition:enter-start="opacity-0"
@@ -52,14 +52,14 @@
         <!-- Sidebar -->
         <x-sidebar />
 
-        <!-- Main -->
-        <div class="flex-1 flex flex-col overflow-hidden bg-gray-50 dark:bg-[#0B0F0D] transition-colors duration-200 ease-in-out">
+        <!-- 2. Burahin ang bg-gray-50 dark:bg-[#0B0F0D] at transition sa WRAPPER DIV -->
+        <div class="flex-1 flex flex-col overflow-hidden">
 
             <!-- Topbar -->
             <x-topbar />
 
-            <!-- Content -->
-            <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-[#0B0F0D] transition-colors duration-200 ease-in-out">
+            <!-- 3. Burahin ang bg-gray-50 dark:bg-[#0B0F0D] at transition sa MAIN tag -->
+            <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
                 {{ $slot }}
             </main>
 

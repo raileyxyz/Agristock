@@ -83,11 +83,25 @@
             },
             handleThemeChange() {
                 this.isDark = document.documentElement.classList.contains('dark');
-                if (this.trendChart && this.categoryChart) {
-                    this.trendChart.destroy();
-                    this.categoryChart.destroy();
-                    this.renderTrendChart();
-                    this.renderCategoryChart();
+
+                if (this.trendChart) {
+                    const gridColor = this.isDark ? '#1F2B23' : '#f1f5f9';
+                    const textColor = this.isDark ? '#9CA3AF' : '#6B7280';
+
+                    this.trendChart.options.scales.y.grid.color = gridColor;
+                    this.trendChart.options.scales.y.ticks.color = textColor;
+                    this.trendChart.options.scales.x.ticks.color = textColor;
+                    this.trendChart.update('none');
+                }
+
+                // Mabilis na pag-update ng category chart
+                if (this.categoryChart) {
+                    const textColor = this.isDark ? '#D1D5DB' : '#374151';
+                    const borderColor = this.isDark ? '#111713' : '#ffffff';
+
+                    this.categoryChart.data.datasets[0].borderColor = borderColor;
+                    this.categoryChart.options.plugins.legend.labels.color = textColor;
+                    this.categoryChart.update('none');
                 }
             }
         }"

@@ -5,3 +5,30 @@
 [x-cloak] {
     display: none !important;
 }
+
+/* Custom Neutral Gray Scrollbar */
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    /* Semi-transparent neutral gray */
+    background: rgba(156, 163, 175, 0.4);
+    border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    /* Solid gray kapag in-hover */
+    background: rgba(156, 163, 175, 0.8);
+}
+
+/* Firefox Support */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.4) transparent;
+}
