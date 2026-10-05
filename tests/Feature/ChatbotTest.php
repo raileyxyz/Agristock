@@ -57,9 +57,10 @@ function chatAddStock(Product $product, float $quantity): Inventory
         'user_id' => User::factory()->staff()->create()->id,
         'quantity' => $quantity,
         'remaining_quantity' => $quantity,
+        'batch_number' => 'BATCH-' . uniqid(),
+        'location' => 'Warehouse A',
     ]);
 }
-
 /*
 |--------------------------------------------------------------------------
 | ChatbotService
@@ -67,16 +68,16 @@ function chatAddStock(Product $product, float $quantity): Inventory
 */
 
 it('returns the reply and saves both messages', function () {
-    Http::fake(['openrouter.ai/*' => Http::response(chatTextResponse('Hello po!'))]);
+    Http::fake(['openrouter.ai/*' => Http::response(chatTextResponse('Hello!'))]);
     $user = User::factory()->staff()->create();
 
     $result = app(ChatbotService::class)->ask($user, 'Hi');
 
     expect($result['success'])->toBeTrue()
-        ->and($result['message'])->toBe('Hello po!');
+        ->and($result['message'])->toBe('Hello!');
 
     $this->assertDatabaseHas('chat_messages', ['user_id' => $user->id, 'role' => 'user', 'content' => 'Hi']);
-    $this->assertDatabaseHas('chat_messages', ['user_id' => $user->id, 'role' => 'assistant', 'content' => 'Hello po!']);
+    $this->assertDatabaseHas('chat_messages', ['user_id' => $user->id, 'role' => 'assistant', 'content' => 'Hello!']);
 });
 
 it('strips markdown bold from the reply', function () {
@@ -92,14 +93,14 @@ it('runs a tool call and then returns the final answer', function () {
     Http::fake([
         'openrouter.ai/*' => Http::sequence()
             ->push(chatToolCallResponse())
-            ->push(chatTextResponse('Walang low stock ngayon.')),
+            ->push(chatTextResponse('There are no low stock products right now.')),
     ]);
     $user = User::factory()->staff()->create();
 
     $result = app(ChatbotService::class)->ask($user, 'Which products are low in stock?');
 
     expect($result['success'])->toBeTrue()
-        ->and($result['message'])->toBe('Walang low stock ngayon.');
+        ->and($result['message'])->toBe('There are no low stock products right now.');
 
     Http::assertSentCount(2);
     Http::assertSent(fn ($request) => collect($request['messages'])->contains('role', 'tool'));
@@ -112,7 +113,7 @@ it('returns a friendly message on rate limit and saves nothing', function () {
     $result = app(ChatbotService::class)->ask($user, 'Hi');
 
     expect($result['success'])->toBeFalse()
-        ->and($result['message'])->toContain('Busy');
+        ->and($result['message'])->toContain('rate limit');
 
     $this->assertDatabaseCount('chat_messages', 0);
 });

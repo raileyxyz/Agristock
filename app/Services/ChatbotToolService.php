@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Enums\Status;
 use App\Models\Product;
 use App\Models\Supplier;
+
 
 class ChatbotToolService
 {
@@ -135,8 +137,11 @@ class ChatbotToolService
 
         $suppliers = Supplier::active()
             ->whereHas('categories', function ($query) use ($keyword) {
-                $query->where('categories.name', 'like', "%{$keyword}%")
-                    ->orWhereIn('categories.id', Product::where('name', 'like', "%{$keyword}%")->select('category_id'));
+                $query->where('categories.status', Status::ACTIVE->value)
+                    ->where(function ($query) use ($keyword) {
+                        $query->where('categories.name', 'like', "%{$keyword}%")
+                            ->orWhereIn('categories.id', Product::where('name', 'like', "%{$keyword}%")->select('category_id'));
+                    });
             })
             ->with('categories:id,name')
             ->orderBy('company_name')

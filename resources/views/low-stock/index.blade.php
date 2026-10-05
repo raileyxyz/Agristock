@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="mb-1">
-        <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Low Stock Monitoring</h1>
-        <p class="text-gray-400 text-sm mt-1">{{ $totalCount }} {{ Str::plural('item', $totalCount) }} need attention</p>
+        <h1 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 transition-colors duration-200 ease-in-out">Low Stock Monitoring</h1>
+        <p class="text-gray-400 dark:text-gray-400 text-sm mt-1 transition-colors duration-200 ease-in-out">{{ $totalCount }} {{ Str::plural('item', $totalCount) }} need attention</p>
     </div>
 
     <!-- Search + Category filter -->
@@ -14,14 +14,14 @@
           class="flex flex-col sm:flex-row gap-3 mt-6">
 
         <div class="relative flex-1 min-w-0">
-            <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+            <i data-lucide="search" class="w-4 h-4 text-gray-400 dark:text-gray-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
             <input type="text" name="search" x-model="search" placeholder="Search products..."
-                   class="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                   class="w-full border border-gray-300 dark:border-[#27332C] bg-white dark:bg-[#111713] text-gray-800 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
         </div>
 
         <div class="relative w-full sm:w-auto">
             <select name="category_id" onchange="this.form.submit()"
-                    class="w-full sm:w-auto appearance-none border border-gray-300 rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    class="w-full sm:w-auto appearance-none border border-gray-300 dark:border-[#27332C] rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white dark:bg-[#111713] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
                 <option value="">All Categories</option>
                 @foreach($categories as $category)
                     <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
@@ -29,7 +29,7 @@
                     </option>
                 @endforeach
             </select>
-            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 dark:text-gray-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
         </div>
     </form>
 
@@ -43,14 +43,14 @@
                 $percent = $reorderPoint > 0 ? min(100, ($current / $reorderPoint) * 100) : 0;
 
                 if ($current <= 0) {
-                    $status = ['label' => 'Out of Stock', 'badge' => 'bg-gray-100 text-gray-600', 'bar' => 'bg-gray-300'];
+                    $status = ['label' => 'Out of Stock', 'badge' => 'bg-gray-100 text-gray-600 dark:bg-[#1C2621] dark:text-gray-400', 'bar' => 'bg-gray-300 dark:bg-gray-600'];
                 } elseif ($current <= $minimumStock) {
-                    $status = ['label' => 'Critical', 'badge' => 'bg-red-50 text-red-600', 'bar' => 'bg-red-500'];
+                    $status = ['label' => 'Critical', 'badge' => 'bg-red-50 text-red-600 dark:bg-red-950/50 dark:text-red-400', 'bar' => 'bg-red-500'];
                 } else {
-                    $status = ['label' => 'Low Stock', 'badge' => 'bg-amber-50 text-amber-600', 'bar' => 'bg-amber-500'];
+                    $status = ['label' => 'Low Stock', 'badge' => 'bg-amber-50 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400', 'bar' => 'bg-amber-500'];
                 }
             @endphp
-            <div class="bg-white border border-gray-200 rounded-xl p-3 sm:p-4">
+            <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl p-3 sm:p-4 transition-colors duration-200 ease-in-out">
                 <div class="flex items-start sm:items-center gap-3 sm:gap-4">
                     <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg flex items-center justify-center text-lg sm:text-xl shrink-0"
                          style="background-color: {{ $product->category->icon_color ?? '#6b7280' }}22;">
@@ -59,7 +59,7 @@
 
                     <div class="flex-1 min-w-0">
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 mb-2">
-                            <p class="font-semibold text-gray-800 truncate">{{ $product->name }}</p>
+                            <p class="font-semibold text-gray-800 dark:text-gray-100 truncate">{{ $product->name }}</p>
                             <div class="flex items-center justify-between sm:justify-end gap-2 sm:gap-3 shrink-0">
                                 <span class="text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap {{ $status['badge'] }}">
                                     {{ $status['label'] }}
@@ -71,22 +71,22 @@
                             </div>
                         </div>
 
-                        <div class="relative h-2 bg-gray-100 rounded-full overflow-hidden">
+                        <div class="relative h-2 bg-gray-100 dark:bg-[#1C2621] rounded-full overflow-hidden">
                             <div class="absolute inset-y-0 left-0 rounded-full {{ $status['bar'] }}" style="width: {{ $percent }}%;"></div>
                         </div>
 
                         <div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 mt-1.5">
-                            <p class="text-xs text-gray-400">Reorder at: {{ rtrim(rtrim(number_format($reorderPoint, 2), '0'), '.') }} {{ $product->unit->abbreviation ?? '' }}</p>
-                            <p class="text-xs text-gray-500">{{ rtrim(rtrim(number_format($current, 2), '0'), '.') }} / {{ rtrim(rtrim(number_format($reorderPoint, 2), '0'), '.') }} {{ $product->unit->abbreviation ?? '' }}</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500">Reorder at: {{ rtrim(rtrim(number_format($reorderPoint, 2), '0'), '.') }} {{ $product->unit->abbreviation ?? '' }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ rtrim(rtrim(number_format($current, 2), '0'), '.') }} / {{ rtrim(rtrim(number_format($reorderPoint, 2), '0'), '.') }} {{ $product->unit->abbreviation ?? '' }}</p>
                         </div>
                     </div>
                 </div>
             </div>
         @empty
-            <div class="bg-white border border-gray-200 rounded-xl px-5 py-14 text-center">
-                <i data-lucide="check-circle" class="w-8 h-8 text-green-300 mx-auto mb-2"></i>
-                <p class="text-gray-500 text-sm">No products need attention right now.</p>
-                <p class="text-gray-400 text-xs mt-1">All active products are above their reorder point.</p>
+            <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl px-5 py-14 text-center transition-colors duration-200 ease-in-out">
+                <i data-lucide="check-circle" class="w-8 h-8 text-green-300 dark:text-green-700 mx-auto mb-2"></i>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">No products need attention right now.</p>
+                <p class="text-gray-400 dark:text-gray-500 text-xs mt-1">All active products are above their reorder point.</p>
             </div>
         @endforelse
     </div>

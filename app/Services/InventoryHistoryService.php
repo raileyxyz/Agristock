@@ -58,7 +58,9 @@ class InventoryHistoryService
                     'date' => $inv->created_at,
                     'product_name' => $inv->product->name ?? '—',
                     'type' => $isTransferMirror ? 'Transfer In' : 'Stock In',
-                    'type_class' => $isTransferMirror ? 'bg-blue-50 text-blue-700' : 'bg-green-50 text-green-700',
+                    'type_class' => $isTransferMirror
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400'
+                        : 'bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-400',
                     'batch_number' => $inv->batch_number,
                     'location' => $inv->location,
                     'quantity' => (float) $inv->quantity,
@@ -87,7 +89,9 @@ class InventoryHistoryService
                     'date' => $out->created_at,
                     'product_name' => $out->product->name ?? '—',
                     'type' => $isTransfer ? 'Transfer Out' : 'Stock Out',
-                    'type_class' => $isTransfer ? 'bg-blue-50 text-blue-700' : 'bg-red-50 text-red-700',
+                    'type_class' => $isTransfer
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400'
+                        : 'bg-red-50 text-red-700 dark:bg-red-950/50 dark:text-red-400',
                     'batch_number' => $out->batch_numbers ?: '—',
                     'location' => $out->location,
                     'quantity' => -1 * (float) $out->quantity,
@@ -113,7 +117,7 @@ class InventoryHistoryService
                 'date' => $adj->created_at,
                 'product_name' => $adj->inventory->product->name ?? '—',
                 'type' => 'Adjustment',
-                'type_class' => 'bg-amber-50 text-amber-700',
+                'type_class' => 'bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-400',
                 'batch_number' => $adj->inventory->batch_number ?? '—',
                 'location' => $adj->inventory->location ?? '—',
                 'quantity' => $adj->difference,

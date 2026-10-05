@@ -5,8 +5,7 @@
         <p class="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">System access control matrix for AgriStock.</p>
     </div>
 
-    <!-- Grid Container -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 items-start mt-4 sm:mt-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-4 sm:mt-6">
         @php
             $roleStyles = [
                 'Admin' => ['badge' => 'bg-purple-100 text-purple-700'],
@@ -16,9 +15,10 @@
         @endphp
 
         @foreach($permissions as $role => $perms)
-            <div class="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 shadow-sm space-y-4">
+            <!-- Card Container (Inilagay ang flex flex-col h-full) -->
+            <div class="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 shadow-sm flex flex-col h-full space-y-4">
                 <!-- Role Header Card Top -->
-                <div class="flex items-center gap-3 pb-3 sm:pb-4 border-b border-gray-100">
+                <div class="flex items-center gap-3 pb-3 sm:pb-4 border-b border-gray-100 shrink-0">
                     <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center shrink-0">
                         <i data-lucide="shield" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                     </div>
@@ -33,7 +33,7 @@
                 </div>
 
                 <!-- Permissions List -->
-                <ul class="space-y-2 sm:space-y-2.5">
+                <ul class="space-y-2 sm:space-y-2.5 flex-1">
                     @foreach($perms as $perm)
                         <li class="flex items-start gap-2 text-xs sm:text-sm text-gray-600">
                             <i data-lucide="check-circle" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600 shrink-0 mt-0.5"></i>

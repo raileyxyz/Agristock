@@ -97,18 +97,30 @@ class Inventory extends Model
         $reorder = $this->product->reorder_point ?? 0;
 
         if ($remaining <= 0) {
-            return ['label' => 'Out of Stock', 'class' => 'bg-gray-100 text-gray-500'];
+            return [
+                'label' => 'Out of Stock',
+                'class' => 'bg-gray-100 text-gray-500 dark:bg-gray-800/60 dark:text-gray-400'
+            ];
         }
 
         if ($remaining <= $minimum) {
-            return ['label' => 'Critical', 'class' => 'bg-red-50 text-red-600'];
+            return [
+                'label' => 'Critical',
+                'class' => 'bg-red-50 text-red-600 dark:bg-red-950/50 dark:text-red-400'
+            ];
         }
 
         if ($remaining <= $reorder) {
-            return ['label' => 'Low Stock', 'class' => 'bg-amber-50 text-amber-600'];
+            return [
+                'label' => 'Low Stock',
+                'class' => 'bg-amber-50 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400'
+            ];
         }
 
-        return ['label' => 'In Stock', 'class' => 'bg-green-50 text-green-700'];
+        return [
+            'label' => 'In Stock',
+            'class' => 'bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-400'
+        ];
     }
 
     public function getExpiryDisplayAttribute(): array
