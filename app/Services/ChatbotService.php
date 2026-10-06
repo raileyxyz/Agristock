@@ -78,7 +78,7 @@ class ChatbotService
 
                 foreach ($toolCalls as $call) {
                     $arguments = json_decode($call['function']['arguments'] ?? '{}', true) ?? [];
-                    $result = $this->tools->execute($call['function']['name'] ?? '', $arguments);
+                    $result = $this->tools->execute($user, $call['function']['name'] ?? '', $arguments);
 
                     $messages[] = [
                         'role' => 'tool',
@@ -107,7 +107,7 @@ class ChatbotService
         ChatMessage::where('user_id', $user->id)->delete();
     }
 
-    private function callOpenRouter(array $messages)
+    private function callOpenRouter(User $user, array $messages)
     {
         return Http::withToken(config('services.openrouter.key'))
             ->acceptJson()
@@ -115,7 +115,7 @@ class ChatbotService
             ->post(config('services.openrouter.base_url') . '/chat/completions', [
                 'model' => config('services.openrouter.model'),
                 'messages' => $messages,
-                'tools' => $this->tools->definitions(),
+                'tools' => $this->tools->definitions($user),
             ]);
     }
 
@@ -145,8 +145,8 @@ class ChatbotService
         return <<<PROMPT
         You are the AgriStock assistant, built into an agriculture inventory system.
         You answer questions about product stock, low-stock items, and suppliers.
-
         Rules:
+        - Some information is not available to every user. If a tool returns an access error, or no available tool can answer the question, say that you do not have access to that information. Never guess.
         - Use the provided tools to get data. Answer ONLY from tool results.
         - If a tool returns no data, say so. Never guess or invent products, quantities, or suppliers.
         - If the question is not about this inventory system, politely say you can only help with inventory questions.

@@ -56,3 +56,16 @@ it('buckets expiry batches into expired, within 60 days, and safe', function () 
         ->and($summary['within_60'])->toBe(1)
         ->and($summary['safe'])->toBe(1);
 });
+
+it('ignores depleted batches in the expiry report', function () {
+    $manager = User::factory()->manager()->create();
+    $product = Product::factory()->create(['expiry_track' => true]);
+
+    Inventory::factory()->for($product)->create(['expiry_date' => now()->subDay(), 'remaining_quantity' => 0]);
+    Inventory::factory()->for($product)->create(['expiry_date' => now()->subDay(), 'remaining_quantity' => 5]);
+
+    $summary = $this->actingAs($manager)->get('/reports/expiry')->viewData('summary');
+
+    expect($summary['expired'])->toBe(1)
+        ->and($summary['tracked'])->toBe(1);
+});

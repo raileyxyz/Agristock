@@ -29,7 +29,7 @@ return [
         'Inventory Management (stock in/out/view)',
         'Supplier Management (view)',
         // 'Purchase Orders (view)',
-        'Reports (stock report)',
+        'Reports (stock report/expiry report)',
         'Settings',
     ],
 ];

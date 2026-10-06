@@ -2,7 +2,9 @@
     <div x-data="{
             isDark: document.documentElement.classList.contains('dark'),
             init() {
-                this.renderTrendChart();
+                if (this.$refs.trendChart) {
+                    this.renderTrendChart();
+                }
                 this.renderCategoryChart();
             },
             trendChart: null,
@@ -114,7 +116,7 @@
         </div>
 
         <!-- Summary Cards Grid -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4 mb-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 @can('reports.valuation') xl:grid-cols-6 @else xl:grid-cols-5 @endcan gap-3 sm:gap-4 mb-6">
 
             <!-- Total Products -->
             <a href="{{ route('products.index') }}" class="group relative bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ease-in-out flex flex-col justify-between min-h-[110px] sm:min-h-[120px]">
@@ -192,6 +194,7 @@
             </a>
 
             <!-- Monthly Inventory Value -->
+            @can('reports.valuation')
             <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ease-in-out flex flex-col justify-between min-h-[110px] sm:min-h-[120px]">
                 <div>
                     <div class="flex items-start justify-between mb-2 sm:mb-3">
@@ -204,18 +207,21 @@
                 </div>
                 <p class="text-[10px] sm:text-[11px] text-gray-400 dark:text-gray-500 mt-1 truncate transition-colors duration-200 ease-in-out">Based on current stock</p>
             </div>
+            @endcan
 
         </div>
 
         <!-- Charts Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
+            @can('reports.valuation')
             <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-6 shadow-sm transition-colors duration-200 ease-in-out">
                 <h2 class="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200 mb-3 sm:mb-4 transition-colors duration-200 ease-in-out">Monthly Inventory Value</h2>
                 <div class="h-56 sm:h-64 relative">
                     <canvas x-ref="trendChart"></canvas>
                 </div>
             </div>
-            <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-6 shadow-sm transition-colors duration-200 ease-in-out">
+            @endcan
+            <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-6 shadow-sm transition-colors duration-200 ease-in-out @cannot('reports.valuation') lg:col-span-2 @endcannot">
                 <h2 class="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200 mb-3 sm:mb-4 transition-colors duration-200 ease-in-out">Stock by Category</h2>
                 <div class="h-56 sm:h-64 relative">
                     <canvas x-ref="categoryChart"></canvas>

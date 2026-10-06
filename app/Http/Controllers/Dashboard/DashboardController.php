@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Services\DashboardService;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -12,10 +13,12 @@ class DashboardController extends Controller
         protected DashboardService $dashboardService
     ) {}
 
-    public function index(): View
+    public function index(Request $request): View
     {
-        $summary = $this->dashboardService->getSummaryCards();
-        $valueTrend = $this->dashboardService->getMonthlyInventoryValueTrend();
+        $canSeeValue = $request->user()->can('reports.valuation');
+
+        $summary = $this->dashboardService->getSummaryCards($canSeeValue);
+        $valueTrend = $canSeeValue ? $this->dashboardService->getMonthlyInventoryValueTrend() : ['labels' => [], 'values' => []];
         $categoryData = $this->dashboardService->getStockByCategory();
         $lowStockItems = $this->dashboardService->getLowStockItems();
         $expiringSoonItems = $this->dashboardService->getExpiringSoonItems();

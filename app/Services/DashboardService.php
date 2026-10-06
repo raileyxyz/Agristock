@@ -16,7 +16,7 @@ class DashboardService
         protected ReportService $reportService
     ) {}
 
-    public function getSummaryCards(): array
+    public function getSummaryCards(bool $includeValue = true): array
     {
         $lowStockProducts = Product::needsReorder()->get(['id', 'minimum_stock']);
 
@@ -34,7 +34,7 @@ class DashboardService
             'low_stock_critical' => $criticalCount,
             'expiring_soon_count' => $expirySummary['within_30'] + $expirySummary['within_60'],
             'expired_count' => $expirySummary['expired'],
-            'monthly_inventory_value' => $this->currentInventoryValue(),
+            'monthly_inventory_value' => $includeValue ? $this->currentInventoryValue() : null,
         ];
     }
 
@@ -73,7 +73,7 @@ class DashboardService
         return ['labels' => $labels, 'values' => $values];
     }
 
-    private function currentInventoryValue(): float
+    public function currentInventoryValue(): float
     {
         return (float) Inventory::query()
             ->join('products', 'products.id', '=', 'inventories.product_id')

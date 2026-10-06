@@ -81,6 +81,20 @@ class Inventory extends Model
         return $query->when($supplierId, fn($q) => $q->where('supplier_id', $supplierId));
     }
 
+    public function scopeInStock($query)
+    {
+        return $query->where('remaining_quantity', '>', 0);
+    }
+
+    public function scopeFilterStock($query, $stock)
+    {
+        return match ($stock) {
+            'depleted' => $query->where('remaining_quantity', '<=', 0),
+            'all' => $query,
+            default => $query->inStock(),
+        };
+    }
+
     public function getFormattedQuantityAttribute(): string
     {
         $qty = $this->remaining_quantity;

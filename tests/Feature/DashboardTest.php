@@ -49,14 +49,34 @@ it('classifies low stock vs critical stock correctly', function () {
 });
 
 it('calculates the current inventory value from remaining quantity times cost price', function () {
+    $manager = User::factory()->manager()->create();
+
+    $product = Product::factory()->create(['cost_price' => 50]);
+    Inventory::factory()->for($product)->create(['quantity' => 10, 'remaining_quantity' => 10]);
+
+    $summary = $this->actingAs($manager)->get('/dashboard')->viewData('summary');
+
+    expect((float) $summary['monthly_inventory_value'])->toBe(500.0);
+});
+
+it('does not calculate or show the inventory value for staff', function () {
     $staff = User::factory()->staff()->create();
 
     $product = Product::factory()->create(['cost_price' => 50]);
     Inventory::factory()->for($product)->create(['quantity' => 10, 'remaining_quantity' => 10]);
 
-    $summary = $this->actingAs($staff)->get('/dashboard')->viewData('summary');
+    $response = $this->actingAs($staff)->get('/dashboard');
 
-    expect((float) $summary['monthly_inventory_value'])->toBe(500.0);
+    $response->assertOk()->assertDontSee('Inventory Value');
+
+    expect($response->viewData('summary')['monthly_inventory_value'])->toBeNull()
+        ->and($response->viewData('valueTrend')['values'])->toBe([]);
+});
+
+it('shows the inventory value to managers and admins', function () {
+    foreach ([User::factory()->manager()->create(), User::factory()->admin()->create()] as $user) {
+        $this->actingAs($user)->get('/dashboard')->assertOk()->assertSee('Inventory Value');
+    }
 });
 
 it('counts expired and expiring-soon batches only for expiry-tracked products', function () {
@@ -73,4 +93,17 @@ it('counts expired and expiring-soon batches only for expiry-tracked products', 
 
     expect($summary['expired_count'])->toBe(1)
         ->and($summary['expiring_soon_count'])->toBe(1);
+});
+
+it('does not count depleted batches as expired or expiring soon', function () {
+    $staff = User::factory()->staff()->create();
+    $product = Product::factory()->create(['expiry_track' => true]);
+
+    Inventory::factory()->for($product)->create(['expiry_date' => now()->subDay(), 'remaining_quantity' => 0]); // depleted, expired
+    Inventory::factory()->for($product)->create(['expiry_date' => now()->addDays(10), 'remaining_quantity' => 0]); // depleted, expiring
+
+    $summary = $this->actingAs($staff)->get('/dashboard')->viewData('summary');
+
+    expect($summary['expired_count'])->toBe(0)
+        ->and($summary['expiring_soon_count'])->toBe(0);
 });

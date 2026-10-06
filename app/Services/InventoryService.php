@@ -23,6 +23,7 @@ class InventoryService
             ->filterCategory($filters['category_id'] ?? null)
             ->filterLocation($filters['location'] ?? null)
             ->filterSupplier($filters['supplier_id'] ?? null)
+            ->filterStock($filters['stock'] ?? null)
             ->latest()
             ->paginate(15)
             ->withQueryString();
@@ -31,8 +32,8 @@ class InventoryService
     public function getSummary(): array
     {
         return [
-            'total_items' => Inventory::count(),
-            'total_locations' => Inventory::distinct('location')->count('location'),
+            'total_items' => Inventory::inStock()->count(),
+            'total_locations' => Inventory::inStock()->distinct('location')->count('location'),
         ];
     }
 

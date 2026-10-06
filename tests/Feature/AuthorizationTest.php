@@ -66,12 +66,12 @@ it('allows admin to update and delete a supplier', function () {
 
 // ── Reports ──────────────────────────────────────
 
-it('forbids staff from viewing movement and expiry reports, but allows the stock report', function () {
+it('allows staff to view the stock and expiry reports, but not the movement report', function () {
     $staff = User::factory()->staff()->create();
 
     $this->actingAs($staff)->get('/reports/stock')->assertOk();
+    $this->actingAs($staff)->get('/reports/expiry')->assertOk();
     $this->actingAs($staff)->get('/reports/movement')->assertForbidden();
-    $this->actingAs($staff)->get('/reports/expiry')->assertForbidden();
 });
 
 it('allows manager to view all report types', function () {

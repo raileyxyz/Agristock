@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Services\ChatbotService;
 use App\Services\ChatbotToolService;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Gate;
 
 beforeEach(function () {
     config([
@@ -60,6 +61,11 @@ function chatAddStock(Product $product, float $quantity): Inventory
         'batch_number' => 'BATCH-' . uniqid(),
         'location' => 'Warehouse A',
     ]);
+}
+
+function chatUser(): User
+{
+    return User::factory()->staff()->create();
 }
 /*
 |--------------------------------------------------------------------------
@@ -159,7 +165,7 @@ it('sends only the last 10 history messages to the model', function () {
 */
 
 it('returns an error array for an unknown tool', function () {
-    $result = app(ChatbotToolService::class)->execute('does_not_exist', []);
+    $result = app(ChatbotToolService::class)->execute(chatUser(), 'does_not_exist', []);
 
     expect($result)->toHaveKey('error');
 });
@@ -176,7 +182,7 @@ it('returns the total stock and unit of a product across batches', function () {
     chatAddStock($product, 30);
     chatAddStock($product, 5);
 
-    $result = app(ChatbotToolService::class)->execute('get_product_stock', ['product_name' => 'Urea']);
+    $result = app(ChatbotToolService::class)->execute(chatUser(), 'get_product_stock', ['product_name' => 'Urea']);
 
     expect($result['found'])->toBeTrue()
         ->and($result['products'])->toHaveCount(1)
@@ -187,7 +193,7 @@ it('returns the total stock and unit of a product across batches', function () {
 it('does not return archived products in the stock lookup', function () {
     Product::factory()->create(['name' => 'Old Urea', 'status' => 'Archived']);
 
-    $result = app(ChatbotToolService::class)->execute('get_product_stock', ['product_name' => 'Old Urea']);
+    $result = app(ChatbotToolService::class)->execute(chatUser(), 'get_product_stock', ['product_name' => 'Old Urea']);
 
     expect($result['found'])->toBeFalse();
 });
@@ -195,7 +201,7 @@ it('does not return archived products in the stock lookup', function () {
 it('does not leak an archived product through a SKU match', function () {
     Product::factory()->create(['name' => 'Something Else', 'sku' => 'URE-999', 'status' => 'Archived']);
 
-    $result = app(ChatbotToolService::class)->execute('get_product_stock', ['product_name' => 'URE-999']);
+    $result = app(ChatbotToolService::class)->execute(chatUser(), 'get_product_stock', ['product_name' => 'URE-999']);
 
     expect($result['found'])->toBeFalse();
 });
@@ -209,14 +215,14 @@ it('lists only active products at or below the reorder point', function () {
     chatAddStock($healthy, 100);
     chatAddStock($archived, 1);
 
-    $result = app(ChatbotToolService::class)->execute('get_low_stock_products', []);
+    $result = app(ChatbotToolService::class)->execute(chatUser(), 'get_low_stock_products', []);
 
     expect($result['count'])->toBe(1)
         ->and($result['products'][0]['name'])->toBe('Low Item');
 });
 
 it('returns zero low stock products when nothing needs reorder', function () {
-    $result = app(ChatbotToolService::class)->execute('get_low_stock_products', []);
+    $result = app(ChatbotToolService::class)->execute(chatUser(), 'get_low_stock_products', []);
 
     expect($result['count'])->toBe(0);
 });
@@ -226,7 +232,7 @@ it('finds active suppliers by category name', function () {
     $supplier = Supplier::factory()->create(['company_name' => 'Yara Fertilizers Inc.', 'status' => 'Active']);
     $supplier->categories()->attach($category->id);
 
-    $result = app(ChatbotToolService::class)->execute('find_suppliers', ['keyword' => 'Fertilizer']);
+    $result = app(ChatbotToolService::class)->execute(chatUser(), 'find_suppliers', ['keyword' => 'Fertilizer']);
 
     expect($result['found'])->toBeTrue()
         ->and($result['suppliers'][0]['company_name'])->toBe('Yara Fertilizers Inc.')
@@ -239,7 +245,7 @@ it('finds suppliers by product name through the product category', function () {
     $supplier = Supplier::factory()->create(['company_name' => 'Yara Fertilizers Inc.', 'status' => 'Active']);
     $supplier->categories()->attach($category->id);
 
-    $result = app(ChatbotToolService::class)->execute('find_suppliers', ['keyword' => 'Urea']);
+    $result = app(ChatbotToolService::class)->execute(chatUser(), 'find_suppliers', ['keyword' => 'Urea']);
 
     expect($result['found'])->toBeTrue()
         ->and($result['suppliers'][0]['company_name'])->toBe('Yara Fertilizers Inc.');
@@ -250,7 +256,7 @@ it('does not return archived suppliers', function () {
     $supplier = Supplier::factory()->create(['status' => 'Archived']);
     $supplier->categories()->attach($category->id);
 
-    $result = app(ChatbotToolService::class)->execute('find_suppliers', ['keyword' => 'Seeds']);
+    $result = app(ChatbotToolService::class)->execute(chatUser(), 'find_suppliers', ['keyword' => 'Seeds']);
 
     expect($result['found'])->toBeFalse();
 });
@@ -260,9 +266,61 @@ it('does not match suppliers through an archived category', function () {
     $supplier = Supplier::factory()->create(['status' => 'Active']);
     $supplier->categories()->attach($category->id);
 
-    $result = app(ChatbotToolService::class)->execute('find_suppliers', ['keyword' => 'Pesticides']);
+    $result = app(ChatbotToolService::class)->execute(chatUser(), 'find_suppliers', ['keyword' => 'Pesticides']);
 
     expect($result['found'])->toBeFalse();
+});
+
+/*
+|--------------------------------------------------------------------------
+| Tool permissions
+|--------------------------------------------------------------------------
+*/
+
+it('only references abilities that exist in config/abilities.php', function () {
+    foreach (ChatbotToolService::TOOL_ABILITIES as $tool => $ability) {
+        expect(array_key_exists($ability, config('abilities')))->toBeTrue("{$tool} uses an unknown ability: {$ability}");
+    }
+});
+
+it('offers the user every tool they are allowed to use', function () {
+    $names = collect(app(ChatbotToolService::class)->definitions(chatUser()))
+        ->pluck('function.name')
+        ->all();
+
+    expect($names)->toBe(['get_product_stock', 'get_low_stock_products', 'find_suppliers']);
+});
+
+it('hides a tool when the user lacks its ability', function () {
+    Gate::define('suppliers.view', fn () => false);
+
+    $names = collect(app(ChatbotToolService::class)->definitions(chatUser()))
+        ->pluck('function.name')
+        ->all();
+
+    expect($names)->toContain('get_product_stock')
+        ->and($names)->not->toContain('find_suppliers');
+});
+
+it('refuses to run a tool the user lacks the ability for', function () {
+    Gate::define('suppliers.view', fn () => false);
+
+    $result = app(ChatbotToolService::class)->execute(chatUser(), 'find_suppliers', ['keyword' => 'Seeds']);
+
+    expect($result)->toBe(['error' => 'You do not have access to this information.']);
+});
+
+it('sends only the allowed tools to the model', function () {
+    Gate::define('suppliers.view', fn () => false);
+    Http::fake(['openrouter.ai/*' => Http::response(chatTextResponse('ok'))]);
+
+    app(ChatbotService::class)->ask(chatUser(), 'Hi');
+
+    Http::assertSent(function ($request) {
+        $names = collect($request['tools'])->pluck('function.name');
+
+        return $names->contains('get_product_stock') && ! $names->contains('find_suppliers');
+    });
 });
 
 /*

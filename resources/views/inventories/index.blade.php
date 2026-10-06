@@ -157,6 +157,16 @@
                 </select>
                 <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 dark:text-gray-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
             </div>
+
+            <div class="relative w-full sm:w-auto">
+                <select name="stock" onchange="this.form.submit()"
+                        class="w-full sm:w-auto appearance-none border border-gray-300 dark:border-[#27332C] rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white dark:bg-[#111713] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
+                    <option value="">In Stock</option>
+                    <option value="depleted" {{ request('stock') === 'depleted' ? 'selected' : '' }}>Depleted</option>
+                    <option value="all" {{ request('stock') === 'all' ? 'selected' : '' }}>All Batches</option>
+                </select>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 dark:text-gray-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            </div>
         </form>
 
         <!-- Inventory table -->

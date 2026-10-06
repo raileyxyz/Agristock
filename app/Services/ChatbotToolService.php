@@ -5,14 +5,26 @@ namespace App\Services;
 use App\Enums\Status;
 use App\Models\Product;
 use App\Models\Supplier;
-
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 
 class ChatbotToolService
 {
-    /**
-     * Tool definitions na ipapadala sa OpenRouter (OpenAI-style function calling).
-     */
-    public function definitions(): array
+    public const TOOL_ABILITIES = [
+        'get_product_stock' => 'inventory.view',
+        'get_low_stock_products' => 'inventory.view',
+        'find_suppliers' => 'suppliers.view',
+    ];
+
+    public function definitions(User $user): array
+    {
+        return array_values(array_filter(
+            $this->allDefinitions(),
+            fn (array $tool) => $this->canUse($user, $tool['function']['name'])
+        ));
+    }
+
+    private function allDefinitions(): array
     {
         return [
             [
@@ -63,17 +75,28 @@ class ChatbotToolService
         ];
     }
 
-    /**
-     * Patakbuhin ang tool na hiningi ng model. Laging array ang balik.
-     */
-    public function execute(string $name, array $arguments): array
+    public function execute(User $user, string $name, array $arguments): array
     {
+        if (! array_key_exists($name, self::TOOL_ABILITIES)) {
+            return ['error' => "Unknown tool: {$name}"];
+        }
+
+        if (! $this->canUse($user, $name)) {
+            return ['error' => 'You do not have access to this information.'];
+        }
+
         return match ($name) {
             'get_product_stock' => $this->getProductStock((string) ($arguments['product_name'] ?? '')),
             'get_low_stock_products' => $this->getLowStockProducts(),
             'find_suppliers' => $this->findSuppliers((string) ($arguments['keyword'] ?? '')),
-            default => ['error' => "Unknown tool: {$name}"],
         };
+    }
+
+    private function canUse(User $user, string $tool): bool
+    {
+        $ability = self::TOOL_ABILITIES[$tool] ?? null;
+
+        return $ability !== null && Gate::forUser($user)->allows($ability);
     }
 
     private function getProductStock(string $search): array

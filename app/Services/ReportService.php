@@ -198,12 +198,13 @@ class ReportService
     }
 
     /**
-     * Active, expiry-tracked inventory batches with an expiry date set.
+     * Active, expiry-tracked inventory batches that still have stock and an expiry date set.
      */
     public function trackedExpiryBatches()
     {
         return Inventory::query()
             ->whereNotNull('expiry_date')
+            ->where('remaining_quantity', '>', 0)
             ->whereHas('product', fn ($q) => $q->where('status', Status::ACTIVE->value)->where('expiry_track', true))
             ->with(['product.category', 'product.unit'])
             ->orderBy('expiry_date')
