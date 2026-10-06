@@ -29,8 +29,9 @@ return [
     // 'purchase-orders.delete' => [],
 
     // Reports
-    'reports.stock'    => [UserRole::MANAGER, UserRole::STAFF],
-    'reports.movement' => [UserRole::MANAGER],
-    'reports.expiry'   => [UserRole::MANAGER],
+    'reports.stock'     => [UserRole::MANAGER, UserRole::STAFF],
+    'reports.expiry'    => [UserRole::MANAGER, UserRole::STAFF],
+    'reports.movement'  => [UserRole::MANAGER],
+    'reports.valuation' => [UserRole::MANAGER],
 
 ];
