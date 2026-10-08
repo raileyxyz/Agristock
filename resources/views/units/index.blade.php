@@ -127,7 +127,7 @@
                                 </td>
                                 <td class="px-5 py-3.5">
                                     @if($unit->products_count > 0)
-                                        <span class="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400">
+                                        <span class="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400">
                                             <i data-lucide="package" class="w-3 h-3"></i>
                                             {{ $unit->products_count }} {{ Str::plural('product', $unit->products_count) }}
                                         </span>

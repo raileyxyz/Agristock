@@ -1,17 +1,43 @@
 <x-app-layout>
     <div x-data="{
             isDark: document.documentElement.classList.contains('dark'),
-            init() {
-                if (this.$refs.trendChart) {
-                    this.renderTrendChart();
-                }
-                this.renderCategoryChart();
-            },
             trendChart: null,
             categoryChart: null,
-            renderTrendChart() {
+            observer: null,
+
+            init() {
+                this.renderCharts(true);
+
+                // Pinapanood ang 'dark' class mismo sa <html>, kaya kahit anong toggle
+                // (topbar, login, landing) ay mapapansin ng dashboard — walang refresh.
+                this.observer = new MutationObserver(() => this.handleThemeChange());
+                this.observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+            },
+
+            renderCharts(animate = true) {
+                if (this.$refs.trendChart) {
+                    this.renderTrendChart(animate);
+                }
+                this.renderCategoryChart(animate);
+            },
+
+            destroyCharts() {
+                // Alpine.raw: huwag i-destroy ang reactive proxy, kundi ang totoong Chart instance.
+                if (this.trendChart) {
+                    Alpine.raw(this.trendChart).destroy();
+                    this.trendChart = null;
+                }
+                if (this.categoryChart) {
+                    Alpine.raw(this.categoryChart).destroy();
+                    this.categoryChart = null;
+                }
+            },
+
+            renderTrendChart(animate = true) {
                 const gridColor = this.isDark ? '#1F2B23' : '#f1f5f9';
                 const textColor = this.isDark ? '#9CA3AF' : '#6B7280';
+                const lineColor = this.isDark ? '#22c55e' : '#16a34a';
+                const fillColor = this.isDark ? 'rgba(34, 197, 94, 0.15)' : 'rgba(22, 163, 74, 0.12)';
 
                 this.trendChart = new Chart(this.$refs.trendChart, {
                     type: 'line',
@@ -19,18 +45,26 @@
                         labels: @js($valueTrend['labels']),
                         datasets: [{
                             data: @js($valueTrend['values']),
-                            borderColor: '#16a34a',
-                            backgroundColor: 'rgba(22, 163, 74, 0.12)',
+                            borderColor: lineColor,
+                            backgroundColor: fillColor,
                             fill: true,
                             tension: 0.35,
                             pointRadius: 3,
-                            pointBackgroundColor: '#16a34a',
+                            pointBackgroundColor: lineColor,
                         }]
                     },
                     options: {
+                        animation: animate ? undefined : false,
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: this.isDark ? '#1C2621' : '#1e293b',
+                                borderColor: '#27332C',
+                                borderWidth: this.isDark ? 1 : 0
+                            }
+                        },
                         scales: {
                             y: {
                                 beginAtZero: true,
@@ -48,7 +82,8 @@
                     }
                 });
             },
-            renderCategoryChart() {
+
+            renderCategoryChart(animate = true) {
                 const textColor = this.isDark ? '#D1D5DB' : '#374151';
                 const borderColor = this.isDark ? '#111713' : '#ffffff';
 
@@ -64,6 +99,7 @@
                         }]
                     },
                     options: {
+                        animation: animate ? undefined : false,
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
@@ -77,34 +113,27 @@
                                     color: textColor,
                                     font: { size: 10, weight: '500' }
                                 }
+                            },
+                            tooltip: {
+                                backgroundColor: this.isDark ? '#1C2621' : '#1e293b',
+                                borderColor: '#27332C',
+                                borderWidth: this.isDark ? 1 : 0
                             }
                         },
                         cutout: '60%'
                     }
                 });
             },
+
             handleThemeChange() {
-                this.isDark = document.documentElement.classList.contains('dark');
+                const dark = document.documentElement.classList.contains('dark');
 
-                if (this.trendChart) {
-                    const gridColor = this.isDark ? '#1F2B23' : '#f1f5f9';
-                    const textColor = this.isDark ? '#9CA3AF' : '#6B7280';
+                // Iwas dobleng render (observer + theme-changed event)
+                if (dark === this.isDark) return;
 
-                    this.trendChart.options.scales.y.grid.color = gridColor;
-                    this.trendChart.options.scales.y.ticks.color = textColor;
-                    this.trendChart.options.scales.x.ticks.color = textColor;
-                    this.trendChart.update('none');
-                }
-
-                // Mabilis na pag-update ng category chart
-                if (this.categoryChart) {
-                    const textColor = this.isDark ? '#D1D5DB' : '#374151';
-                    const borderColor = this.isDark ? '#111713' : '#ffffff';
-
-                    this.categoryChart.data.datasets[0].borderColor = borderColor;
-                    this.categoryChart.options.plugins.legend.labels.color = textColor;
-                    this.categoryChart.update('none');
-                }
+                this.isDark = dark;
+                this.destroyCharts();
+                this.renderCharts(false);
             }
         }"
         @theme-changed.window="handleThemeChange()">
