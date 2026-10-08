@@ -222,8 +222,8 @@
                 <p class="text-[10px] sm:text-[11px] text-gray-400 dark:text-gray-500 mt-1 truncate transition-colors duration-200 ease-in-out">Immediate action</p>
             </a>
 
-            <!-- Monthly Inventory Value -->
             @can('reports.valuation')
+            <!-- Monthly Inventory Value -->
             <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ease-in-out flex flex-col justify-between min-h-[110px] sm:min-h-[120px]">
                 <div>
                     <div class="flex items-start justify-between mb-2 sm:mb-3">

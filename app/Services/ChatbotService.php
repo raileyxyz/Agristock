@@ -26,7 +26,7 @@ class ChatbotService
             $messages = $this->buildMessages($user, $userMessage);
 
             for ($round = 0; $round < self::MAX_TOOL_ROUNDS; $round++) {
-                $response = $this->callOpenRouter($messages);
+                $response = $this->callOpenRouter($user, $messages);
 
                 if ($response->status() === 429) {
                     return [
