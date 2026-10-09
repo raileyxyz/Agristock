@@ -13,12 +13,18 @@
             formErrors: {},
             originalCategory: null,
 
+            // Emoji picker
+            showEmojiPicker: false,
+            isDark: document.documentElement.classList.contains('dark'),
+            quickPicks: ['🌱', '🌾', '🛠️', '💧', '🧪', '🚿', '🧴', '⚗️', '🐛', '🪲', '🌽', '🍅', '🥬', '🌿', '🚜', '📦'],
+
             editCategory(category) {
                 this.showModal = true;
                 this.editingId = category.id;
                 this.selectedCategory = category;
                 this.originalCategory = { ...category };
                 this.formErrors = {};
+                this.showEmojiPicker = false;
             },
 
             openCreate() {
@@ -27,9 +33,11 @@
                 this.selectedCategory = { name: '', description: '', icon: '', icon_color: '#16a34a', status: 'Active' };
                 this.originalCategory = null;
                 this.formErrors = {};
+                this.showEmojiPicker = false;
             },
 
             closeModal() {
+                this.showEmojiPicker = false;
                 this.showModal = false;
                 this.editingId = null;
                 this.selectedCategory = null;
@@ -45,6 +53,21 @@
             openArchive(id, name) {
                 this.archiveTarget = { id, name };
                 this.showArchiveModal = true;
+            },
+
+            toggleEmojiPicker() {
+                // Kunin ang kasalukuyang theme tuwing bubuksan ang picker
+                this.isDark = document.documentElement.classList.contains('dark');
+                this.showEmojiPicker = !this.showEmojiPicker;
+            },
+
+            pickEmoji(emoji) {
+                this.selectedCategory.icon = emoji;
+                this.showEmojiPicker = false;
+            },
+
+            clearEmoji() {
+                this.selectedCategory.icon = '';
             }
         }"
         x-init="
@@ -268,16 +291,40 @@
                             </template>
                         </div>
 
+                        <!-- Icon + Color -->
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Icon (emoji)</label>
-                                <input
-                                    type="text"
-                                    name="icon"
-                                    x-model="selectedCategory.icon"
-                                    maxlength="4"
-                                    class="w-full border rounded-lg px-3.5 py-2.5 text-sm text-center text-gray-800 dark:text-gray-100 dark:bg-[#0B0F0D] focus:outline-none focus:ring-2 transition-colors"
-                                    :class="formErrors.icon ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
+
+                                <div class="relative">
+                                    <!-- Readonly: pinipili lang sa picker, walang typing -->
+                                    <input
+                                        type="text"
+                                        name="icon"
+                                        readonly
+                                        :value="selectedCategory?.icon ?? ''"
+                                        placeholder="Choose icon"
+                                        aria-haspopup="true"
+                                        :aria-expanded="showEmojiPicker.toString()"
+                                        @click="toggleEmojiPicker()"
+                                        @keydown.enter.prevent="toggleEmojiPicker()"
+                                        @keydown.space.prevent="toggleEmojiPicker()"
+                                        class="w-full border rounded-lg pl-3.5 pr-9 py-2 text-lg leading-6 text-center cursor-pointer select-none text-gray-800 dark:text-gray-100 dark:bg-[#0B0F0D] placeholder:text-sm placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors"
+                                        :class="[
+                                            showEmojiPicker ? 'ring-2 ring-green-500/40 border-green-500 dark:border-green-400' : '',
+                                            formErrors.icon ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'
+                                        ]">
+
+                                    <!-- Clear button (lalabas lang kapag may napiling emoji) -->
+                                    <button type="button"
+                                            x-show="selectedCategory?.icon"
+                                            @click.stop="clearEmoji()"
+                                            title="Clear icon"
+                                            class="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#1C2621] transition-colors">
+                                        <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                                    </button>
+                                </div>
+
                                 <template x-if="formErrors.icon">
                                     <p class="text-xs text-red-600 dark:text-red-400 mt-1.5 flex items-center gap-1">
                                         <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="formErrors.icon?.[0]"></span>
@@ -297,6 +344,48 @@
                                         <i data-lucide="circle-alert" class="w-3 h-3"></i> <span x-text="formErrors.icon_color?.[0]"></span>
                                     </p>
                                 </template>
+                            </div>
+                        </div>
+
+                        <!-- Live preview (kapareho ng itsura sa category cards) -->
+                        <div class="flex items-center gap-3 rounded-xl border border-dashed border-gray-200 dark:border-[#27332C] bg-gray-50/60 dark:bg-[#111713] px-3.5 py-3">
+                            <div class="w-11 h-11 rounded-lg flex items-center justify-center text-xl shrink-0 transition-colors"
+                                 :style="{ backgroundColor: (selectedCategory?.icon_color || '#16a34a') + '22' }">
+                                <span x-show="selectedCategory?.icon" x-text="selectedCategory?.icon"></span>
+                                <i data-lucide="smile" x-show="!selectedCategory?.icon" class="w-5 h-5 text-gray-300 dark:text-gray-600"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="font-semibold text-sm truncate"
+                                   :class="selectedCategory?.name ? 'text-gray-800 dark:text-gray-100' : 'text-gray-400 dark:text-gray-500'"
+                                   x-text="selectedCategory?.name || 'Category name'"></p>
+                                <p class="text-[11px] text-gray-400 dark:text-gray-500">Preview</p>
+                            </div>
+                        </div>
+
+                        <!-- Inline emoji picker panel -->
+                        <div x-show="showEmojiPicker" style="display: none;">
+                            <div class="rounded-xl border border-gray-200 dark:border-[#27332C] bg-gray-50 dark:bg-[#111713] overflow-hidden">
+
+                                <!-- Quick picks -->
+                                <div class="px-3 pt-3 pb-2.5 border-b border-gray-200 dark:border-[#27332C]">
+                                    <p class="text-[11px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2">Quick picks</p>
+                                    <div class="flex flex-wrap gap-1.5">
+                                        <template x-for="emoji in quickPicks" :key="emoji">
+                                            <button type="button"
+                                                    @click="pickEmoji(emoji)"
+                                                    class="w-9 h-9 flex items-center justify-center rounded-lg text-xl border transition-colors"
+                                                    :class="selectedCategory?.icon === emoji
+                                                        ? 'bg-green-50 dark:bg-green-950/40 border-green-500 dark:border-green-400'
+                                                        : 'bg-white dark:bg-[#0B0F0D] border-gray-200 dark:border-[#27332C] hover:border-green-500 dark:hover:border-green-400'"
+                                                    x-text="emoji"></button>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Full picker (may search at categories) -->
+                                <emoji-picker
+                                    :class="isDark ? 'dark' : 'light'"
+                                    @emoji-click="pickEmoji($event.detail.unicode)"></emoji-picker>
                             </div>
                         </div>
 
@@ -473,4 +562,43 @@
         </div>
 
     </div>
+
+    <!-- Emoji picker: library + theme (light/dark) na tugma sa palette ng system -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+    <style>
+        emoji-picker {
+            width: 100%;
+            height: 18rem;
+            --num-columns: 8;
+            --emoji-size: 1.4rem;
+            --border-size: 0;
+            --border-radius: 0;
+            --outline-size: 2px;
+            --indicator-height: 3px;
+        }
+        emoji-picker.light {
+            --background: #f9fafb;
+            --border-color: #e5e7eb;
+            --input-border-color: #d1d5db;
+            --input-font-color: #1f2937;
+            --input-placeholder-color: #9ca3af;
+            --category-font-color: #6b7280;
+            --button-hover-background: #e5e7eb;
+            --button-active-background: #d1d5db;
+            --indicator-color: #16a34a;
+            --outline-color: #16a34a;
+        }
+        emoji-picker.dark {
+            --background: #111713;
+            --border-color: #27332C;
+            --input-border-color: #27332C;
+            --input-font-color: #f3f4f6;
+            --input-placeholder-color: #6b7280;
+            --category-font-color: #9ca3af;
+            --button-hover-background: #1C2621;
+            --button-active-background: #27332C;
+            --indicator-color: #4ade80;
+            --outline-color: #4ade80;
+        }
+    </style>
 </x-app-layout>
