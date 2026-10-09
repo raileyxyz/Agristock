@@ -14,6 +14,8 @@ class InventoryHistoryService
         $type = $filters['type'] ?? 'all';
         $search = $filters['search'] ?? null;
         $page = (int) ($filters['page'] ?? 1);
+        $days = (int) ($filters['days'] ?? 0);
+        $userId = $filters['user_id'] ?? null;
         $perPage = 15;
 
         $movements = collect();
@@ -30,7 +32,11 @@ class InventoryHistoryService
             $movements = $movements->merge($this->adjustmentRows($search));
         }
 
-        $sorted = $movements->sortByDesc('date')->values();
+        $sorted = $movements
+            ->when($userId, fn ($rows) => $rows->where('user_id', $userId))
+            ->when($days > 0, fn ($rows) => $rows->where('date', '>=', now()->subDays($days - 1)->startOfDay()))
+            ->sortByDesc('date')
+            ->values();
 
         return new LengthAwarePaginator(
             $sorted->forPage($page, $perPage),
@@ -66,6 +72,7 @@ class InventoryHistoryService
                     'quantity' => (float) $inv->quantity,
                     'unit_abbr' => $inv->product->unit->abbreviation ?? '',
                     'reason' => $isTransferMirror ? $inv->notes : '—',
+                    'user_id' => $inv->user_id,
                     'user_name' => $inv->user->name ?? '—',
                     'user_role' => $inv->user->role?->value ?? '—',
                     'is_transfer' => $isTransferMirror,
@@ -97,6 +104,7 @@ class InventoryHistoryService
                     'quantity' => -1 * (float) $out->quantity,
                     'unit_abbr' => $out->product->unit->abbreviation ?? '',
                     'reason' => $isTransfer ? "Transfer to {$out->transfer_to}" : $out->reason,
+                    'user_id' => $out->user_id,
                     'user_name' => $out->user->name ?? '—',
                     'user_role' => $out->user->role?->value ?? '—',
                     'is_transfer' => $isTransfer,
@@ -123,6 +131,7 @@ class InventoryHistoryService
                 'quantity' => $adj->difference,
                 'unit_abbr' => $adj->inventory->product->unit->abbreviation ?? '',
                 'reason' => $adj->reason,
+                'user_id' => $adj->user_id,
                 'user_name' => $adj->user->name ?? '—',
                 'user_role' => $adj->user->role?->value ?? '—',
             ]);

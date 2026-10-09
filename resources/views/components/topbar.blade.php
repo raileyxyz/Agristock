@@ -222,9 +222,9 @@
                         <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ Auth::user()->email }}</p>
                         @php
                             $roleBadge = match(Auth::user()->role->value) {
-                                'Admin' => 'bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300',
-                                'Manager' => 'bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300',
-                                default => 'bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
+                                'Admin' => 'bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-400',
+                                'Manager' => 'bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400',
+                                default => 'bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-400',
                             };
                         @endphp
                         <span class="inline-block mt-1 text-[11px] font-bold px-2 py-0.5 rounded-full {{ $roleBadge }}">
