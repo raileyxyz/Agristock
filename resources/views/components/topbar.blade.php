@@ -73,7 +73,7 @@
                 x-transition:leave-end="opacity-0 scale-95"
                 class="fixed inset-x-3 top-[4.5rem] origin-top
                        sm:absolute sm:inset-x-auto sm:top-full sm:right-0 sm:mt-2 sm:w-80 sm:origin-top-right
-                       bg-white dark:bg-[#161D19] border border-gray-200 dark:border-[#27332C] rounded-xl shadow-lg overflow-hidden z-50"
+                       bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl shadow-lg overflow-hidden z-50"
                 style="display: none;">
 
                 <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-[#27332C]">
@@ -135,7 +135,7 @@
                     x-transition:enter="transition ease-out duration-200"
                     x-transition:enter-start="opacity-0 scale-95 translate-y-2"
                     x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                    class="bg-white dark:bg-[#161D19] rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden max-h-[85vh] flex flex-col border dark:border-[#27332C]">
+                    class="bg-white dark:bg-[#111713] rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden max-h-[85vh] flex flex-col border dark:border-[#27332C]">
 
                     <!-- Modal Header -->
                     <div class="flex items-center justify-between px-6 pt-6 pb-4 shrink-0 border-b border-gray-100 dark:border-[#27332C]">
@@ -211,11 +211,11 @@
                 x-transition:leave="transition ease-in duration-100"
                 x-transition:leave-start="opacity-100 scale-100"
                 x-transition:leave-end="opacity-0 scale-95"
-                class="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-[#161D19] border border-gray-200 dark:border-[#27332C] rounded-xl shadow-lg overflow-hidden z-50"
+                class="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl shadow-lg overflow-hidden z-50"
                 style="display: none;">
 
                 <!-- Identity Block -->
-                <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-[#1C2621]">
+                <div class="flex items-center gap-3 p-4 bg-white dark:bg-[#111713]">
                     <x-avatar size="w-11 h-11" text-size="text-base" />
                     <div class="min-w-0">
                         <p class="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate">{{ Auth::user()->name }}</p>
@@ -232,6 +232,9 @@
                         </span>
                     </div>
                 </div>
+
+                <!-- Divider Line -->
+                <div class="border-t border-gray-100 dark:border-[#27332C]"></div>
 
                 <!-- Actions -->
                 <div class="py-1.5">
