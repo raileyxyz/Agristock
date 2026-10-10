@@ -135,16 +135,16 @@
                             @endphp
                             <tr class="hover:bg-gray-50 dark:hover:bg-[#161F1A]/60 transition-colors duration-200 ease-in-out">
                                 <td class="px-3 py-2.5 whitespace-nowrap">
-                                    <div class="flex items-center gap-2.5">
+                                    <div class="flex items-center gap-3">
                                         <div class="relative shrink-0">
-                                            <x-avatar :user="$user" size="w-8 h-8" text-size="text-xs" />
+                                            <x-avatar :user="$user" size="w-9 h-9" text-size="text-xs font-semibold" />
                                             @if($user->id === auth()->id())
-                                                <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] flex items-center justify-center">
-                                                    <i data-lucide="check" class="w-3 h-3 text-red-600 dark:text-red-400 font-bold"></i>
+                                                <div class="absolute -bottom-0.5 -right-0.5 w-4.5 h-4.5 rounded-full bg-green-600 dark:bg-green-500 border-2 border-white dark:border-[#111713] flex items-center justify-center shadow-sm" title="You">
+                                                    <i data-lucide="check" class="w-2.5 h-2.5 text-white stroke-[3]"></i>
                                                 </div>
                                             @endif
                                         </div>
-                                        <span class="font-medium text-gray-800 dark:text-gray-200 max-w-[200px] truncate" title="{{ $user->name }}">{{ $user->name }}</span>
+                                        <span class="font-medium text-gray-900 dark:text-gray-100 max-w-[200px] truncate" title="{{ $user->name }}">{{ $user->name }}</span>
                                     </div>
                                 </td>
                                 <td class="px-3 py-2.5 text-gray-500 dark:text-gray-400 whitespace-nowrap">{{ $user->email }}</td>

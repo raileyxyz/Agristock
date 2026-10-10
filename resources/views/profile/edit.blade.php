@@ -61,14 +61,7 @@
                     <!-- Photo Upload Section -->
                     <div class="flex items-center gap-3.5 sm:gap-4 pb-5 sm:pb-6 border-b border-gray-100 dark:border-[#1F2B23]">
                         <div class="relative group w-16 h-16 sm:w-20 sm:h-20 shrink-0">
-                            @if($user->avatar)
-                                <img src="{{ Storage::url($user->avatar) }}" alt="{{ $user->name }}"
-                                     class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover">
-                            @else
-                                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-green-600 text-white flex items-center justify-center text-xl sm:text-2xl font-bold">
-                                    {{ strtoupper(substr($user->name, 0, 2)) }}
-                                </div>
-                            @endif
+                            <x-avatar :user="$user" size="w-16 h-16 sm:w-20 sm:h-20" text-size="text-xl sm:text-2xl"/>
 
                             <button type="button" @click="showPhotoModal = true"
                                     class="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
