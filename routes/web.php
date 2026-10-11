@@ -121,4 +121,11 @@ Route::middleware('auth')->group(function () {
 });
 });
 
+if (app()->environment('local')) {
+    Route::get('/mail-preview', function () {
+        return (new \Illuminate\Auth\Notifications\ResetPassword('fake-token'))
+            ->toMail(\App\Models\User::first());
+    });
+}
+
 require __DIR__.'/auth.php';
