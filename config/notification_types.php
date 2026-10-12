@@ -18,6 +18,7 @@ return [
         'category' => 'Inventory Alerts',
         'roles' => [UserRole::ADMIN, UserRole::MANAGER, UserRole::STAFF],
         'default_enabled' => true,
+        'mail' => true,
     ],
     'expiring_soon' => [
         'label' => 'Expiring Soon',
@@ -32,6 +33,7 @@ return [
         'category' => 'Inventory Alerts',
         'roles' => [UserRole::ADMIN, UserRole::MANAGER, UserRole::STAFF],
         'default_enabled' => true,
+        'mail' => true,
     ],
 
     // Stock Movement

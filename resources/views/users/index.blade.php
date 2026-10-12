@@ -9,6 +9,8 @@
             archiveTarget: { id: null, name: '' },
             showSuccessModal: false,
             successMessage: '{{ addslashes(session('success', '')) }}',
+            showErrorModal: false,
+            errorMessage: '{{ addslashes(session('error', '')) }}',
             showViewModal: false,
             viewTarget: {},
 
@@ -46,6 +48,10 @@
         x-init="
             @if(session('success'))
                 showSuccessModal = true;
+            @endif
+
+            @if(session('error'))
+                showErrorModal = true;
             @endif
         ">
 
@@ -161,6 +167,9 @@
                                             : 'bg-gray-100 text-gray-500 dark:bg-[#1C2621] dark:text-gray-400' }}">
                                         {{ $user->status->value }}
                                     </span>
+                                    @if(is_null($user->email_verified_at) && $user->status === \App\Enums\Status::ACTIVE)
+                                        <span class="ml-1 text-xs font-medium px-2 py-1 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400">Pending invite</span>
+                                    @endif
                                 </td>
 
                                 <!-- Actions Dropdown Column -->
@@ -226,6 +235,20 @@
                                                         <i data-lucide="archive" class="w-3.5 h-3.5"></i>
                                                         Archive
                                                     </button>
+                                                @endcan
+                                            @endif
+
+                                            <!-- Resend invite -->
+                                            @if($user->id !== auth()->id() && $user->status === \App\Enums\Status::ACTIVE && is_null($user->email_verified_at))
+                                                @can('update', $user)
+                                                    <form method="POST" action="{{ route('users.resend-invite', $user) }}">
+                                                        @csrf
+                                                        <button type="submit"
+                                                                class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#1C2621] hover:text-green-600 dark:hover:text-green-400 transition-colors">
+                                                            <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                                                            Resend invite
+                                                        </button>
+                                                    </form>
                                                 @endcan
                                             @endif
                                         </div>

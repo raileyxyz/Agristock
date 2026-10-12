@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Notifications\AppEmailNotification;
 use App\Notifications\AppNotification;
 
 class NotificationDispatchService
@@ -29,8 +30,14 @@ class NotificationDispatchService
             ->get()
             ->filter(fn (User $user) => $this->preferenceService->isEnabled($user, $type));
 
+        $sendMail = ($meta['mail'] ?? false) === true;
+
         foreach ($recipients as $recipient) {
             $recipient->notify(new AppNotification($type, $title, $body, $url));
+
+            if ($sendMail && $recipient->email_verified_at !== null) {
+                $recipient->notify(new AppEmailNotification($title, $body, $url));
+            }
         }
     }
 }

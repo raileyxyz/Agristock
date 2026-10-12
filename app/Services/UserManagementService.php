@@ -7,6 +7,10 @@ use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Notifications\UserInviteNotification;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 class UserManagementService
 {
@@ -50,21 +54,62 @@ class UserManagementService
             ->pluck('total', 'role');
     }
 
-    public function create(array $data, User $actor): User
+    public function create(array $data, User $actor): array
     {
-        return DB::transaction(function () use ($data, $actor) {
-            $user = User::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => Hash::make($data['password']),
-                'role' => $data['role'],
-                'status' => Status::ACTIVE->value,
-            ]);
+        try {
+            $user = DB::transaction(function () use ($data, $actor) {
+                $user = User::create([
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'password' => Hash::make(Str::random(40)),
+                    'role' => $data['role'],
+                    'status' => Status::ACTIVE->value,
+                ]);
 
-            event(new \App\Events\NewUserAdded($user, $actor));
+                event(new \App\Events\NewUserAdded($user, $actor));
 
-            return $user;
-        });
+                return $user;
+            });
+        } catch (\Throwable $e) {
+            Log::error('Failed to create user', ['error' => $e->getMessage()]);
+
+            return ['success' => false, 'message' => 'Could not create the user. Please try again.'];
+        }
+
+        if (! $this->sendInvite($user)) {
+            return [
+                'success' => true,
+                'message' => 'User created, but the invite email could not be sent. Use "Resend invite" from the options menu.',
+            ];
+        }
+
+        return ['success' => true, 'message' => "User created. An invite email was sent to {$user->email}."];
+    }
+
+    public function resendInvite(User $user): array
+    {
+        if ($user->status !== Status::ACTIVE) {
+            return ['success' => false, 'message' => 'Archived users cannot be invited.'];
+        }
+
+        if (! $this->sendInvite($user)) {
+            return ['success' => false, 'message' => 'The invite email could not be sent. Please check the mail settings and try again.'];
+        }
+
+        return ['success' => true, 'message' => "Invite email sent to {$user->email}."];
+    }
+
+    private function sendInvite(User $user): bool
+    {
+        try {
+            $user->notify(new UserInviteNotification(Password::createToken($user)));
+
+            return true;
+        } catch (\Throwable $e) {
+            Log::error('Failed to send user invite', ['user_id' => $user->id, 'error' => $e->getMessage()]);
+
+            return false;
+        }
     }
 
     public function update(User $user, array $data, User $actor): User

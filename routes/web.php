@@ -90,6 +90,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class)
         ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 
+    Route::post('/users/{user}/resend-invite', [UserController::class, 'resendInvite'])
+        ->name('users.resend-invite');
+
     Route::get('/users-roles-permissions', [UserController::class, 'rolesPermissions'])
         ->name('users.roles');
 

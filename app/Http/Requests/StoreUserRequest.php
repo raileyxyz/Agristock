@@ -6,6 +6,7 @@ use App\Enums\UserRole;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 
@@ -17,6 +18,13 @@ class StoreUserRequest extends FormRequest
     public function authorize(): bool
     {
         return $this->user()?->isAdmin() ?? false;
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('email')) {
+            $this->merge(['email' => Str::lower(trim((string) $this->input('email')))]);
+        }
     }
 
     /**
@@ -35,7 +43,7 @@ class StoreUserRequest extends FormRequest
 
             'email' => [
                 'required',
-                'email',
+                app()->environment('testing') ? 'email:rfc' : 'email:rfc,dns',
                 'max:255',
                 'unique:users,email'
             ],
@@ -43,12 +51,6 @@ class StoreUserRequest extends FormRequest
             'role' => [
                 'required',
                 new Enum(UserRole::class)
-            ],
-
-            'password' => [
-                'required',
-                'string',
-                'min:8'
             ],
         ];
     }
@@ -61,8 +63,6 @@ class StoreUserRequest extends FormRequest
             'email.unique' => 'This email is already registered.',
             'role.required' => 'Please select a role.',
             'role.in' => 'Selected role is invalid.',
-            'password.required' => 'Please set a temporary password.',
-            'password.min' => 'Password must be at least 8 characters.',
         ];
     }
 }

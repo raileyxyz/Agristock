@@ -57,9 +57,23 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        $this->userManagementService->create($request->validated(), Auth::user());
+        $result = $this->userManagementService->create($request->validated(), Auth::user());
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        if (! $result['success']) {
+            return back()->withInput()->with('error', $result['message']);
+        }
+
+        return redirect()->route('users.index')->with('success', $result['message']);
+    }
+
+    public function resendInvite(User $user): RedirectResponse
+    {
+        $this->authorize('update', $user);
+
+        $result = $this->userManagementService->resendInvite($user);
+
+        return redirect()->route('users.index')
+            ->with($result['success'] ? 'success' : 'error', $result['message']);
     }
 
     /**
