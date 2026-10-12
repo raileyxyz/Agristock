@@ -14,7 +14,7 @@
             <!-- Expired Items -->
             <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
                 <div>
-                    <p class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-red-600 dark:text-red-400">Expired Items</p>
+                    <p class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Expired Items</p>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ $summary['expired'] }}</p>
                     <p class="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5">Past expiration date</p>
                 </div>
@@ -26,7 +26,7 @@
             <!-- Critical (Within 30 Days) -->
             <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
                 <div>
-                    <p class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-red-500 dark:text-red-400">Critical (&le; 30 Days)</p>
+                    <p class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Critical (&le; 30 Days)</p>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ $summary['within_30'] }}</p>
                     <p class="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5">Requires immediate action</p>
                 </div>
@@ -38,7 +38,7 @@
             <!-- Warning (31 to 60 Days) -->
             <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
                 <div>
-                    <p class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">Warning (31-60 Days)</p>
+                    <p class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Warning (31-60 Days)</p>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ $summary['within_60'] }}</p>
                     <p class="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5">Plan for stock rotation</p>
                 </div>
@@ -50,7 +50,7 @@
             <!-- Safe (Over 60 Days) -->
             <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
                 <div>
-                    <p class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-green-600 dark:text-green-400">Good (&gt; 60 Days)</p>
+                    <p class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Good (&gt; 60 Days)</p>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ $summary['safe'] }}</p>
                     <p class="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5">Sufficient shelf life</p>
                 </div>

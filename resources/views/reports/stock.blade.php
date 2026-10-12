@@ -130,7 +130,7 @@
             <!-- Total SKUs -->
             <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
                 <div>
-                    <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Total SKUs</span>
+                    <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Total SKUs</span>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ number_format($summary['total_skus']) }}</p>
                     <p class="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5">Tracked products</p>
                 </div>
@@ -142,7 +142,7 @@
             <!-- In Stock -->
             <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
                 <div>
-                    <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-green-600 dark:text-green-400">In Stock</span>
+                    <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">In Stock</span>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ number_format($summary['in_stock']) }}</p>
                     <p class="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5">Healthy inventory levels</p>
                 </div>
@@ -154,7 +154,7 @@
             <!-- Low / Critical -->
             <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
                 <div>
-                    <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">Low / Critical</span>
+                    <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Low / Critical</span>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ number_format($summary['low_critical']) }}</p>
                     <p class="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5">Reorder point reached</p>
                 </div>
@@ -166,7 +166,7 @@
             <!-- Out of Stock -->
             <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
                 <div>
-                    <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-red-600 dark:text-red-400">Out of Stock</span>
+                    <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Out of Stock</span>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ number_format($summary['out_of_stock']) }}</p>
                     <p class="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5">Zero availability</p>
                 </div>

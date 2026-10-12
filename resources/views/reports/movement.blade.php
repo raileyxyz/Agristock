@@ -147,7 +147,7 @@
             <!-- Total Received -->
             <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
                 <div>
-                    <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-green-600 dark:text-green-400">Total Received</span>
+                    <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Total Received</span>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ number_format($summary['total_received'], 0) }}</p>
                     <p class="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5">Incoming stock movements</p>
                 </div>
@@ -159,7 +159,7 @@
             <!-- Total Consumed -->
             <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
                 <div>
-                    <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">Total Consumed</span>
+                    <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Total Consumed</span>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ number_format($summary['total_consumed'], 0) }}</p>
                     <p class="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5">Outgoing stock movements</p>
                 </div>
@@ -171,7 +171,7 @@
             <!-- Adjustments -->
             <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between sm:col-span-2 lg:col-span-1">
                 <div>
-                    <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Adjustments</span>
+                    <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Adjustments</span>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ number_format($summary['adjustments_count']) }}</p>
                     <p class="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5">Manual inventory corrections</p>
                 </div>
