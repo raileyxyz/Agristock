@@ -29,6 +29,7 @@ class UserController extends Controller
         $users = $this->userManagementService->list(
             search: $request->query('search'),
             role: $request->query('role'),
+            status: $request->query('status'),
         );
 
         $statistics = $this->userManagementService->getStatistics();
@@ -72,8 +73,7 @@ class UserController extends Controller
 
         $result = $this->userManagementService->resendInvite($user);
 
-        return redirect()->route('users.index')
-            ->with($result['success'] ? 'success' : 'error', $result['message']);
+        return redirect()->route('users.index')->with($result['success'] ? 'success' : 'error', $result['message']);
     }
 
     /**
@@ -93,9 +93,9 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
-        $this->userManagementService->update($user, $request->validated(), Auth::user());
+        $result = $this->userManagementService->update($user, $request->validated(), Auth::user());
 
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+        return redirect()->route('users.index')->with($result['success'] ? 'success' : 'error', $result['message']);
     }
 
     /**

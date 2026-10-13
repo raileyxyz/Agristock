@@ -3,6 +3,7 @@
 use App\Models\User;
 use App\Notifications\UserInviteNotification;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Auth\Notifications\VerifyEmail;
 
 it('allows admin to create a new user', function () {
     $admin = User::factory()->admin()->create();
@@ -220,3 +221,107 @@ it('forbids non-admin roles from creating users or resending invites', function 
     expect(User::where('email', 'juan@example.com')->exists())->toBeFalse();
     Notification::assertNothingSent();
 })->with(['manager', 'staff']);
+
+it('shows the pending invite badge only for users who have not verified their email', function () {
+    $admin = User::factory()->admin()->create();
+    User::factory()->staff()->unverified()->create(['name' => 'Pending Person']);
+    User::factory()->staff()->create(['name' => 'Verified Person']);
+
+    $response = $this->actingAs($admin)->get('/users');
+
+    $response->assertOk();
+    expect(substr_count($response->getContent(), '>Pending invite</span>'))->toBe(1);
+});
+
+it('resets verification and sends a verification link when admin changes a user email', function () {
+    Notification::fake();
+    $admin = User::factory()->admin()->create();
+    $target = User::factory()->staff()->create();
+
+    $this->actingAs($admin)->put("/users/{$target->id}", [
+        'name' => $target->name,
+        'email' => 'New.Address@Example.com',
+        'role' => 'Staff',
+        'status' => 'Active',
+    ])->assertRedirect(route('users.index'));
+
+    $target->refresh();
+
+    expect($target->email)->toBe('new.address@example.com')
+        ->and($target->email_verified_at)->toBeNull();
+
+    Notification::assertSentTo($target, VerifyEmail::class);
+});
+
+it('keeps verification when admin saves a user without changing the email', function () {
+    Notification::fake();
+    $admin = User::factory()->admin()->create();
+    $target = User::factory()->staff()->create(['email' => 'Mixed.Case@example.com']);
+
+    $this->actingAs($admin)->put("/users/{$target->id}", [
+        'name' => 'Renamed User',
+        'email' => $target->email,
+        'role' => 'Staff',
+        'status' => 'Active',
+    ]);
+
+    Notification::assertNotSentTo($target, VerifyEmail::class);
+    expect($target->fresh()->email_verified_at)->not->toBeNull();
+});
+
+it('rejects a badly formatted email when admin updates a user', function () {
+    $admin = User::factory()->admin()->create();
+    $target = User::factory()->staff()->create();
+
+    $this->actingAs($admin)->put("/users/{$target->id}", [
+        'name' => $target->name,
+        'email' => 'not-an-email',
+        'role' => 'Staff',
+        'status' => 'Active',
+    ])->assertSessionHasErrors('email');
+});
+
+it('forbids non-admin roles from changing a user email', function (string $role) {
+    Notification::fake();
+    $actor = User::factory()->{$role}()->create();
+    $target = User::factory()->staff()->create();
+    $oldEmail = $target->email;
+
+    $this->actingAs($actor)->put("/users/{$target->id}", [
+        'name' => $target->name,
+        'email' => 'new@example.com',
+        'role' => 'Staff',
+        'status' => 'Active',
+    ])->assertForbidden();
+
+    expect($target->fresh()->email)->toBe($oldEmail);
+    Notification::assertNothingSent();
+})->with(['manager', 'staff']);
+
+it('filters the users list by status', function () {
+    $admin = User::factory()->admin()->create(['name' => 'Admin Person']);
+    User::factory()->staff()->create(['name' => 'Verified Staff']);
+    User::factory()->staff()->unverified()->create(['name' => 'Pending Staff']);
+    User::factory()->staff()->archived()->create(['name' => 'Archived Staff']);
+
+    $this->actingAs($admin)->get('/users?status=active')
+        ->assertSee('Verified Staff')
+        ->assertDontSee('Pending Staff')
+        ->assertDontSee('Archived Staff');
+
+    $this->actingAs($admin)->get('/users?status=pending')
+        ->assertSee('Pending Staff')
+        ->assertDontSee('Verified Staff')
+        ->assertDontSee('Archived Staff');
+
+    $this->actingAs($admin)->get('/users?status=archived')
+        ->assertSee('Archived Staff')
+        ->assertDontSee('Verified Staff')
+        ->assertDontSee('Pending Staff');
+});
+
+it('lets admin and manager use the status filter but not staff', function (string $role, int $expected) {
+    $actor = User::factory()->{$role}()->create();
+
+    $this->actingAs($actor)->get('/users?status=pending')->assertStatus($expected);
+})->with([['admin', 200], ['manager', 200], ['staff', 403]]);

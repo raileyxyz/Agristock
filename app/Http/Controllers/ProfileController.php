@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -33,19 +34,32 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $request->user()->fill($request->safe()->except('current_password'));
 
         if (! $request->user()->isDirty()) {
             return Redirect::route('profile.edit')->with('status', 'profile-unchanged');
         }
 
-        if ($request->user()->isDirty('email')) {
+        $emailChanged = $request->user()->isDirty('email');
+
+        if ($emailChanged) {
             $request->user()->email_verified_at = null;
         }
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        if ($emailChanged) {
+            try {
+                $request->user()->sendEmailVerificationNotification();
+            } catch (\Throwable $e) {
+                Log::error('Failed to send email verification', [
+                    'user_id' => $request->user()->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');;
     }
 
     public function updateAvatar(Request $request): RedirectResponse

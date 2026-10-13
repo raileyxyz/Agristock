@@ -19,6 +19,7 @@ class UserInviteNotification extends Notification
         $url = route('password.reset', [
             'token' => $this->token,
             'email' => $notifiable->email,
+            'invite' => 1,
         ]);
 
         $minutes = config('auth.passwords.'.config('auth.defaults.passwords').'.expire');

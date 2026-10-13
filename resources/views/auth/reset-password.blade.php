@@ -3,10 +3,10 @@
     <!-- Header Section -->
     <div class="mb-8 text-left">
         <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-[#F1F5F2] mb-2 tracking-tight transition-colors duration-300">
-            Reset password
+            {{ $request->boolean('invite') ? 'Set your password' : 'Reset password' }}
         </h1>
         <p class="text-sm text-gray-500 dark:text-[#9AA79F] transition-colors duration-300">
-            Please enter your new password below.
+            {{ $request->boolean('invite') ? 'Welcome to AgriStock! Choose a password to activate your account.' : 'Please enter your new password below.' }}
         </p>
     </div>
 
@@ -86,9 +86,8 @@
         </div>
 
         <!-- Submit Button -->
-        <button type="submit"
-                class="w-full bg-green-600 hover:bg-green-700 active:bg-green-800 dark:bg-green-600 dark:hover:bg-green-500 text-white py-3.5 px-4 rounded-xl font-semibold text-base shadow-sm transition-all duration-150 text-center">
-            Reset Password
+        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 active:bg-green-800 dark:bg-green-600 dark:hover:bg-green-500 text-white py-3.5 px-4 rounded-xl font-semibold text-base shadow-sm transition-all duration-150 text-center">
+            {{ $request->boolean('invite') ? 'Set Password' : 'Reset Password' }}
         </button>
     </form>
 

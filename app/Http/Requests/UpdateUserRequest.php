@@ -8,6 +8,7 @@ use Illuminate\Validation\Rules\Enum;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -17,6 +18,13 @@ class UpdateUserRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('email')) {
+            $this->merge(['email' => Str::lower(trim((string) $this->input('email')))]);
+        }
     }
 
     /**
@@ -37,7 +45,7 @@ class UpdateUserRequest extends FormRequest
 
             'email' => [
                 'required',
-                'email',
+                app()->environment('testing') ? 'email:rfc' : 'email:rfc,dns',
                 'max:255',
                 Rule::unique('users', 'email')->ignore($userId)
             ],

@@ -87,8 +87,23 @@
 
                             <div>
                                 <x-input-label for="email" :value="__('Email')" class="text-xs sm:text-sm" />
-                                <x-text-input id="email" name="email" type="email" class="mt-1 sm:mt-1.5 block w-full text-xs sm:text-sm" :value="old('email', $user->email)" required autocomplete="username" />
-                                <x-input-error class="mt-1 sm:mt-1.5" :messages="$errors->get('email')" />
+                                @if($user->isAdmin())
+                                    <div x-data="{ original: @js($user->email), email: @js(old('email', $user->email)) }">
+                                        <x-text-input id="email" name="email" type="email" x-model="email" class="mt-1 sm:mt-1.5 block w-full text-xs sm:text-sm" :value="old('email', $user->email)" required autocomplete="username" />
+                                        <x-input-error class="mt-1 sm:mt-1.5" :messages="$errors->get('email')" />
+                                        <p class="mt-1 sm:mt-1.5 text-[11px] sm:text-xs text-gray-400 dark:text-gray-500">If you change your email, a verification link will be sent to the new address.</p>
+
+                                        <div x-show="email.trim().toLowerCase() !== original.toLowerCase()" x-cloak class="mt-3">
+                                            <x-input-label for="current_password" :value="__('Current Password')" class="text-xs sm:text-sm" />
+                                            <x-text-input id="current_password" name="current_password" type="password" class="mt-1 sm:mt-1.5 block w-full text-xs sm:text-sm" autocomplete="current-password" />
+                                            <x-input-error class="mt-1 sm:mt-1.5" :messages="$errors->get('current_password')" />
+                                            <p class="mt-1 sm:mt-1.5 text-[11px] sm:text-xs text-gray-400 dark:text-gray-500">Enter your current password to confirm the email change.</p>
+                                        </div>
+                                    </div>
+                                @else
+                                    <x-text-input id="email" type="email" class="mt-1 sm:mt-1.5 block w-full text-xs sm:text-sm opacity-70 cursor-not-allowed" :value="$user->email" disabled />
+                                    <p class="mt-1 sm:mt-1.5 text-[11px] sm:text-xs text-gray-400 dark:text-gray-500">Only an administrator can change your email address.</p>
+                                @endif
                             </div>
 
                             <div>
@@ -104,7 +119,7 @@
                             </div>
                         </div>
 
-                        @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
+                        @if (! $user->hasVerifiedEmail())
                             <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                                 {{ __('Your email address is unverified.') }}
                                 <button form="send-verification" class="underline hover:text-gray-900 dark:hover:text-gray-100">

@@ -111,6 +111,17 @@
                 </select>
                 <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 dark:text-gray-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
             </div>
+
+            <div class="relative w-full sm:w-auto">
+                <select name="status" onchange="this.form.submit()"
+                        class="w-full sm:w-auto appearance-none border border-gray-300 dark:border-[#27332C] rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white dark:bg-[#111713] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
+                    <option value="">All Status</option>
+                    <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                    <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending invite</option>
+                    <option value="archived" {{ request('status') === 'archived' ? 'selected' : '' }}>Archived</option>
+                </select>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 dark:text-gray-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            </div>
         </form>
 
         <!-- Users table -->
@@ -449,6 +460,9 @@
                                 <template x-if="editErrors.email">
                                     <p class="text-xs text-red-600 dark:text-red-400 mt-1.5" x-text="editErrors.email?.[0]"></p>
                                 </template>
+                                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1.5">
+                                    Changing the email requires the user to verify it again; a verification link is sent to the new address. If the user has not set a password yet, use "Resend invite" instead.
+                                </p>
                             </div>
 
                             <div>
@@ -579,6 +593,36 @@
                 <div class="flex items-center justify-center px-6 py-4 bg-gray-50 dark:bg-[#111713] border-t border-gray-100 dark:border-[#27332C]">
                     <button @click="showSuccessModal = false"
                             class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                        Got it
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Modal -->
+        <div x-show="showErrorModal"
+             x-transition:enter="transition-opacity ease-out duration-200"
+             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+             x-transition:leave="transition-opacity ease-in duration-150"
+             x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+             class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+             style="display: none;" x-cloak>
+            <div @click.outside="showErrorModal = false"
+                 x-show="showErrorModal"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                 class="bg-white dark:bg-[#161D19] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+                <div class="px-6 pt-6 pb-5 text-center">
+                    <div class="w-12 h-12 rounded-full bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 flex items-center justify-center mb-4 mx-auto">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </div>
+                    <h2 class="font-semibold text-gray-800 dark:text-gray-100 text-base mb-1.5">Something went wrong</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400" x-text="errorMessage"></p>
+                </div>
+                <div class="flex items-center justify-center px-6 py-4 bg-gray-50 dark:bg-[#111713] border-t border-gray-100 dark:border-[#27332C]">
+                    <button @click="showErrorModal = false"
+                            class="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                         Got it
                     </button>
                 </div>

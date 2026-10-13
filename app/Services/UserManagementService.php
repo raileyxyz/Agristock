@@ -17,12 +17,13 @@ class UserManagementService
     /**
      * Get a paginated, filtered, searchable list of users.
      */
-    public function list(?string $search, ?string $role, int $perPage = 10): LengthAwarePaginator
+    public function list(?string $search, ?string $role, ?string $status = null, int $perPage = 10): LengthAwarePaginator
     {
         return User::query()
-            ->select(['id', 'name', 'email', 'phone', 'address', 'avatar', 'role', 'status', 'last_login_at', 'created_at'])
+            ->select(['id', 'name', 'email', 'email_verified_at', 'phone', 'address', 'avatar', 'role', 'status', 'last_login_at', 'created_at'])
             ->search($search)
             ->role($role)
+            ->statusFilter($status)
             ->latest()
             ->paginate($perPage)
             ->withQueryString();
@@ -112,43 +113,81 @@ class UserManagementService
         }
     }
 
-    public function update(User $user, array $data, User $actor): User
+    private function sendVerification(User $user): bool
     {
-        return DB::transaction(function () use ($user, $data, $actor) {
-            $oldRole = $user->role->value;
-            $oldStatus = $user->status;
+        try {
+            $user->sendEmailVerificationNotification();
 
-            $payload = [
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'role' => $data['role'],
+            return true;
+        } catch (\Throwable $e) {
+            Log::error('Failed to send email verification', ['user_id' => $user->id, 'error' => $e->getMessage()]);
+
+            return false;
+        }
+    }
+
+    public function update(User $user, array $data, User $actor): array
+    {
+        $emailChanged = strcasecmp($data['email'], $user->email) !== 0;
+
+        try {
+            $user = DB::transaction(function () use ($user, $data, $actor, $emailChanged) {
+                $oldRole = $user->role->value;
+                $oldStatus = $user->status;
+
+                $payload = [
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'role' => $data['role'],
+                ];
+
+                if (isset($data['status'])) {
+                    $payload['status'] = $data['status'];
+                }
+
+                if (! empty($data['password'])) {
+                    $payload['password'] = Hash::make($data['password']);
+                }
+
+                if ($emailChanged) {
+                    $user->email_verified_at = null;
+                }
+
+                $user->update($payload);
+                $user = $user->fresh();
+
+                if ($oldRole !== $user->role->value) {
+                    event(new \App\Events\UserRoleChanged($user, $oldRole, $user->role->value, $actor));
+                }
+
+                if ($oldStatus === \App\Enums\Status::ARCHIVED && $user->status === \App\Enums\Status::ACTIVE) {
+                    event(new \App\Events\UserAccountRestored($user, $actor));
+                }
+
+                if ($oldStatus === \App\Enums\Status::ACTIVE && $user->status === \App\Enums\Status::ARCHIVED) {
+                    event(new \App\Events\UserAccountArchived($user, $actor));
+                }
+
+                return $user;
+            });
+        } catch (\Throwable $e) {
+            Log::error('Failed to update user', ['user_id' => $user->id, 'error' => $e->getMessage()]);
+
+            return ['success' => false, 'message' => 'Could not update the user. Please try again.'];
+        }
+
+        if (! $emailChanged || $user->status !== Status::ACTIVE) {
+            return ['success' => true, 'message' => 'User updated successfully.'];
+        }
+
+        if (! $this->sendVerification($user)) {
+            return [
+                'success' => true,
+                'message' => 'User updated, but the verification email could not be sent. Use "Resend invite" from the options menu.',
             ];
+        }
 
-            if (isset($data['status'])) {
-                $payload['status'] = $data['status'];
-            }
-
-            if (! empty($data['password'])) {
-                $payload['password'] = Hash::make($data['password']);
-            }
-
-            $user->update($payload);
-            $user = $user->fresh();
-
-            if ($oldRole !== $user->role->value) {
-                event(new \App\Events\UserRoleChanged($user, $oldRole, $user->role->value, $actor));
-            }
-
-            if ($oldStatus === \App\Enums\Status::ARCHIVED && $user->status === \App\Enums\Status::ACTIVE) {
-                event(new \App\Events\UserAccountRestored($user, $actor));
-            }
-
-            if ($oldStatus === \App\Enums\Status::ACTIVE && $user->status === \App\Enums\Status::ARCHIVED) {
-                event(new \App\Events\UserAccountArchived($user, $actor));
-            }
-
-            return $user;
-        });
+        return ['success' => true, 'message' => "User updated. A verification link was sent to {$user->email}."];
     }
 
     public function archive(User $user, User $actor): void

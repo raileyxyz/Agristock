@@ -77,4 +77,14 @@ class User extends Authenticatable
             });
         });
     }
+
+    public function scopeStatusFilter(Builder $query, ?string $filter): Builder
+    {
+        return match ($filter) {
+            'active' => $query->where('status', Status::ACTIVE->value)->whereNotNull('email_verified_at'),
+            'pending' => $query->where('status', Status::ACTIVE->value)->whereNull('email_verified_at'),
+            'archived' => $query->where('status', Status::ARCHIVED->value),
+            default => $query,
+        };
+    }
 }

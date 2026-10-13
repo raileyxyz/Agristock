@@ -49,20 +49,15 @@
             class="fixed inset-0 bg-black/40 z-30 lg:hidden"
             style="display: none;"></div>
 
-        <!-- Sidebar -->
         <x-sidebar />
 
-        <!-- 2. Burahin ang bg-gray-50 dark:bg-[#0B0F0D] at transition sa WRAPPER DIV -->
         <div class="flex-1 flex flex-col overflow-hidden">
 
-            <!-- Topbar -->
             <x-topbar />
 
-            <!-- 3. Burahin ang bg-gray-50 dark:bg-[#0B0F0D] at transition sa MAIN tag -->
-            <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+            <main class="flex-1 overflow-y-auto p-4 pb-24 sm:p-6 sm:pb-24 lg:p-8 lg:pb-24">
                 {{ $slot }}
             </main>
-
         </div>
 
     </div>

@@ -28,22 +28,13 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'name' => [
                 'required',
                 'string',
                 'min:2',
                 'max:255',
                 'regex:/^[\pL\s\-\.\']+$/u',
-            ],
-
-            'email' => [
-                'required',
-                'string',
-                'lowercase',
-                app()->environment('testing') ? 'email:rfc' : 'email:rfc,dns',
-                'max:255',
-                Rule::unique(User::class)->ignore($this->user()->id),
             ],
 
             'phone' => [
@@ -58,6 +49,23 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
             ],
         ];
+
+        if ($this->user()->isAdmin()) {
+            $rules['email'] = [
+                'required',
+                'string',
+                'lowercase',
+                app()->environment('testing') ? 'email:rfc' : 'email:rfc,dns',
+                'max:255',
+                Rule::unique(User::class)->ignore($this->user()->id),
+            ];
+
+            if (strcasecmp((string) $this->input('email'), $this->user()->email) !== 0) {
+                $rules['current_password'] = ['required', 'current_password'];
+            }
+        }
+
+        return $rules;
     }
 
     /**
@@ -69,6 +77,8 @@ class ProfileUpdateRequest extends FormRequest
             'name.regex' => 'Name may only contain letters, spaces, hyphens, periods, and apostrophes.',
             'phone.regex' => 'Enter a valid Philippine mobile number (e.g. 0917 234 5678 or +63 917 234 5678).',
             'address.min' => 'Please enter a more complete address.',
+            'current_password.required' => 'Enter your current password to change your email.',
+            'current_password.current_password' => 'The password you entered is incorrect.',
         ];
     }
 }
