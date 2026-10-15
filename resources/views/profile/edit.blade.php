@@ -102,6 +102,18 @@
                             </div>
 
                             <div>
+                                <x-input-label for="phone" :value="__('Phone Number')" class="text-xs sm:text-sm" />
+                                <x-text-input id="phone" name="phone" type="text" class="mt-1 sm:mt-1.5 block w-full text-xs sm:text-sm" :value="old('phone', $user->phone)" placeholder="+63 917 234 5678" autocomplete="tel" />
+                                <x-input-error class="mt-1 sm:mt-1.5" :messages="$errors->get('phone')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="address" :value="__('Address')" class="text-xs sm:text-sm" />
+                                <x-text-input id="address" name="address" type="text" class="mt-1 sm:mt-1.5 block w-full text-xs sm:text-sm" :value="old('address', $user->address)" />
+                                <x-input-error class="mt-1 sm:mt-1.5" :messages="$errors->get('address')" />
+                            </div>
+
+                            <div>
                                 <x-input-label for="email" :value="__('Email')" class="text-xs sm:text-sm" />
                                 @if($user->isAdmin())
                                     <div x-data="{ original: @js($user->email), email: @js(old('email', $user->email)) }">
@@ -120,18 +132,6 @@
                                     <x-text-input id="email" type="email" class="mt-1 sm:mt-1.5 block w-full text-xs sm:text-sm opacity-70 cursor-not-allowed" :value="$user->email" disabled />
                                     <p class="mt-1 sm:mt-1.5 text-[11px] sm:text-xs text-gray-400 dark:text-gray-500">Only an administrator can change your email address.</p>
                                 @endif
-                            </div>
-
-                            <div>
-                                <x-input-label for="phone" :value="__('Phone Number')" class="text-xs sm:text-sm" />
-                                <x-text-input id="phone" name="phone" type="text" class="mt-1 sm:mt-1.5 block w-full text-xs sm:text-sm" :value="old('phone', $user->phone)" placeholder="+63 917 234 5678" autocomplete="tel" />
-                                <x-input-error class="mt-1 sm:mt-1.5" :messages="$errors->get('phone')" />
-                            </div>
-
-                            <div>
-                                <x-input-label for="address" :value="__('Address')" class="text-xs sm:text-sm" />
-                                <x-text-input id="address" name="address" type="text" class="mt-1 sm:mt-1.5 block w-full text-xs sm:text-sm" :value="old('address', $user->address)" />
-                                <x-input-error class="mt-1 sm:mt-1.5" :messages="$errors->get('address')" />
                             </div>
                         </div>
 
