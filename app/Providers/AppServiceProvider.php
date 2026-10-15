@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Auth\Events\Login;
 use App\Listeners\UpdateLastLogin;
+use App\Enums\Status;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\View;
 use App\View\Composers\SidebarComposer;
@@ -43,7 +44,13 @@ class AppServiceProvider extends ServiceProvider
                 return null;
             }
 
-            $isDeletingSelf = $ability === 'delete' && ($arguments[0] ?? null) instanceof User && $arguments[0]->is($user);
+            $target = $arguments[0] ?? null;
+
+            if ($target instanceof User && $target->status === Status::DELETED && in_array($ability, ['update', 'delete'], true)) {
+                return false;
+            }
+
+            $isDeletingSelf = $ability === 'delete' && $target instanceof User && $target->is($user);
 
             if ($isDeletingSelf) {
                 return null;

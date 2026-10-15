@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\Status;
 use App\Models\User;
+use App\Models\AccountDeletionRequest;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -11,6 +12,7 @@ use App\Notifications\UserInviteNotification;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+
 
 class UserManagementService
 {
@@ -43,6 +45,8 @@ class UserManagementService
             'total' => User::count(),
             'active' => User::where('status', Status::ACTIVE->value)->count(),
             'archived' => User::where('status', Status::ARCHIVED->value)->count(),
+            'deleted' => User::where('status', Status::DELETED->value)->count(),
+            'pending_deletions' => AccountDeletionRequest::pending()->count(),
         ];
     }
 

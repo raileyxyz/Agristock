@@ -12,6 +12,7 @@ use App\Http\Controllers\Inventory\LowStockController;
 use App\Http\Controllers\Inventory\StockOutController;
 use App\Http\Controllers\Inventory\StockAdjustmentController;
 use App\Http\Controllers\Suppliers\SupplierController;
+use App\Http\Controllers\Users\DeletionRequestController;
 use App\Http\Controllers\Users\UserController;
 use App\Http\Controllers\Reports\ReportController;
 use App\Http\Controllers\Notifications\NotificationPreferenceController;
@@ -31,7 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile/deletion-request', [ProfileController::class, 'requestDeletion'])->name('profile.deletion-request');
 
     // Product Management
     Route::resource('products', ProductController::class)
@@ -95,6 +96,15 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/users-roles-permissions', [UserController::class, 'rolesPermissions'])
         ->name('users.roles');
+
+    Route::get('/users/deletion-requests', [DeletionRequestController::class, 'index'])
+        ->name('users.deletion-requests.index');
+
+    Route::post('/users/deletion-requests/{deletionRequest}/approve', [DeletionRequestController::class, 'approve'])
+        ->name('users.deletion-requests.approve');
+
+    Route::post('/users/deletion-requests/{deletionRequest}/reject', [DeletionRequestController::class, 'reject'])
+        ->name('users.deletion-requests.reject');
 
     Route::middleware('can:reports.stock')->group(function () {
         Route::get('/reports/stock', [ReportController::class, 'stock'])->name('reports.stock');

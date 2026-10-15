@@ -53,40 +53,6 @@ test('email verification status is unchanged when the email address is unchanged
     $this->assertNotNull($user->refresh()->email_verified_at);
 });
 
-test('user can delete their account', function () {
-    $user = User::factory()->create();
-
-    $response = $this
-        ->actingAs($user)
-        ->delete('/profile', [
-            'password' => 'password',
-        ]);
-
-    $response
-        ->assertSessionHasNoErrors()
-        ->assertRedirect('/');
-
-    $this->assertGuest();
-    $this->assertNull($user->fresh());
-});
-
-test('correct password must be provided to delete account', function () {
-    $user = User::factory()->create();
-
-    $response = $this
-        ->actingAs($user)
-        ->from('/profile')
-        ->delete('/profile', [
-            'password' => 'wrong-password',
-        ]);
-
-    $response
-        ->assertSessionHasErrorsIn('userDeletion', 'password')
-        ->assertRedirect('/profile');
-
-    $this->assertNotNull($user->fresh());
-});
-
 it('does not let a manager or staff change their own email from the profile page', function (string $role) {
     Notification::fake();
     $user = User::factory()->{$role}()->create(['name' => 'Test User']);
@@ -114,7 +80,8 @@ it('lets an admin change their own email with the current password and sends a v
         'name' => 'Admin User',
         'email' => 'new-admin@example.com',
         'current_password' => 'password',
-    ])->assertSessionHasNoErrors()->assertRedirect('/profile');
+
+    ])->assertSessionHasNoErrors()->assertRedirect('/profile')->assertSessionHas('email_verification', 'sent');
 
     $admin->refresh();
 
@@ -148,7 +115,7 @@ it('does not send a verification link when an admin keeps the same email', funct
     $this->actingAs($admin)->patch('/profile', [
         'name' => 'Renamed Admin',
         'email' => $admin->email,
-    ])->assertSessionHasNoErrors();
+    ])->assertSessionHasNoErrors()->assertSessionMissing('email_verification');
 
     Notification::assertNothingSent();
     expect($admin->fresh()->email_verified_at)->not->toBeNull();

@@ -51,11 +51,15 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        if (Auth::user()->status === Status::ARCHIVED) {
+        $status = Auth::user()->status;
+
+        if ($status !== Status::ACTIVE) {
             Auth::logout();
 
             throw ValidationException::withMessages([
-                'email' => 'This account has been archived. Please contact your administrator.',
+                'email' => $status === Status::DELETED
+                    ? 'This account has been deleted.'
+                    : 'This account has been archived. Please contact your administrator.',
             ]);
         }
 

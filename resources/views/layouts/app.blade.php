@@ -55,6 +55,16 @@
 
             <x-topbar />
 
+            @auth
+                @unless(auth()->user()->hasVerifiedEmail())
+                    <div class="bg-amber-50 dark:bg-amber-950/30 border-b border-amber-200 dark:border-amber-900/40 text-amber-800 dark:text-amber-300 text-xs sm:text-sm px-4 sm:px-6 lg:px-8 py-2.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+                        <i data-lucide="mail" class="w-4 h-4 shrink-0"></i>
+                        <span>Your email address is not verified. You can view data, but you cannot make changes until you verify it.</span>
+                        <a href="{{ route('profile.edit') }}" class="font-semibold underline underline-offset-2 hover:text-amber-900 dark:hover:text-amber-200">Verify now</a>
+                    </div>
+                @endunless
+            @endauth
+
             <main class="flex-1 overflow-y-auto p-4 pb-24 sm:p-6 sm:pb-24 lg:p-8 lg:pb-24">
                 {{ $slot }}
             </main>

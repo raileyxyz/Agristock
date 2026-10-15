@@ -48,6 +48,14 @@ class UserPolicy
     }
 
     /**
+     * Determine whether the user can review account deletion requests.
+     */
+    public function reviewDeletionRequests(User $user): bool
+    {
+        return $user->isAdmin();
+    }
+
+    /**
      * Determine whether the user can restore the model.
      */
     public function restore(User $user, User $model): bool

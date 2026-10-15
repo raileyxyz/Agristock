@@ -73,15 +73,34 @@
                     <span>
                         {{ $statistics['archived'] }} Archived
                     </span>
+
+                    <span class="text-gray-300 dark:text-[#27332C]">•</span>
+
+                    <span>
+                        {{ $statistics['deleted'] }} Deleted
+                    </span>
                 </p>
             </div>
-            @can('create', \App\Models\User::class)
-                <a href="{{ route('users.create') }}"
-                   class="bg-green-600 hover:bg-green-700 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
-                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-                    Add User
-                </a>
-            @endcan
+            <div class="flex items-center gap-2 shrink-0">
+                @can('reviewDeletionRequests', \App\Models\User::class)
+                    <a href="{{ route('users.deletion-requests.index') }}"
+                       class="relative border border-gray-300 dark:border-[#27332C] text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#161F1A] px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors">
+                        <i data-lucide="user-minus" class="w-3.5 h-3.5"></i>
+                        Deletion Requests
+                        @if($statistics['pending_deletions'] > 0)
+                            <span class="min-w-5 h-5 px-1.5 rounded-full bg-red-600 text-white text-[10px] font-bold flex items-center justify-center">{{ $statistics['pending_deletions'] }}</span>
+                        @endif
+                    </a>
+                @endcan
+
+                @can('create', \App\Models\User::class)
+                    <a href="{{ route('users.create') }}"
+                       class="bg-green-600 hover:bg-green-700 text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors shrink-0">
+                        <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                        Add User
+                    </a>
+                @endcan
+            </div>
         </div>
 
         <!-- Search + Role filter -->
@@ -117,8 +136,9 @@
                         class="w-full sm:w-auto appearance-none border border-gray-300 dark:border-[#27332C] rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white dark:bg-[#111713] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
                     <option value="">All Status</option>
                     <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
-                    <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending invite</option>
                     <option value="archived" {{ request('status') === 'archived' ? 'selected' : '' }}>Archived</option>
+                    <option value="deleted" {{ request('status') === 'deleted' ? 'selected' : '' }}>Deleted</option>
+                    <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending invite</option>
                 </select>
                 <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 dark:text-gray-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
             </div>
@@ -173,9 +193,11 @@
                                 </td>
                                 <td class="px-3 py-2.5 whitespace-nowrap">
                                     <span class="text-xs font-medium px-2.5 py-1 rounded-full
-                                        {{ $user->status === \App\Enums\Status::ACTIVE
-                                            ? 'bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400'
-                                            : 'bg-gray-100 text-gray-500 dark:bg-[#1C2621] dark:text-gray-400' }}">
+                                        {{ match($user->status) {
+                                            \App\Enums\Status::ACTIVE => 'bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400',
+                                            \App\Enums\Status::DELETED => 'bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400',
+                                            default => 'bg-gray-100 text-gray-500 dark:bg-[#1C2621] dark:text-gray-400',
+                                        } }}">
                                         {{ $user->status->value }}
                                     </span>
                                     @if(is_null($user->email_verified_at) && $user->status === \App\Enums\Status::ACTIVE)

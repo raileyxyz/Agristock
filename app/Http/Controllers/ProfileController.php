@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Services\AccountDeletionRequestService;
 use App\Services\NotificationPreferenceService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,7 +19,8 @@ class ProfileController extends Controller
      * Display the user's profile form.
      */
     public function __construct(
-        protected NotificationPreferenceService $preferenceService
+        protected NotificationPreferenceService $preferenceService,
+        protected AccountDeletionRequestService $deletionRequestService
     ) {}
 
     public function edit(Request $request): View
@@ -26,6 +28,7 @@ class ProfileController extends Controller
         return view('profile.edit', [
             'user' => $request->user(),
             'notificationGroups' => $this->preferenceService->getPreferencesForUser($request->user()),
+            'deletionRequest' => $this->deletionRequestService->latestFor($request->user()),
         ]);
     }
 
@@ -48,18 +51,22 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
+        $redirect = Redirect::route('profile.edit')->with('status', 'profile-updated');
+
         if ($emailChanged) {
             try {
                 $request->user()->sendEmailVerificationNotification();
+                $redirect->with('email_verification', 'sent');
             } catch (\Throwable $e) {
                 Log::error('Failed to send email verification', [
                     'user_id' => $request->user()->id,
                     'error' => $e->getMessage(),
                 ]);
+                $redirect->with('email_verification', 'failed');
             }
         }
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');;
+        return $redirect;
     }
 
     public function updateAvatar(Request $request): RedirectResponse
@@ -82,25 +89,19 @@ class ProfileController extends Controller
     }
 
     /**
-     * Delete the user's account.
+     * Send a request to the administrators to delete the user's account.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function requestDeletion(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
+            'reason' => ['required', 'string', 'min:10', 'max:500'],
             'password' => ['required', 'current_password'],
         ]);
 
-        $user = $request->user();
+        $result = $this->deletionRequestService->request($request->user(), $request->input('reason'));
 
-        event(new \App\Events\UserAccountDeleted($user->name, $user->email));
-
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        return Redirect::route('profile.edit')
+            ->with('status', $result['success'] ? 'deletion-requested' : 'deletion-request-failed')
+            ->with('deletion_message', $result['message']);
     }
 }

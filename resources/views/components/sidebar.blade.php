@@ -238,6 +238,11 @@
                         <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Add User
                     </a>
                     @endcan
+                    @can('create', App\Models\User::class)
+                    <a href="{{ route('users.deletion-requests.index') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('users.deletion-requests.index') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
+                        <i data-lucide="user-minus" class="w-3.5 h-3.5"></i> Deletion Request
+                    </a>
+                    @endcan
                     @can('viewAny', App\Models\User::class)
                     <a href="{{ route('users.roles') }}" class="flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors {{ request()->routeIs('users.roles') ? 'bg-green-600 text-white font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#161F1A]' }}">
                         <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Roles &amp; Permissions

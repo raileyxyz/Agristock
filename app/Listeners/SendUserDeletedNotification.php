@@ -16,9 +16,9 @@ class SendUserDeletedNotification
         $this->dispatchService->sendToEligibleUsers(
             'user_deleted',
             'User Account Deleted',
-            "{$event->deletedUserName} ({$event->deletedUserEmail}) permanently deleted their own account.",
+            "{$event->actor->name} approved the deletion of {$event->deletedUserName} ({$event->deletedUserEmail}).",
             route('users.index'),
-            null
+            $event->actor
         );
     }
 }

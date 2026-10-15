@@ -17,13 +17,15 @@ class EnsureUserIsActive
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->status === Status::ARCHIVED) {
+        if (Auth::check() && Auth::user()->status !== Status::ACTIVE) {
+            $deleted = Auth::user()->status === Status::DELETED;
+
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
             return redirect()->route('login')->withErrors([
-                'email' => 'Your account has been archived.',
+                'email' => $deleted ? 'Your account has been deleted.' : 'Your account has been archived.',
             ]);
         }
 

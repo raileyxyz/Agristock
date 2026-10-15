@@ -97,9 +97,23 @@ return [
     ],
     'user_deleted' => [
         'label' => 'User Account Deleted',
-        'description' => 'Notify when a user permanently deletes their own account.',
+        'description' => 'Notify when an administrator approves the deletion of a user account.',
         'category' => 'User & Security',
         'roles' => [UserRole::ADMIN],
+        'default_enabled' => true,
+    ],
+    'deletion_requested' => [
+        'label' => 'Account Deletion Request',
+        'description' => 'Notify when a user asks to have their account deleted.',
+        'category' => 'User & Security',
+        'roles' => [UserRole::ADMIN],
+        'default_enabled' => true,
+    ],
+    'deletion_decided' => [
+        'label' => 'Deletion Request Decision',
+        'description' => 'Notify when an administrator declines your account deletion request.',
+        'category' => 'User & Security',
+        'roles' => [UserRole::MANAGER, UserRole::STAFF],
         'default_enabled' => true,
     ],
 

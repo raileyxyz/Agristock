@@ -3,7 +3,7 @@
         activeTab: '{{
             request('tab') === 'notifications' || in_array(session('status'), ['notifications-updated', 'notifications-unchanged'])
                 ? 'notifications'
-                : (request('tab') === 'security' || session('status') === 'password-updated' || $errors->updatePassword->isNotEmpty() || $errors->userDeletion->isNotEmpty()
+                : (request('tab') === 'security' || session('status') === 'password-updated' || in_array(session('status'), ['deletion-requested', 'deletion-request-failed']) || $errors->updatePassword->isNotEmpty() || $errors->userDeletion->isNotEmpty()
                     ? 'security'
                     : 'profile')
         }}',
@@ -53,6 +53,22 @@
                         <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" x-transition
                             class="bg-green-50 dark:bg-green-950/40 border border-green-200 dark:border-green-900/40 text-green-700 dark:text-green-300 text-xs sm:text-sm px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg">
                             Changes saved successfully.
+                        </div>
+                    @endif
+
+                    @if(session('email_verification') === 'sent')
+                        <div class="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 text-amber-800 dark:text-amber-300 text-xs sm:text-sm px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg">
+                            We sent a verification link to <span class="font-semibold break-all">{{ $user->email }}</span>. Open it to verify your new email address. Until then, email alerts will not be sent to this address.
+                        </div>
+                    @elseif(session('email_verification') === 'failed')
+                        <div class="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/40 text-red-700 dark:text-red-300 text-xs sm:text-sm px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg">
+                            Your email was changed, but we could not send the verification link. Use "Click here to re-send the verification email" below to try again.
+                        </div>
+                    @endif
+
+                    @if(session('status') === 'verification-required')
+                        <div class="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 text-amber-800 dark:text-amber-300 text-xs sm:text-sm px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg">
+                            Verify your email address to unlock that action. Use the re-send link below to get a new verification email. If your email address is wrong, an administrator can correct it.
                         </div>
                     @endif
 
@@ -250,16 +266,36 @@
 
                     <!-- Delete Account Card -->
                     <div class="bg-white dark:bg-[#111713] border border-red-200 dark:border-red-900/40 rounded-xl p-4 sm:p-6 shadow-sm transition-colors duration-200 ease-in-out"
-                        x-data="{ showDeleteModal: {{ $errors->userDeletion->isNotEmpty() ? 'true' : 'false' }}, password: '' }"
+                        x-data="{ showDeleteModal: {{ $errors->userDeletion->isNotEmpty() ? 'true' : 'false' }}, password: '', reason: @js(old('reason', '')) }"
                         x-init="if (showDeleteModal) $nextTick(() => lucide.createIcons())">
                         <h2 class="text-sm sm:text-base font-bold text-red-600 dark:text-red-400">Delete Account</h2>
-                        <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5 sm:mt-1 mb-4 sm:mb-5 leading-relaxed">Once deleted, all of your data will be permanently removed. This cannot be undone.</p>
+                        <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5 sm:mt-1 mb-4 sm:mb-5 leading-relaxed">Deleting your account needs approval from an administrator. Send a request with your reason. You can keep using the system until it is approved. Once approved, your account is marked as Deleted, you can no longer log in, and it cannot be restored.</p>
 
-                        <button type="button" @click="showDeleteModal = true; $nextTick(() => lucide.createIcons())"
-                                class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-colors">
-                            <i data-lucide="trash-2" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
-                            <span>Delete Account</span>
-                        </button>
+                        @if(in_array(session('status'), ['deletion-requested', 'deletion-request-failed']))
+                            <div class="mb-4 text-xs sm:text-sm px-3.5 py-2.5 rounded-lg border {{ session('status') === 'deletion-requested' ? 'bg-green-50 dark:bg-green-950/40 border-green-200 dark:border-green-900/40 text-green-700 dark:text-green-300' : 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-900/40 text-red-700 dark:text-red-300' }}">
+                                {{ session('deletion_message') }}
+                            </div>
+                        @endif
+
+                        @if($user->isAdmin())
+                            <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Administrator accounts cannot be deleted from here.</p>
+                        @elseif($deletionRequest?->status === \App\Enums\DeletionRequestStatus::PENDING)
+                            <div class="text-xs sm:text-sm px-3.5 py-2.5 rounded-lg border bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900/40 text-amber-800 dark:text-amber-300">
+                                Your deletion request is waiting for an administrator's decision (sent {{ $deletionRequest->created_at->diffForHumans() }}).
+                            </div>
+                        @else
+                            @if($deletionRequest?->status === \App\Enums\DeletionRequestStatus::REJECTED)
+                                <div class="mb-4 text-xs sm:text-sm px-3.5 py-2.5 rounded-lg border bg-gray-50 dark:bg-[#161D19] border-gray-200 dark:border-[#27332C] text-gray-600 dark:text-gray-300">
+                                    Your last request was declined{{ $deletionRequest->admin_note ? ': '.$deletionRequest->admin_note : '.' }}
+                                </div>
+                            @endif
+
+                            <button type="button" @click="showDeleteModal = true; $nextTick(() => lucide.createIcons())"
+                                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-colors">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                                <span>Request Account Deletion</span>
+                            </button>
+                        @endif
 
                         <!-- Delete Account Modal -->
                         <div x-show="showDeleteModal"
@@ -280,14 +316,32 @@
                                         <i data-lucide="trash-2" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                                     </div>
 
-                                    <h2 class="text-sm sm:text-base font-semibold text-gray-900 dark:text-gray-100">Delete your account?</h2>
+                                    <h2 class="text-sm sm:text-base font-semibold text-gray-900 dark:text-gray-100">Request account deletion?</h2>
                                     <p class="mt-1 text-xs sm:text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                                        This action is permanent. All your data will be removed and cannot be recovered.
+                                        An administrator must approve this request. If approved, your account is marked as Deleted and cannot be restored. Your past stock records stay in the system.
                                     </p>
 
-                                    <form method="post" action="{{ route('profile.destroy') }}" class="mt-4 sm:mt-5 text-left">
+                                    <form method="post" action="{{ route('profile.deletion-request') }}" class="mt-4 sm:mt-5 text-left">
                                         @csrf
-                                        @method('delete')
+
+                                        <div class="mb-4">
+                                            <label for="deletion_reason" class="block text-[11px] sm:text-xs font-medium text-gray-700 dark:text-gray-200 mb-1.5">
+                                                Why do you want to delete your account?
+                                            </label>
+                                            <textarea id="deletion_reason" name="reason" x-model="reason" rows="3" maxlength="500"
+                                                placeholder="Tell the administrator your reason (at least 10 characters)"
+                                                class="w-full border rounded-lg px-3 py-2 text-xs sm:text-sm placeholder-gray-400 dark:placeholder-gray-500 dark:bg-[#0B0F0D] dark:text-gray-100 focus:outline-none focus:ring-2 transition-all
+                                                {{ $errors->userDeletion->has('reason')
+                                                    ? 'border-red-400 dark:border-red-500/60 focus:ring-red-500/20 focus:border-red-500'
+                                                    : 'border-gray-200 dark:border-[#27332C] focus:ring-red-500/20 focus:border-red-500' }}"></textarea>
+
+                                            @error('reason', 'userDeletion')
+                                                <p class="mt-1.5 text-[11px] sm:text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
+                                                    <i data-lucide="circle-alert" class="w-3 h-3 shrink-0"></i>
+                                                    <span>{{ $message }}</span>
+                                                </p>
+                                            @enderror
+                                        </div>
 
                                         <label for="password" class="block text-[11px] sm:text-xs font-medium text-gray-700 dark:text-gray-200 mb-1.5">
                                             Confirm your password
@@ -313,17 +367,17 @@
                                         @enderror
 
                                         <div class="mt-5 sm:mt-6 flex items-center gap-2.5">
-                                            <button type="button" @click="showDeleteModal = false; password = ''"
+                                            <button type="button" @click="showDeleteModal = false; password = ''; reason = ''"
                                                     class="flex-1 h-9 sm:h-10 rounded-lg text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#1C2621] dark:hover:text-gray-100 transition-colors">
                                                 Cancel
                                             </button>
                                             <button type="submit"
-                                                    :disabled="!password"
-                                                    :class="password
+                                                    :disabled="!password || reason.trim().length < 10"
+                                                    :class="password && reason.trim().length >= 10
                                                         ? 'bg-red-600 hover:bg-red-700 text-white'
                                                         : 'bg-red-300 dark:bg-red-950/60 text-white dark:text-red-400/60 cursor-not-allowed'"
                                                     class="flex-1 h-9 sm:h-10 rounded-lg text-xs sm:text-sm font-medium transition-colors shadow-sm">
-                                                Delete
+                                                Send Request
                                             </button>
                                         </div>
                                     </form>

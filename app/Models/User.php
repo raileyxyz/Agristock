@@ -84,6 +84,7 @@ class User extends Authenticatable
             'active' => $query->where('status', Status::ACTIVE->value)->whereNotNull('email_verified_at'),
             'pending' => $query->where('status', Status::ACTIVE->value)->whereNull('email_verified_at'),
             'archived' => $query->where('status', Status::ARCHIVED->value),
+            'deleted' => $query->where('status', Status::DELETED->value),
             default => $query,
         };
     }
