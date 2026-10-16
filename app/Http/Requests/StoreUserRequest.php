@@ -52,6 +52,11 @@ class StoreUserRequest extends FormRequest
                 'required',
                 new Enum(UserRole::class)
             ],
+
+            'current_password' => [
+                Rule::requiredIf(fn () => $this->input('role') === UserRole::ADMIN->value),
+                'current_password',
+            ],
         ];
     }
 
@@ -63,6 +68,8 @@ class StoreUserRequest extends FormRequest
             'email.unique' => 'This email is already registered.',
             'role.required' => 'Please select a role.',
             'role.in' => 'Selected role is invalid.',
+            'current_password.required' => 'Enter your password to confirm adding an Admin account.',
+            'current_password.current_password' => 'The password you entered is incorrect.',
         ];
     }
 }

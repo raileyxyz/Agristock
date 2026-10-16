@@ -92,6 +92,30 @@
                             @enderror
                         </div>
 
+                        <!-- Admin confirmation -->
+                        <div x-show="role === 'Admin'" x-cloak>
+                            <div class="rounded-lg border border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-950/30 px-3 py-2.5 mb-3 flex items-start gap-2">
+                                <i data-lucide="shield-alert" class="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0"></i>
+                                <p class="text-xs sm:text-sm text-amber-800 dark:text-amber-300">
+                                    Admin accounts have full access to the system. Enter your own password to confirm.
+                                </p>
+                            </div>
+
+                            <label class="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 sm:mb-1.5">
+                                Your Password
+                            </label>
+                            <input type="password" name="current_password" autocomplete="current-password"
+                                :disabled="role !== 'Admin'"
+                                placeholder="Enter your password"
+                                class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#0B0F0D] dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors
+                                {{ $errors->has('current_password') ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400' }}">
+                            @error('current_password')
+                                <p class="text-xs text-red-600 dark:text-red-400 mt-1 sm:mt-1.5 flex items-center gap-1">
+                                    <i data-lucide="circle-alert" class="w-3.5 h-3.5 shrink-0"></i> {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+
                         <!-- Invite info -->
                         <div class="flex items-start gap-2 rounded-lg border border-green-200 dark:border-green-900/50 bg-green-50 dark:bg-green-950/30 px-3 py-2.5">
                             <i data-lucide="mail" class="w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 shrink-0"></i>

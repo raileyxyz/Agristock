@@ -4,6 +4,7 @@ use App\Models\User;
 use App\Notifications\UserInviteNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Support\Facades\Hash;
 
 it('allows admin to create a new user', function () {
     $admin = User::factory()->admin()->create();
@@ -325,3 +326,51 @@ it('lets admin and manager use the status filter but not staff', function (strin
 
     $this->actingAs($actor)->get('/users?status=pending')->assertStatus($expected);
 })->with([['admin', 200], ['manager', 200], ['staff', 403]]);
+
+it('requires the admin password to create an admin account', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)->post('/users', [
+        'name' => 'New Admin',
+        'email' => 'newadmin@example.com',
+        'role' => 'Admin',
+    ])->assertSessionHasErrors('current_password');
+
+    $this->assertDatabaseMissing('users', ['email' => 'newadmin@example.com']);
+});
+
+it('rejects a wrong password when creating an admin account', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)->post('/users', [
+        'name' => 'New Admin',
+        'email' => 'newadmin@example.com',
+        'role' => 'Admin',
+        'current_password' => 'wrong-password',
+    ])->assertSessionHasErrors('current_password');
+
+    $this->assertDatabaseMissing('users', ['email' => 'newadmin@example.com']);
+});
+
+it('creates an admin account when the correct password is given', function () {
+    Notification::fake();
+    $admin = User::factory()->admin()->create(); // adjust kung iba ang default password ng factory mo
+
+    $this->actingAs($admin)->post('/users', [
+        'name' => 'New Admin',
+        'email' => 'newadmin@example.com',
+        'role' => 'Admin',
+        'current_password' => 'password',
+    ])->assertRedirect(route('users.index'));
+
+    $this->assertDatabaseHas('users', ['email' => 'newadmin@example.com', 'role' => 'Admin']);
+});
+
+it('does not require a password for non-admin roles', function () {
+    Notification::fake();
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)->post('/users', [
+        'name' => 'Juan', 'email' => 'juan@example.com', 'role' => 'Manager',
+    ])->assertRedirect(route('users.index'));
+});
