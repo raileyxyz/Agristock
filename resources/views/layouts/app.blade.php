@@ -23,7 +23,7 @@
     </script>
 </head>
 
-<body class="font-sans antialiased bg-gray-50 dark:bg-[#0B0F0D] text-gray-900 dark:text-gray-100">
+<body class="font-sans antialiased bg-gray-50 dark:bg-[#121212] text-gray-900 dark:text-gray-100">
 
     <div x-data="{
             sidebarOpen: false,

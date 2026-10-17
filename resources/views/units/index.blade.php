@@ -90,7 +90,7 @@
         <form method="GET" data-search-form class="relative w-full sm:max-w-sm mt-6">
             <i data-lucide="search" class="w-4 h-4 text-gray-400 dark:text-gray-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
             <input type="text" name="search" x-model="search" placeholder="Search units by name or abbreviation"
-                class="w-full border border-gray-300 dark:border-[#27332C] bg-white dark:bg-[#111713] text-gray-800 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-lg pl-9 pr-9 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
+                class="w-full border border-gray-300 dark:border-[#27332C] bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-lg pl-9 pr-9 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
             <button type="button" x-show="search" @click="search = ''"
                     class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-100">
                 <i data-lucide="x" class="w-4 h-4"></i>
@@ -98,14 +98,14 @@
         </form>
 
         <!-- Units table -->
-        <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl overflow-hidden mt-4 transition-colors duration-200 ease-in-out">
+        <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl overflow-hidden mt-4 transition-colors duration-200 ease-in-out">
             <div class="overflow-x-auto">
                 @php
                     $canManageUnits = Auth::user()->can('products.update') || Auth::user()->can('products.delete');
                 @endphp
                 <table class="w-full text-sm min-w-[560px]">
                     <thead>
-                        <tr class="bg-gray-50 dark:bg-[#161F1A] border-b border-gray-200 dark:border-[#1F2B23] text-left text-gray-500 dark:text-gray-400 transition-colors duration-200 ease-in-out">
+                        <tr class="bg-gray-50 dark:bg-[#121212] border-b border-gray-200 dark:border-[#1F2B23] text-left text-gray-500 dark:text-gray-400 transition-colors duration-200 ease-in-out">
                             <th class="px-5 py-3 font-medium">ID</th>
                             <th class="px-5 py-3 font-medium">Name</th>
                             <th class="px-5 py-3 font-medium">Abbreviation</th>
@@ -121,7 +121,7 @@
                                 <td class="px-5 py-3.5 text-gray-400 dark:text-gray-500 text-xs">U{{ $unit->id }}</td>
                                 <td class="px-5 py-3.5 font-semibold text-gray-800 dark:text-gray-200">{{ $unit->name }}</td>
                                 <td class="px-5 py-3.5">
-                                    <span class="inline-block text-xs font-medium px-2.5 py-1 rounded-md bg-gray-100 dark:bg-[#1C2621] text-gray-600 dark:text-gray-400">
+                                    <span class="inline-block text-xs font-medium px-2.5 py-1 rounded-md bg-gray-100 dark:bg-[#121212] text-gray-600 dark:text-gray-400">
                                         {{ $unit->abbreviation }}
                                     </span>
                                 </td>
@@ -132,7 +132,7 @@
                                             {{ $unit->products_count }} {{ Str::plural('product', $unit->products_count) }}
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 dark:bg-[#1C2621] text-gray-400 dark:text-gray-500">
+                                        <span class="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 dark:bg-[#121212] text-gray-400 dark:text-gray-500">
                                             Not used yet
                                         </span>
                                     @endif
@@ -192,7 +192,7 @@
             x-transition:leave="transition-opacity ease-in duration-150"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            class="fixed inset-0 bg-black/50 dark:bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             style="display: none;">
             <div @click.outside="closeModal()"
                 x-show="showModal"
@@ -202,7 +202,7 @@
                 x-transition:leave="transition ease-in duration-150"
                 x-transition:leave-start="opacity-100 scale-100"
                 x-transition:leave-end="opacity-0 scale-95"
-                class="bg-white dark:bg-[#161D19] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+                class="bg-white dark:bg-[#121212] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
 
                 <form method="POST"
                     :action="editingId ? `/units/${editingId}` : '{{ route('units.store') }}'">
@@ -224,7 +224,7 @@
                             </div>
                         </div>
                         <button type="button" @click="closeModal()"
-                                class="text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#1C2621] rounded-lg p-1.5 -mt-1 -mr-1 transition-colors shrink-0">
+                                class="text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#121212] rounded-lg p-1.5 -mt-1 -mr-1 transition-colors shrink-0">
                             <i data-lucide="x" class="w-4.5 h-4.5"></i>
                         </button>
                     </div>
@@ -234,7 +234,7 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Unit name</label>
                             <input type="text" name="name" x-model="unitForm.name" placeholder="Full name (e.g. Kilogram)"
-                                class="w-full border rounded-lg px-3.5 py-2.5 text-sm text-gray-800 dark:text-gray-100 dark:bg-[#0B0F0D] dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors"
+                                class="w-full border rounded-lg px-3.5 py-2.5 text-sm text-gray-800 dark:text-gray-100 dark:bg-[#121212] dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors"
                                 :class="formErrors.name ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
                             <template x-if="formErrors.name">
                                 <p class="text-xs text-red-600 dark:text-red-400 mt-1.5 flex items-center gap-1">
@@ -246,7 +246,7 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Abbreviation</label>
                             <input type="text" name="abbreviation" maxlength="10" x-model="unitForm.abbreviation" placeholder="Abbreviation (e.g. kg)"
-                                class="w-full border rounded-lg px-3.5 py-2.5 text-sm text-gray-800 dark:text-gray-100 dark:bg-[#0B0F0D] dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors"
+                                class="w-full border rounded-lg px-3.5 py-2.5 text-sm text-gray-800 dark:text-gray-100 dark:bg-[#121212] dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors"
                                 :class="formErrors.abbreviation ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
                             <template x-if="formErrors.abbreviation">
                                 <p class="text-xs text-red-600 dark:text-red-400 mt-1.5 flex items-center gap-1">
@@ -258,16 +258,16 @@
                     </div>
 
                     <!-- Footer -->
-                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-4 sm:px-6 py-4 bg-gray-50 dark:bg-[#111713] border-t border-gray-100 dark:border-[#27332C]">
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-4 sm:px-6 py-4 bg-gray-50 dark:bg-[#121212] border-t border-gray-100 dark:border-[#27332C]">
                         <button type="button" @click="closeModal()"
-                                class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#1C2621] dark:hover:text-gray-100 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
+                                class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#121212] dark:hover:text-gray-100 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
                             Cancel
                         </button>
                         <button type="submit"
                                 :disabled="!hasUnitChanges()"
                                 :class="hasUnitChanges()
                                     ? 'bg-green-600 hover:bg-green-700 cursor-pointer text-white'
-                                    : 'bg-gray-300 dark:bg-[#1C2621] text-white dark:text-gray-500 cursor-not-allowed'"
+                                    : 'bg-gray-300 dark:bg-[#27332C] text-white dark:text-gray-500 cursor-not-allowed'"
                                 class="px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm order-1 sm:order-2">
                             <span x-text="editingId ? 'Save changes' : 'Create unit'"></span>
                         </button>
@@ -284,7 +284,7 @@
             x-transition:leave="transition-opacity ease-in duration-150"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            class="fixed inset-0 bg-black/50 dark:bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             style="display: none;">
             <div @click.outside="showDeleteModal = false"
                 x-show="showDeleteModal"
@@ -294,7 +294,7 @@
                 x-transition:leave="transition ease-in duration-150"
                 x-transition:leave-start="opacity-100 scale-100"
                 x-transition:leave-end="opacity-0 scale-95"
-                class="bg-white dark:bg-[#161D19] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+                class="bg-white dark:bg-[#121212] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
 
                 <div class="px-6 pt-6 pb-5">
                     <div class="w-11 h-11 rounded-full bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 flex items-center justify-center mb-4">
@@ -308,11 +308,11 @@
                 </div>
 
                 <form method="POST" :action="`/units/${deleteTarget.id}`"
-                    class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 dark:bg-[#111713] border-t border-gray-100 dark:border-[#27332C]">
+                    class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 dark:bg-[#121212] border-t border-gray-100 dark:border-[#27332C]">
                     @csrf
                     @method('DELETE')
                     <button type="button" @click="showDeleteModal = false"
-                            class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#1C2621] dark:hover:text-gray-100 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
+                            class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#121212] dark:hover:text-gray-100 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
                         Cancel
                     </button>
                     <button type="submit"
@@ -331,14 +331,14 @@
             x-transition:leave="transition-opacity ease-in duration-150"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            class="fixed inset-0 bg-black/50 dark:bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             style="display: none;">
             <div @click.outside="showSuccessModal = false"
                 x-show="showSuccessModal"
                 x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-2"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                class="bg-white dark:bg-[#161D19] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+                class="bg-white dark:bg-[#121212] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
 
                 <div class="px-6 pt-6 pb-5 text-center">
                     <div class="w-12 h-12 rounded-full bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-400 flex items-center justify-center mb-4 mx-auto">
@@ -348,7 +348,7 @@
                     <p class="text-sm text-gray-500 dark:text-gray-400" x-text="successMessage || 'Unit saved successfully.'"></p>
                 </div>
 
-                <div class="flex items-center justify-center px-6 py-4 bg-gray-50 dark:bg-[#111713] border-t border-gray-100 dark:border-[#27332C]">
+                <div class="flex items-center justify-center px-6 py-4 bg-gray-50 dark:bg-[#121212] border-t border-gray-100 dark:border-[#27332C]">
                     <button @click="showSuccessModal = false"
                             class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                         Got it
@@ -365,7 +365,7 @@
             x-transition:leave="transition-opacity ease-in duration-150"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            class="fixed inset-0 bg-black/50 dark:bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             style="display: none;">
             <div @click.outside="showCannotDeleteModal = false"
                 x-show="showCannotDeleteModal"
@@ -375,7 +375,7 @@
                 x-transition:leave="transition ease-in duration-150"
                 x-transition:leave-start="opacity-100 scale-100"
                 x-transition:leave-end="opacity-0 scale-95"
-                class="bg-white dark:bg-[#161D19] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+                class="bg-white dark:bg-[#121212] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
 
                 <div class="px-6 pt-6 pb-5 text-center">
                     <div class="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-4 mx-auto">
@@ -391,7 +391,7 @@
                     </p>
                 </div>
 
-                <div class="flex items-center justify-center px-6 py-4 bg-gray-50 dark:bg-[#111713] border-t border-gray-100 dark:border-[#27332C]">
+                <div class="flex items-center justify-center px-6 py-4 bg-gray-50 dark:bg-[#121212] border-t border-gray-100 dark:border-[#27332C]">
                     <button @click="showCannotDeleteModal = false"
                             class="bg-amber-600 hover:bg-amber-800 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                         Got it

@@ -109,7 +109,7 @@
         }
     </style>
 </head>
-<body class="font-sans antialiased text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-[#0B0F0D] min-h-screen page-fade-in">
+<body class="font-sans antialiased text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-[#121212] min-h-screen page-fade-in">
 
     <div class="min-h-screen flex flex-col lg:grid lg:grid-cols-12">
 

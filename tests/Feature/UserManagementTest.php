@@ -354,7 +354,7 @@ it('rejects a wrong password when creating an admin account', function () {
 
 it('creates an admin account when the correct password is given', function () {
     Notification::fake();
-    $admin = User::factory()->admin()->create(); // adjust kung iba ang default password ng factory mo
+    $admin = User::factory()->admin()->create();
 
     $this->actingAs($admin)->post('/users', [
         'name' => 'New Admin',

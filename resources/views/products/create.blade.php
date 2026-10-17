@@ -28,7 +28,7 @@
                 <div class="lg:col-span-2 space-y-4 sm:space-y-6">
 
                     <!-- Card 1: Product Information -->
-                    <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-sm transition-colors duration-200 ease-in-out">
+                    <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-sm transition-colors duration-200 ease-in-out">
                         <h2 class="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200 border-b border-gray-100 dark:border-[#1F2B23] pb-2.5 sm:pb-3">Product Details</h2>
 
                         <!-- Product Name -->
@@ -37,7 +37,7 @@
                                 Product Name
                             </label>
                             <input type="text" name="name" value="{{ old('name') }}" placeholder="e.g. Hybrid Maize Seeds DK-8031"
-                                class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#0B0F0D] dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors
+                                class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#121212] dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors
                                 {{ $errors->has('name') ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400' }}">
                             @error('name')
                                 <p class="text-xs text-red-600 dark:text-red-400 mt-1 sm:mt-1.5 flex items-center gap-1">
@@ -53,7 +53,7 @@
                                     Category
                                 </label>
                                 <select name="category_id"
-                                        class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm bg-white dark:bg-[#0B0F0D] dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors
+                                        class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm bg-white dark:bg-[#121212] dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors
                                         {{ $errors->has('category_id') ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400' }}">
                                     <option value="">Select category...</option>
                                     @foreach($categories ?? [] as $category)
@@ -74,7 +74,7 @@
                                     Unit of Measurement
                                 </label>
                                 <select name="unit_id"
-                                        class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm bg-white dark:bg-[#0B0F0D] dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors
+                                        class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm bg-white dark:bg-[#121212] dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors
                                         {{ $errors->has('unit_id') ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400' }}">
                                     <option value="">Select unit...</option>
                                     @foreach($units ?? [] as $unit)
@@ -95,7 +95,7 @@
                         <div>
                             <label class="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 sm:mb-1.5">Description</label>
                             <textarea name="description" rows="3" placeholder="Brief description of the product..."
-                                class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#0B0F0D] dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors resize-none
+                                class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#121212] dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors resize-none
                                 {{ $errors->has('description') ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400' }}">{{ old('description') }}</textarea>
                             @error('description')
                                 <p class="text-xs text-red-600 dark:text-red-400 mt-1 sm:mt-1.5 flex items-center gap-1">
@@ -106,7 +106,7 @@
                     </div>
 
                     <!-- Card 2: Pricing & Stock Limits -->
-                    <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-sm transition-colors duration-200 ease-in-out">
+                    <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-sm transition-colors duration-200 ease-in-out">
                         <h2 class="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200 border-b border-gray-100 dark:border-[#1F2B23] pb-2.5 sm:pb-3">Pricing & Inventory Alert Thresholds</h2>
 
                         <!-- Cost Price + Selling Price -->
@@ -118,7 +118,7 @@
                                 <div class="relative">
                                     <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xs sm:text-sm">₱</span>
                                     <input type="number" step="0.01" name="cost_price" value="{{ old('cost_price') }}" placeholder="0.00"
-                                        class="w-full border rounded-lg pl-8 pr-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#0B0F0D] dark:text-gray-100 dark:placeholder:text-gray-500 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors
+                                        class="w-full border rounded-lg pl-8 pr-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#121212] dark:text-gray-100 dark:placeholder:text-gray-500 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors
                                         {{ $errors->has('cost_price') ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400' }}">
                                 </div>
                                 @error('cost_price')
@@ -137,7 +137,7 @@
                                 <div class="relative">
                                     <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xs sm:text-sm">₱</span>
                                     <input type="number" step="0.01" name="selling_price" value="{{ old('selling_price') }}" placeholder="0.00"
-                                        class="w-full border rounded-lg pl-8 pr-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#0B0F0D] dark:text-gray-100 dark:placeholder:text-gray-500 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors
+                                        class="w-full border rounded-lg pl-8 pr-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#121212] dark:text-gray-100 dark:placeholder:text-gray-500 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors
                                         {{ $errors->has('selling_price') ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400' }}">
                                 </div>
                                 @error('selling_price')
@@ -157,7 +157,7 @@
                                     Minimum Stock Level
                                 </label>
                                 <input type="number" name="minimum_stock" value="{{ old('minimum_stock') }}" placeholder="e.g. 50"
-                                    class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#0B0F0D] dark:text-gray-100 dark:placeholder:text-gray-500 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors
+                                    class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#121212] dark:text-gray-100 dark:placeholder:text-gray-500 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors
                                     {{ $errors->has('minimum_stock') ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400' }}">
                                 @error('minimum_stock')
                                     <p class="text-xs text-red-600 dark:text-red-400 mt-1 sm:mt-1.5 flex items-center gap-1">
@@ -173,7 +173,7 @@
                                     Reorder Point
                                 </label>
                                 <input type="number" name="reorder_point" value="{{ old('reorder_point') }}" placeholder="e.g. 70"
-                                    class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#0B0F0D] dark:text-gray-100 dark:placeholder:text-gray-500 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors
+                                    class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#121212] dark:text-gray-100 dark:placeholder:text-gray-500 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors
                                     {{ $errors->has('reorder_point') ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400' }}">
                                 @error('reorder_point')
                                     <p class="text-xs text-red-600 dark:text-red-400 mt-1 sm:mt-1.5 flex items-center gap-1">
@@ -192,7 +192,7 @@
                 <div class="space-y-4 sm:space-y-6">
 
                     <!-- Organization & Options Card -->
-                    <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-sm transition-colors duration-200 ease-in-out">
+                    <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-sm transition-colors duration-200 ease-in-out">
                         <h2 class="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200 border-b border-gray-100 dark:border-[#1F2B23] pb-2.5 sm:pb-3">Organization</h2>
 
                         <!-- SKU -->
@@ -201,7 +201,7 @@
                                 SKU <span class="text-gray-400 dark:text-gray-500 font-normal">(optional)</span>
                             </label>
                             <input type="text" name="sku" value="{{ old('sku') }}" placeholder="Auto-generated"
-                                class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#0B0F0D] dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors
+                                class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#121212] dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors
                                 {{ $errors->has('sku') ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400' }}">
                             @error('sku')
                                 <p class="text-xs text-red-600 dark:text-red-400 mt-1 sm:mt-1.5 flex items-center gap-1">
@@ -213,7 +213,7 @@
                         <!-- Status Switcher -->
                         <div>
                             <span class="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5 sm:mb-2">Status</span>
-                            <div class="flex items-center gap-1.5 bg-gray-50 dark:bg-[#0B0F0D] border border-gray-200 dark:border-[#27332C] p-1 sm:p-1.5 rounded-lg">
+                            <div class="flex items-center gap-1.5 bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] p-1 sm:p-1.5 rounded-lg">
                                 <button type="button" @click="status = 'Active'"
                                         :class="status === 'Active' ? 'bg-green-600 text-white font-medium shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'"
                                         class="flex-1 px-3 py-2 sm:py-1.5 rounded-md text-xs transition-colors">
@@ -229,9 +229,9 @@
                         </div>
 
                         <!-- Track Expiry Checkbox Card -->
-                        <label class="flex items-start gap-3 bg-gray-50 dark:bg-[#0B0F0D] border border-gray-200 dark:border-[#27332C] rounded-lg p-3 sm:p-3.5 cursor-pointer hover:bg-gray-100/60 dark:hover:bg-[#161F1A] transition-colors">
+                        <label class="flex items-start gap-3 bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-lg p-3 sm:p-3.5 cursor-pointer hover:bg-gray-100/60 dark:hover:bg-[#121212] transition-colors">
                             <input type="checkbox" name="expiry_track" value="1" x-model="trackExpiry"
-                                class="mt-0.5 w-4 h-4 rounded border-gray-300 dark:border-[#27332C] dark:bg-[#111713] text-green-600 focus:ring-green-500/40 dark:focus:ring-offset-[#0B0F0D]">
+                                class="mt-0.5 w-4 h-4 rounded border-gray-300 dark:border-[#27332C] dark:bg-[#121212] text-green-600 focus:ring-green-500/40 dark:focus:ring-offset-[#121212]">
                             <span>
                                 <span class="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200">Track expiry dates</span>
                                 <span class="block text-[11px] sm:text-xs text-gray-400 dark:text-gray-500 mt-0.5 leading-snug">Enable for seeds, pesticides, biologicals, and feeds</span>
@@ -240,7 +240,7 @@
                     </div>
 
                     <!-- Note on Stock Card -->
-                    <div class="bg-gray-50 dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl p-3.5 sm:p-4 transition-colors duration-200 ease-in-out">
+                    <div class="bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl p-3.5 sm:p-4 transition-colors duration-200 ease-in-out">
                         <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
                             <span class="font-medium text-gray-700 dark:text-gray-200">Note:</span> Stock quantity is managed in Inventory Management. To add opening stock, go to <span class="font-medium text-green-600 dark:text-green-400">Inventory → Stock In</span> after saving the product.
                         </p>
@@ -253,7 +253,7 @@
                             Save Product
                         </button>
                         <a href="{{ route('products.index') }}"
-                           class="w-full bg-white dark:bg-[#111713] hover:bg-gray-50 dark:hover:bg-[#1C2621] text-gray-600 dark:text-gray-400 dark:hover:text-gray-100 border border-gray-200 dark:border-[#27332C] px-5 py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-colors text-center">
+                           class="w-full bg-white dark:bg-[#121212] hover:bg-gray-50 dark:hover:bg-[#1C2621] text-gray-600 dark:text-gray-400 dark:hover:text-gray-100 border border-gray-200 dark:border-[#27332C] px-5 py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-colors text-center">
                             Cancel
                         </a>
                     </div>
@@ -271,14 +271,14 @@
             x-transition:leave="transition-opacity ease-in duration-150"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            class="fixed inset-0 bg-black/50 dark:bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             style="display: none;">
             <div @click.outside="showSuccessModal = false"
                 x-show="showSuccessModal"
                 x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-2"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                class="bg-white dark:bg-[#161D19] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-xs sm:max-w-sm overflow-hidden">
+                class="bg-white dark:bg-[#121212] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-xs sm:max-w-sm overflow-hidden">
 
                 <div class="px-5 sm:px-6 pt-5 sm:pt-6 pb-4 sm:pb-5 text-center">
                     <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-400 flex items-center justify-center mb-3 sm:mb-4 mx-auto">
@@ -288,7 +288,7 @@
                     <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400" x-text="successMessage || 'Product created successfully.'"></p>
                 </div>
 
-                <div class="flex items-center justify-center px-5 sm:px-6 py-3.5 sm:py-4 bg-gray-50 dark:bg-[#111713] border-t border-gray-100 dark:border-[#27332C]">
+                <div class="flex items-center justify-center px-5 sm:px-6 py-3.5 sm:py-4 bg-gray-50 dark:bg-[#121212] border-t border-gray-100 dark:border-[#27332C]">
                     <button @click="showSuccessModal = false"
                             class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors shadow-sm">
                         Got it

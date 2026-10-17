@@ -1,4 +1,4 @@
-<header class="h-16 bg-white dark:bg-[#0B0F0D] border-b border-gray-200 dark:border-[#27332C] flex items-center justify-between px-4 lg:px-8 gap-3">
+<header class="h-16 bg-white dark:bg-[#121212] border-b border-gray-200 dark:border-[#27332C] flex items-center justify-between px-4 lg:px-8 gap-3">
 
     <!-- Left side: Mobile Menu Button & Breadcrumb -->
     <div class="flex items-center gap-3 min-w-0">
@@ -45,7 +45,7 @@
                 }, 50);
             "
             type="button"
-            class="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-[#161F1A] transition-colors">
+            class="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-[#121212] transition-colors">
             <i data-lucide="sun" class="w-5 h-5 hidden dark:block text-gray-600 dark:text-gray-400 dark:hover:text-gray-100"></i>
             <i data-lucide="moon" class="w-5 h-5 block dark:hidden text-gray-600 dark:text-gray-400 dark:hover:text-gray-100"></i>
         </button>
@@ -53,7 +53,7 @@
         <!-- Notification Bell Dropdown -->
         <div class="relative" x-data="{ notifOpen: false, showAllModal: false }">
             <button @click="notifOpen = !notifOpen"
-                    class="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-[#161F1A] transition-colors">
+                    class="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-[#121212] transition-colors">
                 <i data-lucide="bell" class="w-5 h-5 text-gray-600 dark:text-gray-400 dark:hover:text-gray-100"></i>
                 @if(isset($unreadNotificationCount) && $unreadNotificationCount > 0)
                     <span class="absolute top-1 right-1 bg-red-500 text-white text-[10px] leading-none rounded-full min-w-[16px] h-[16px] flex items-center justify-center px-0.5">
@@ -73,7 +73,7 @@
                 x-transition:leave-end="opacity-0 scale-95"
                 class="fixed inset-x-3 top-[4.5rem] origin-top
                        sm:absolute sm:inset-x-auto sm:top-full sm:right-0 sm:mt-2 sm:w-80 sm:origin-top-right
-                       bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl shadow-lg overflow-hidden z-50"
+                       bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl shadow-lg overflow-hidden z-50"
                 style="display: none;">
 
                 <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-[#27332C]">
@@ -90,7 +90,7 @@
 
                 <div class="max-h-[60vh] sm:max-h-80 overflow-y-auto divide-y divide-gray-100 dark:divide-[#27332C]">
                     @forelse($topbarNotifications ?? [] as $notification)
-                        <div class="flex items-start gap-3 px-4 py-3 {{ $notification->read_at ? '' : 'bg-green-50/40 dark:bg-green-950/20' }}">
+                        <div class="flex items-start gap-3 px-4 py-3 {{ $notification->read_at ? '' : 'bg-black/50 dark:bg-[#121212]/80' }}">
                             <x-notification-icon :type="$notification->data['type']" />
                             <div class="min-w-0 flex-1">
                                 <p class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $notification->data['title'] }}</p>
@@ -116,7 +116,7 @@
 
                 @if(isset($topbarNotifications) && $topbarNotifications->count() > 0)
                     <button @click="notifOpen = false; showAllModal = true; $nextTick(() => lucide.createIcons())"
-                            class="w-full text-center text-xs font-medium text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 hover:bg-gray-50 dark:hover:bg-[#1C2621] px-4 py-3 border-t border-gray-100 dark:border-[#27332C] transition-colors">
+                            class="w-full text-center text-xs font-medium text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 hover:bg-gray-50 dark:hover:bg-[#121212] px-4 py-3 border-t border-gray-100 dark:border-[#27332C] transition-colors">
                         View all notifications
                     </button>
                 @endif
@@ -129,13 +129,13 @@
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                 x-transition:leave="transition-opacity ease-in duration-150"
                 x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                class="fixed inset-0 bg-black/50 dark:bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
                 style="display: none;" x-cloak>
                 <div @click.outside="showAllModal = false"
                     x-transition:enter="transition ease-out duration-200"
                     x-transition:enter-start="opacity-0 scale-95 translate-y-2"
                     x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                    class="bg-white dark:bg-[#111713] rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden max-h-[85vh] flex flex-col border dark:border-[#27332C]">
+                    class="bg-white dark:bg-[#121212] rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden max-h-[85vh] flex flex-col border dark:border-[#27332C]">
 
                     <!-- Modal Header -->
                     <div class="flex items-center justify-between px-6 pt-6 pb-4 shrink-0 border-b border-gray-100 dark:border-[#27332C]">
@@ -158,7 +158,7 @@
                                 </form>
                             @endif
                             <button type="button" @click="showAllModal = false"
-                                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#1C2621] rounded-lg p-1.5 transition-colors">
+                                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#121212] rounded-lg p-1.5 transition-colors">
                                 <i data-lucide="x" class="w-4.5 h-4.5"></i>
                             </button>
                         </div>
@@ -167,7 +167,7 @@
                     <!-- Modal Body -->
                     <div class="overflow-y-auto divide-y divide-gray-100 dark:divide-[#27332C]">
                         @forelse($topbarNotifications ?? [] as $notification)
-                            <div class="flex items-start gap-3.5 px-6 py-4 {{ $notification->read_at ? '' : 'bg-green-50/40 dark:bg-green-950/20' }}">
+                            <div class="flex items-start gap-3.5 px-6 py-4 {{ $notification->read_at ? '' : 'bg-black/50 dark:bg-[#121212]/80' }}">
                                 <x-notification-icon :type="$notification->data['type']" />
                                 <div class="min-w-0 flex-1">
                                     <p class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $notification->data['title'] }}</p>
@@ -211,11 +211,11 @@
                 x-transition:leave="transition ease-in duration-100"
                 x-transition:leave-start="opacity-100 scale-100"
                 x-transition:leave-end="opacity-0 scale-95"
-                class="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl shadow-lg overflow-hidden z-50"
+                class="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl shadow-lg overflow-hidden z-50"
                 style="display: none;">
 
                 <!-- Identity Block -->
-                <div class="flex items-center gap-3 p-4 bg-white dark:bg-[#111713]">
+                <div class="flex items-center gap-3 p-4 bg-white dark:bg-[#121212]">
                     <x-avatar size="w-11 h-11" text-size="text-base" />
                     <div class="min-w-0">
                         <p class="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate">{{ Auth::user()->name }}</p>
@@ -239,12 +239,12 @@
                 <!-- Actions -->
                 <div class="py-1.5">
                     <a href="{{ route('profile.edit', ['tab' => 'notifications']) }}"
-                    class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#1C2621] transition-colors">
+                    class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#121212] transition-colors">
                         <i data-lucide="bell" class="w-4 h-4 text-gray-400 dark:text-gray-400"></i>
                         Notifications
                     </a>
                     <a href="{{ route('profile.edit') }}"
-                    class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#1C2621] transition-colors">
+                    class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#121212] transition-colors">
                         <i data-lucide="settings" class="w-4 h-4 text-gray-400 dark:text-gray-400"></i>
                         Settings
                     </a>

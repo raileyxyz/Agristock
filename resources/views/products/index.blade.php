@@ -109,12 +109,12 @@
             <div class="relative flex-1 min-w-0 sm:min-w-[200px]">
                 <i data-lucide="search" class="w-4 h-4 text-gray-400 dark:text-gray-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
                 <input type="text" name="search" x-model="search" placeholder="Search by product name or SKU"
-                    class="w-full border border-gray-300 dark:border-[#27332C] bg-white dark:bg-[#111713] text-gray-800 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
+                    class="w-full border border-gray-300 dark:border-[#27332C] bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
             </div>
 
             <div class="relative w-full sm:w-auto">
                 <select name="category" onchange="this.form.submit()"
-                        class="w-full sm:w-auto appearance-none border border-gray-300 dark:border-[#27332C] rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white dark:bg-[#111713] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
+                        class="w-full sm:w-auto appearance-none border border-gray-300 dark:border-[#27332C] rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
                     <option value="">All Categories</option>
                     @foreach($categories ?? [] as $category)
                         <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
@@ -127,7 +127,7 @@
 
             <div class="relative w-full sm:w-auto">
                 <select name="status" onchange="this.form.submit()"
-                        class="w-full sm:w-auto appearance-none border border-gray-300 dark:border-[#27332C] rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white dark:bg-[#111713] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
+                        class="w-full sm:w-auto appearance-none border border-gray-300 dark:border-[#27332C] rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
                     <option value="Active" {{ request('status', 'Active') === 'Active' ? 'selected' : '' }}>Active</option>
                     <option value="Archived" {{ request('status') === 'Archived' ? 'selected' : '' }}>Archived</option>
                     <option value="all" {{ request('status') === 'all' ? 'selected' : '' }}>All</option>
@@ -137,11 +137,11 @@
         </form>
 
         <!-- Products table -->
-        <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl overflow-hidden mt-4 transition-colors duration-200 ease-in-out">
+        <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl overflow-hidden mt-4 transition-colors duration-200 ease-in-out">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm min-w-[1100px]">
                     <thead>
-                        <tr class="bg-gray-50 dark:bg-[#161F1A] border-b border-gray-200 dark:border-[#1F2B23] text-left text-gray-500 dark:text-gray-400 transition-colors duration-200 ease-in-out">
+                        <tr class="bg-gray-50 dark:bg-[#121212] border-b border-gray-200 dark:border-[#1F2B23] text-left text-gray-500 dark:text-gray-400 transition-colors duration-200 ease-in-out">
                             <th class="px-3 py-2 font-medium whitespace-nowrap">ID</th>
                             <th class="px-3 py-2 font-medium whitespace-nowrap">SKU</th>
                             <th class="px-3 py-2 font-medium whitespace-nowrap">Product Name</th>
@@ -190,7 +190,7 @@
                                     <span class="text-xs font-medium px-2 py-0.5 rounded-full
                                         {{ $product->status === \App\Enums\Status::ACTIVE
                                             ? 'bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400'
-                                            : 'bg-gray-100 text-gray-500 dark:bg-[#1C2621] dark:text-gray-400' }}">
+                                            : 'bg-gray-100 text-gray-500 dark:bg-[#121212] dark:text-gray-400' }}">
                                             {{ $product->status->value }}
                                     </span>
                                 </td>
@@ -201,7 +201,7 @@
                                         <button @click="open = !open"
                                                 @click.outside="open = false"
                                                 title="Options"
-                                                class="text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#1C2621] p-1.5 rounded-lg transition-colors">
+                                                class="text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#121212] p-1.5 rounded-lg transition-colors">
                                             <i data-lucide="more-vertical" class="w-4 h-4"></i>
                                         </button>
 
@@ -212,12 +212,12 @@
                                             x-transition:leave="transition ease-in duration-75"
                                             x-transition:leave-start="transform opacity-100 scale-100"
                                             x-transition:leave-end="transform opacity-0 scale-95"
-                                            class="absolute right-0 z-20 mt-1 w-36 origin-top-right rounded-xl bg-white dark:bg-[#161D19] p-1 shadow-lg ring-1 ring-black/5 dark:ring-0 dark:border dark:border-[#27332C] focus:outline-none"
+                                            class="absolute right-0 z-20 mt-1 w-36 origin-top-right rounded-xl bg-white dark:bg-[#121212] p-1 shadow-lg ring-1 ring-black/5 dark:ring-0 dark:border dark:border-[#27332C] focus:outline-none"
                                             x-cloak>
 
                                             <!-- View Product -->
                                             <button @click="open = false; openView(@js($product))"
-                                                    class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#1C2621] hover:text-green-600 dark:hover:text-green-400 transition-colors">
+                                                    class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#121212] hover:text-green-600 dark:hover:text-green-400 transition-colors">
                                                 <i data-lucide="eye" class="w-3.5 h-3.5"></i>
                                                 View
                                             </button>
@@ -225,7 +225,7 @@
                                             <!-- Edit Product -->
                                             @can('products.update')
                                                 <button @click="open = false; openEdit(@js($product))"
-                                                        class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#1C2621] hover:text-green-600 dark:hover:text-green-400 transition-colors">
+                                                        class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#121212] hover:text-green-600 dark:hover:text-green-400 transition-colors">
                                                     <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
                                                     Edit
                                                 </button>
@@ -273,7 +273,7 @@
             x-transition:leave="transition-opacity ease-in duration-150"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            class="fixed inset-0 bg-black/50 dark:bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             style="display: none;"
             x-cloak>
             <div @click.outside="closeEdit()"
@@ -281,7 +281,7 @@
                 x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-2"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                class="bg-white dark:bg-[#161D19] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden max-h-[90vh] flex flex-col">
+                class="bg-white dark:bg-[#121212] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden max-h-[90vh] flex flex-col">
 
                 <template x-if="editForm">
                     <form method="POST" :action="'/products/' + editForm.id" class="flex flex-col overflow-hidden">
@@ -301,7 +301,7 @@
                                 </div>
                             </div>
                             <button type="button" @click="closeEdit()"
-                                    class="text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#1C2621] rounded-lg p-1.5 -mt-1 -mr-1 transition-colors shrink-0">
+                                    class="text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#121212] rounded-lg p-1.5 -mt-1 -mr-1 transition-colors shrink-0">
                                 <i data-lucide="x" class="w-4.5 h-4.5"></i>
                             </button>
                         </div>
@@ -313,7 +313,7 @@
                                 <div class="sm:col-span-2">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Product Name</label>
                                     <input type="text" name="name" x-model="editForm.name"
-                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#0B0F0D] text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors"
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors"
                                         :class="editErrors.name ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
                                     <template x-if="editErrors.name">
                                         <p class="text-xs text-red-600 dark:text-red-400 mt-1.5 flex items-center gap-1">
@@ -324,7 +324,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">SKU</label>
                                     <input type="text" name="sku" x-model="editForm.sku"
-                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#0B0F0D] text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors"
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors"
                                         :class="editErrors.sku ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
                                     <template x-if="editErrors.sku">
                                         <p class="text-xs text-red-600 dark:text-red-400 mt-1.5 flex items-center gap-1">
@@ -338,7 +338,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Category</label>
                                     <select name="category_id" x-model.number="editForm.category_id"
-                                            class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#0B0F0D] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors"
+                                            class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors"
                                             :class="editErrors.category_id ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
                                         @foreach($categories ?? [] as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -353,7 +353,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Unit</label>
                                     <select name="unit_id" x-model.number="editForm.unit_id"
-                                            class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#0B0F0D] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors"
+                                            class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors"
                                             :class="editErrors.unit_id ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
                                         @foreach($units ?? [] as $unit)
                                             <option value="{{ $unit->id }}">{{ $unit->name }} ({{ $unit->abbreviation }})</option>
@@ -371,7 +371,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Cost Price</label>
                                     <input type="number" step="0.01" name="cost_price" x-model="editForm.cost_price"
-                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#0B0F0D] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors"
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors"
                                         :class="editErrors.cost_price ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
                                     <template x-if="editErrors.cost_price">
                                         <p class="text-xs text-red-600 dark:text-red-400 mt-1.5 flex items-center gap-1">
@@ -382,7 +382,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Selling Price</label>
                                     <input type="number" step="0.01" name="selling_price" x-model="editForm.selling_price"
-                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#0B0F0D] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors"
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors"
                                         :class="editErrors.selling_price ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
                                     <template x-if="editErrors.selling_price">
                                         <p class="text-xs text-red-600 dark:text-red-400 mt-1.5 flex items-center gap-1">
@@ -396,7 +396,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Minimum Stock</label>
                                     <input type="number" name="minimum_stock" x-model="editForm.minimum_stock"
-                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#0B0F0D] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors"
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors"
                                         :class="editErrors.minimum_stock ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
                                     <template x-if="editErrors.minimum_stock">
                                         <p class="text-xs text-red-600 dark:text-red-400 mt-1.5 flex items-center gap-1">
@@ -407,7 +407,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Reorder Point</label>
                                     <input type="number" name="reorder_point" x-model="editForm.reorder_point"
-                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#0B0F0D] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors"
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors"
                                         :class="editErrors.reorder_point ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
                                     <template x-if="editErrors.reorder_point">
                                         <p class="text-xs text-red-600 dark:text-red-400 mt-1.5 flex items-center gap-1">
@@ -420,7 +420,7 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Description</label>
                                 <textarea name="description" x-model="editForm.description" rows="3"
-                                    class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#0B0F0D] text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors resize-none"
+                                    class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors resize-none"
                                     :class="editErrors.description ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'"></textarea>
                                 <template x-if="editErrors.description">
                                     <p class="text-xs text-red-600 dark:text-red-400 mt-1.5 flex items-center gap-1">
@@ -430,16 +430,16 @@
                             </div>
 
                             <div class="flex flex-col sm:flex-row gap-3">
-                                <label class="flex-1 flex items-center gap-2.5 bg-gray-50 dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-lg p-3.5 cursor-pointer transition-colors">
+                                <label class="flex-1 flex items-center gap-2.5 bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-lg p-3.5 cursor-pointer transition-colors">
                                     <input type="checkbox" name="expiry_track" value="1" x-model="editForm.expiry_track"
-                                        class="w-4 h-4 rounded border-gray-300 dark:border-[#27332C] dark:bg-[#0B0F0D] text-green-600 focus:ring-green-500/40 dark:focus:ring-offset-[#111713]">
+                                        class="w-4 h-4 rounded border-gray-300 dark:border-[#27332C] dark:bg-[#121212] text-green-600 focus:ring-green-500/40 dark:focus:ring-offset-[#121212]">
                                     <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Track expiry dates</span>
                                 </label>
 
                                 <div class="sm:w-40">
                                     @can('products.delete')
                                         <select name="status" x-model="editForm.status"
-                                                class="w-full h-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#0B0F0D] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors"
+                                                class="w-full h-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors"
                                                 :class="editErrors.status ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
                                             <option value="Active">Active</option>
                                             <option value="Archived">Archived</option>
@@ -451,7 +451,7 @@
                                         </template>
                                     @else
                                         <input type="hidden" name="status" x-model="editForm.status">
-                                        <div class="w-full h-full border border-gray-200 dark:border-[#27332C] rounded-lg px-3.5 py-2.5 text-sm bg-gray-50 dark:bg-[#111713] flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                                        <div class="w-full h-full border border-gray-200 dark:border-[#27332C] rounded-lg px-3.5 py-2.5 text-sm bg-gray-50 dark:bg-[#121212] flex items-center gap-2 text-gray-500 dark:text-gray-400">
                                             <span class="w-2 h-2 rounded-full shrink-0" :class="editForm.status === 'Active' ? 'bg-green-500 dark:bg-green-400' : 'bg-gray-400 dark:bg-gray-500'"></span>
                                             <span x-text="editForm.status"></span>
                                         </div>
@@ -462,16 +462,16 @@
                         </div>
 
                         <!-- Footer -->
-                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-4 sm:px-6 py-4 bg-gray-50 dark:bg-[#111713] border-t border-gray-100 dark:border-[#27332C] shrink-0">
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-4 sm:px-6 py-4 bg-gray-50 dark:bg-[#121212] border-t border-gray-100 dark:border-[#27332C] shrink-0">
                             <button type="button" @click="closeEdit()"
-                                    class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#1C2621] dark:hover:text-gray-100 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
+                                    class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#121212] dark:hover:text-gray-100 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
                                 Cancel
                             </button>
                             <button type="submit"
                                     :disabled="!hasChanges()"
                                     :class="hasChanges()
                                         ? 'bg-green-600 hover:bg-green-700 cursor-pointer text-white'
-                                        : 'bg-gray-300 dark:bg-[#1C2621] dark:text-gray-500 text-white cursor-not-allowed'"
+                                        : 'bg-gray-300 dark:bg-[#27332C] dark:text-gray-500 text-white cursor-not-allowed'"
                                     class="px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm order-1 sm:order-2">
                                 Save changes
                             </button>
@@ -489,14 +489,14 @@
             x-transition:leave="transition-opacity ease-in duration-150"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            class="fixed inset-0 bg-black/50 dark:bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             style="display: none;">
             <div @click.outside="showArchiveModal = false"
                 x-show="showArchiveModal"
                 x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-2"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                class="bg-white dark:bg-[#161D19] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+                class="bg-white dark:bg-[#121212] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
 
                 <div class="px-6 pt-6 pb-5">
                     <div class="w-11 h-11 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-4">
@@ -509,11 +509,11 @@
                 </div>
 
                 <form method="POST" :action="`/products/${archiveTarget.id}`"
-                    class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 dark:bg-[#111713] border-t border-gray-100 dark:border-[#27332C]">
+                    class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 dark:bg-[#121212] border-t border-gray-100 dark:border-[#27332C]">
                     @csrf
                     @method('DELETE')
                     <button type="button" @click="showArchiveModal = false"
-                            class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#1C2621] dark:hover:text-gray-100 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
+                            class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#121212] dark:hover:text-gray-100 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
                         Cancel
                     </button>
                     <button type="submit"
@@ -532,14 +532,14 @@
             x-transition:leave="transition-opacity ease-in duration-150"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            class="fixed inset-0 bg-black/50 dark:bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             style="display: none;">
             <div @click.outside="showSuccessModal = false"
                 x-show="showSuccessModal"
                 x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-2"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                class="bg-white dark:bg-[#161D19] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+                class="bg-white dark:bg-[#121212] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
 
                 <div class="px-6 pt-6 pb-5 text-center">
                     <div class="w-12 h-12 rounded-full bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-400 flex items-center justify-center mb-4 mx-auto">
@@ -549,7 +549,7 @@
                     <p class="text-sm text-gray-500 dark:text-gray-400" x-text="successMessage"></p>
                 </div>
 
-                <div class="flex items-center justify-center px-6 py-4 bg-gray-50 dark:bg-[#111713] border-t border-gray-100 dark:border-[#27332C]">
+                <div class="flex items-center justify-center px-6 py-4 bg-gray-50 dark:bg-[#121212] border-t border-gray-100 dark:border-[#27332C]">
                     <button @click="showSuccessModal = false"
                             class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                         Got it
@@ -566,14 +566,14 @@
             x-transition:leave="transition-opacity ease-in duration-150"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            class="fixed inset-0 bg-black/50 dark:bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             style="display: none;">
             <div @click.outside="showViewModal = false"
                 x-show="showViewModal"
                 x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-2"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                class="bg-white dark:bg-[#161D19] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden max-h-[90vh] flex flex-col"
+                class="bg-white dark:bg-[#121212] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden max-h-[90vh] flex flex-col"
                 x-cloak>
 
                 <template x-if="viewTarget">
@@ -591,7 +591,7 @@
                                 </div>
                             </div>
                             <button type="button" @click="showViewModal = false"
-                                    class="text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#1C2621] rounded-lg p-1.5 -mt-1 -mr-1 transition-colors shrink-0">
+                                    class="text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#121212] rounded-lg p-1.5 -mt-1 -mr-1 transition-colors shrink-0">
                                 <i data-lucide="x" class="w-4.5 h-4.5"></i>
                             </button>
                         </div>
@@ -632,7 +632,7 @@
                                     <span class="inline-block text-xs font-medium px-2 py-0.5 rounded-full"
                                         :class="viewTarget.status === 'Active'
                                             ? 'bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400'
-                                            : 'bg-gray-100 text-gray-500 dark:bg-[#1C2621] dark:text-gray-400'"
+                                            : 'bg-gray-100 text-gray-500 dark:bg-[#121212] dark:text-gray-400'"
                                         x-text="viewTarget.status"></span>
                                 </div>
                             </div>
@@ -646,9 +646,9 @@
                         </div>
 
                         <!-- Footer -->
-                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-4 sm:px-6 py-4 bg-gray-50 dark:bg-[#111713] border-t border-gray-100 dark:border-[#27332C] shrink-0">
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-4 sm:px-6 py-4 bg-gray-50 dark:bg-[#121212] border-t border-gray-100 dark:border-[#27332C] shrink-0">
                             <button type="button" @click="showViewModal = false"
-                                    class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#1C2621] dark:hover:text-gray-100 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
+                                    class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#121212] dark:hover:text-gray-100 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
                                 Close
                             </button>
                             @can('products.update')

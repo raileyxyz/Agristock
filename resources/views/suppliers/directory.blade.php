@@ -6,11 +6,11 @@
     </div>
 
     <!-- Table Container -->
-    <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl shadow-sm overflow-hidden mt-4 sm:mt-6 transition-colors duration-200 ease-in-out">
+    <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl shadow-sm overflow-hidden mt-4 sm:mt-6 transition-colors duration-200 ease-in-out">
         <div class="overflow-x-auto">
             <table class="w-full text-xs sm:text-sm min-w-[850px]">
                 <thead>
-                    <tr class="bg-gray-50 dark:bg-[#161F1A] border-b border-gray-200 dark:border-[#1F2B23] text-left text-gray-500 dark:text-gray-400 transition-colors duration-200 ease-in-out">
+                    <tr class="bg-gray-50 dark:bg-[#121212] border-b border-gray-200 dark:border-[#1F2B23] text-left text-gray-500 dark:text-gray-400 transition-colors duration-200 ease-in-out">
                         <th class="px-3.5 sm:px-4 py-2.5 sm:py-3 font-medium whitespace-nowrap">Supplier</th>
                         <th class="px-3.5 sm:px-4 py-2.5 sm:py-3 font-medium whitespace-nowrap">Contact Person</th>
                         <th class="px-3.5 sm:px-4 py-2.5 sm:py-3 font-medium whitespace-nowrap">Email</th>
@@ -49,7 +49,7 @@
                                 <span class="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full
                                     {{ $supplier->status === \App\Enums\Status::ACTIVE
                                         ? 'bg-green-50 text-green-700 border border-green-200/60 dark:bg-green-950/40 dark:text-green-400 dark:border-green-900/40'
-                                        : 'bg-gray-100 text-gray-600 border border-gray-200/60 dark:bg-[#1C2621] dark:text-gray-400 dark:border-[#27332C]' }}">
+                                        : 'bg-gray-100 text-gray-600 border border-gray-200/60 dark:bg-[#121212] dark:text-gray-400 dark:border-[#27332C]' }}">
                                     {{ $supplier->status->value }}
                                 </span>
                             </td>
@@ -57,7 +57,7 @@
                     @empty
                         <tr>
                             <td colspan="6" class="px-4 py-10 sm:py-14 text-center">
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-50 dark:bg-[#1C2621] text-gray-300 dark:text-gray-600 flex items-center justify-center mb-2.5 mx-auto">
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-50 dark:bg-[#121212] text-gray-300 dark:text-gray-600 flex items-center justify-center mb-2.5 mx-auto">
                                     <i data-lucide="book-user" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                                 </div>
                                 <p class="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200">No suppliers found</p>

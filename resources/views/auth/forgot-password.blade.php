@@ -29,7 +29,7 @@
             <input id="email" type="email" name="email" value="{{ old('email') }}"
                    placeholder="demo@agristock.ph" required autofocus autocomplete="username"
                    class="block w-full border rounded-xl px-4 py-3.5 text-sm text-gray-900 dark:text-[#F1F5F2] placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 transition-all
-                   {{ $errors->has('email') ? 'border-red-300 dark:border-red-500/60 bg-red-50/30 dark:bg-red-950/20 focus:ring-red-500' : 'border-gray-200 dark:border-[#27332C] bg-gray-50 dark:bg-[#1C2621] focus:bg-white dark:focus:bg-[#111714] focus:ring-green-500 dark:focus:ring-[#22C55E]' }}">
+                   {{ $errors->has('email') ? 'border-red-300 dark:border-red-500/60 bg-red-50/30 dark:bg-red-950/20 focus:ring-red-500' : 'border-gray-200 dark:border-[#27332C] bg-gray-50 dark:bg-[#121212] focus:bg-white dark:focus:bg-[#111714] focus:ring-green-500 dark:focus:ring-[#22C55E]' }}">
 
             @error('email')
                 <p class="text-xs text-red-600 dark:text-red-400 mt-1.5 flex items-center gap-1 font-medium">

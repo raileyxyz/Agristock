@@ -53,14 +53,14 @@
         section[id] { scroll-margin-top: 5rem; }
     </style>
 </head>
-<body class="bg-white dark:bg-[#0B0F0D] text-gray-800 dark:text-gray-100 font-sans transition-colors duration-300"
+<body class="bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 font-sans transition-colors duration-300"
     x-data="{ mobileMenuOpen: false, scrolled: false }"
     x-effect="document.body.style.overflow = mobileMenuOpen ? 'hidden' : ''"
     @scroll.window="scrolled = window.scrollY > 8"
     @keydown.escape.window="mobileMenuOpen = false">
 
     <!-- Nav -->
-    <header class="sticky top-0 z-40 bg-white/80 dark:bg-[#0B0F0D]/80 backdrop-blur-md transition-all duration-300"
+    <header class="sticky top-0 z-40 bg-white/80 dark:bg-[#121212]/80 backdrop-blur-md transition-all duration-300"
             :class="scrolled ? 'shadow-sm border-b border-gray-200/80 dark:border-[#27332C]' : 'border-b border-transparent'">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 h-16 sm:h-20 flex items-center justify-between">
             <a href="#top" class="group flex items-center gap-2.5">
@@ -115,7 +115,7 @@
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
             @click="mobileMenuOpen = false"
-            class="fixed inset-0 bg-gray-900/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm"></div>
+            class="fixed inset-0 bg-gray-900/50 dark:bg-[#121212]/80 backdrop-blur-sm"></div>
 
         <!-- Slide-in panel -->
         <div x-show="mobileMenuOpen"
@@ -269,7 +269,7 @@
             @endphp
 
             @foreach($features as $feature)
-                <div class="group border border-gray-200 dark:border-[#27332C] bg-white dark:bg-[#111713] rounded-xl p-6 transition-all duration-300 hover:border-green-400 dark:hover:border-green-400 dark:hover:bg-[#1C2621] hover:-translate-y-1.5 hover:shadow-lg dark:hover:shadow-[#0B0F0D]/60">
+                <div class="group border border-gray-200 dark:border-[#27332C] bg-white dark:bg-[#121212] rounded-xl p-6 transition-all duration-300 hover:border-green-400 dark:hover:border-green-400 dark:hover:bg-[#121212] hover:-translate-y-1.5 hover:shadow-lg dark:hover:shadow-[#121212]/60">
                     <div class="w-11 h-11 bg-green-50 dark:bg-green-950/40 rounded-lg flex items-center justify-center mb-5 transition-colors duration-300 group-hover:bg-green-100 dark:group-hover:bg-green-950/40">
                         <i data-lucide="{{ $feature['icon'] }}" class="w-5 h-5 text-green-700 dark:text-green-400 transition-colors duration-300"></i>
                     </div>
@@ -291,14 +291,14 @@
             @php
                 $steps = [
                     ['num' => '01', 'title' => 'Build Your Catalog', 'desc' => 'Add products with categories, units, and reorder thresholds. No stock quantities here just your product master list.'],
-                    ['num' => '02', 'title' => 'Receive and Move Stock', 'desc' => 'Use Stock In when supplies arrive and Stock Out when used in the field. Every transaction logs user, date, and reference.'],
+                    ['num' => '02', 'title' => 'Receive &amp; Move Stock', 'desc' => 'Use Stock In when supplies arrive and Stock Out when used in the field. Every transaction logs user, date, and reference.'],
                     ['num' => '03', 'title' => 'Get Alerts', 'desc' => 'The dashboard flags low stock, critical levels, and items nearing expiry so you always act before there\'s a crisis.'],
-                    ['num' => '04', 'title' => 'Review and Report', 'desc' => 'Check movement history and generate stock, movement, and expiry reports to spot trends and plan your next restock.'],
+                    ['num' => '04', 'title' => 'Review &amp; Report', 'desc' => 'Check movement history and generate stock, movement, and expiry reports to spot trends and plan your next restock.'],
                 ];
             @endphp
 
             @foreach($steps as $i => $step)
-                <div class="group bg-white dark:bg-[#111713] rounded-xl p-6 border border-gray-200 dark:border-[#27332C] relative transition-all duration-300 hover:border-green-400 dark:hover:border-green-400 dark:hover:bg-[#1C2621] hover:-translate-y-1.5 hover:shadow-lg dark:hover:shadow-[#0B0F0D]/60">
+                <div class="group bg-white dark:bg-[#121212] rounded-xl p-6 border border-gray-200 dark:border-[#27332C] relative transition-all duration-300 hover:border-green-400 dark:hover:border-green-400 dark:hover:bg-[#121212] hover:-translate-y-1.5 hover:shadow-lg dark:hover:shadow-[#0B0F0D]/60">
                     <span class="text-4xl font-extrabold text-green-300 dark:text-green-700 block mb-3 transition-colors duration-300 group-hover:text-green-500 dark:group-hover:text-green-400">{{ $step['num'] }}</span>
                     <h3 class="font-bold text-gray-900 dark:text-gray-100 mb-2">{!! $step['title'] !!}</h3>
                     <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">{{ $step['desc'] }}</p>
@@ -323,7 +323,7 @@
             @endphp
 
             @foreach($galleryImages as $img)
-                <div class="relative overflow-hidden group cursor-pointer bg-[#0B0F0D]">
+                <div class="relative overflow-hidden group cursor-pointer bg-[#121212]">
                     <img src="{{ asset($img) }}" alt="AgriStock farm"
                         class="w-full h-full object-cover grayscale-[30%] opacity-85 dark:opacity-60 scale-105 transition-all duration-500 group-hover:grayscale-0 group-hover:opacity-100 dark:group-hover:opacity-100 group-hover:scale-110">
                 </div>
@@ -386,12 +386,12 @@
                     <p class="text-white dark:text-gray-200 font-semibold text-sm mb-1">Traceable Movements</p>
                     <p class="text-gray-400 dark:text-gray-400 text-xs leading-relaxed">every stock in, out &amp; adjustment is logged</p>
                 </div>
-                <div class="bg-green-50 dark:bg-[#111713] rounded-2xl p-6 sm:p-7 border border-transparent dark:border-[#27332C]">
+                <div class="bg-green-50 dark:bg-[#121212] rounded-2xl p-6 sm:p-7 border border-transparent dark:border-[#27332C]">
                     <p class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 leading-none mb-3">Auto</p>
                     <p class="text-gray-800 dark:text-gray-200 font-semibold text-sm mb-1">Expiry Alerts</p>
                     <p class="text-gray-500 dark:text-gray-400 text-xs leading-relaxed">items nearing expiry flagged on the dashboard</p>
                 </div>
-                <div class="bg-gray-100 dark:bg-[#111713] rounded-2xl p-6 sm:p-7 border border-transparent dark:border-[#27332C]">
+                <div class="bg-gray-100 dark:bg-[#121212] rounded-2xl p-6 sm:p-7 border border-transparent dark:border-[#27332C]">
                     <p class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-gray-100 leading-none mb-3">Live</p>
                     <p class="text-gray-800 dark:text-gray-200 font-semibold text-sm mb-1">Stock Levels</p>
                     <p class="text-gray-500 dark:text-gray-400 text-xs leading-relaxed">low and critical stock at a glance</p>
