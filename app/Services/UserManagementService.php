@@ -149,10 +149,6 @@ class UserManagementService
                     $payload['status'] = $data['status'];
                 }
 
-                if (! empty($data['password'])) {
-                    $payload['password'] = Hash::make($data['password']);
-                }
-
                 if ($emailChanged) {
                     $user->email_verified_at = null;
                 }

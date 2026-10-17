@@ -19,7 +19,7 @@ class SendStockReceivedNotification
             'stock_received',
             'Stock Received',
             "{$event->actor->name} recorded {$event->inventory->quantity} {$product->unit->abbreviation} of {$product->name} received.",
-            route('inventories.index'),
+            route('inventories.index', ['search' => $event->inventory->batch_number]),
             $event->actor
         );
     }

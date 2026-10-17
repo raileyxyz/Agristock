@@ -17,7 +17,7 @@ class SendUserArchivedNotification
             'user_archived',
             'User Account Archived',
             "{$event->actor->name} archived the account of {$event->archivedUser->name}.",
-            route('users.index'),
+            route('users.index', ['search' => $event->archivedUser->email]),
             $event->actor
         );
     }

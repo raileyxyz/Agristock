@@ -21,8 +21,8 @@
             },
 
             openEdit(user) {
-                this.editForm = { ...user, password: '' };
-                this.originalForm = { ...user, password: '' };
+                this.editForm = { ...user, original_role: user.original_role ?? user.role, current_password: '' };
+                this.originalForm = { ...this.editForm };
                 this.editErrors = {};
                 this.showEditModal = true;
                 this.$nextTick(() => lucide.createIcons());
@@ -52,6 +52,19 @@
 
             @if(session('error'))
                 showErrorModal = true;
+            @endif
+
+            @if($errors->any() && old('edit_user_id'))
+                openEdit(@js([
+                    'id' => (int) old('edit_user_id'),
+                    'name' => old('name'),
+                    'email' => old('email'),
+                    'role' => old('role'),
+                    'original_role' => old('original_role'),
+                    'status' => old('status', 'Active'),
+                ]));
+                originalForm = { ...editForm, _failed: true };
+                editErrors = @js($errors->getMessages());
             @endif
         ">
 
@@ -244,7 +257,7 @@
                                             </button>
 
                                             <!-- Edit -->
-                                            @if($user->id !== auth()->id())
+                                            @if($user->id !== auth()->id() && $user->status !== \App\Enums\Status::DELETED)
                                                 @can('update', $user)
                                                     <button @click="open = false; openEdit(@js([
                                                                 'id' => $user->id,
@@ -444,6 +457,8 @@
                     <form method="POST" :action="'/users/' + editForm.id" class="flex flex-col overflow-hidden">
                         @csrf
                         @method('PUT')
+                        <input type="hidden" name="edit_user_id" :value="editForm.id">
+                        <input type="hidden" name="original_role" :value="editForm.original_role">
 
                         <!-- Header -->
                         <div class="flex items-start justify-between gap-3 px-4 sm:px-6 pt-6 pb-5 shrink-0">
@@ -501,17 +516,23 @@
                                 </template>
                             </div>
 
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
-                                    New Password <span class="text-gray-400 dark:text-gray-500 font-normal block sm:inline">(leave blank to keep current)</span>
-                                </label>
-                                <input type="password" name="password" x-model="editForm.password" placeholder="Min 8 characters"
-                                    class="w-full border rounded-lg px-3.5 py-2.5 text-sm dark:bg-[#0B0F0D] dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors"
-                                    :class="editErrors.password ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
-                                <template x-if="editErrors.password">
-                                    <p class="text-xs text-red-600 dark:text-red-400 mt-1.5" x-text="editErrors.password?.[0]"></p>
-                                </template>
-                            </div>
+                            <template x-if="(editForm.role === 'Admin' && editForm.original_role !== 'Admin') || editErrors.current_password">
+                                <div>
+                                    <div class="rounded-lg border border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-950/30 px-3 py-2.5 mb-3 flex items-start gap-2">
+                                        <i data-lucide="shield-alert" class="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0"></i>
+                                        <p class="text-xs text-amber-800 dark:text-amber-300">
+                                            Admin accounts have full access to the system. Enter your own password to confirm.
+                                        </p>
+                                    </div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Your Password</label>
+                                    <input type="password" name="current_password" x-model="editForm.current_password" autocomplete="current-password" placeholder="Enter your password"
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm dark:bg-[#0B0F0D] dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors"
+                                        :class="editErrors.current_password ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
+                                    <template x-if="editErrors.current_password">
+                                        <p class="text-xs text-red-600 dark:text-red-400 mt-1.5" x-text="editErrors.current_password?.[0]"></p>
+                                    </template>
+                                </div>
+                            </template>
 
                             <template x-if="editForm.id !== {{ auth()->id() }}">
                                 <div>

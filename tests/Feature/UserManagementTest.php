@@ -374,3 +374,44 @@ it('does not require a password for non-admin roles', function () {
         'name' => 'Juan', 'email' => 'juan@example.com', 'role' => 'Manager',
     ])->assertRedirect(route('users.index'));
 });
+
+it('requires the admin password to promote a user to admin', function () {
+    $admin = User::factory()->admin()->create();
+    $target = User::factory()->staff()->create();
+
+    $this->actingAs($admin)->put("/users/{$target->id}", [
+        'name' => $target->name, 'email' => $target->email, 'role' => 'Admin', 'status' => 'Active',
+    ])->assertSessionHasErrors('current_password');
+
+    expect($target->fresh()->role->value)->toBe('Staff');
+});
+
+it('promotes a user to admin when the correct password is given', function () {
+    $admin = User::factory()->admin()->create(); // password: 'password'
+    $target = User::factory()->staff()->create();
+
+    $this->actingAs($admin)->put("/users/{$target->id}", [
+        'name' => $target->name, 'email' => $target->email, 'role' => 'Admin',
+        'status' => 'Active', 'current_password' => 'password',
+    ])->assertRedirect(route('users.index'));
+
+    expect($target->fresh()->role->value)->toBe('Admin');
+});
+
+it('does not ask for a password when editing an existing admin', function () {
+    $admin = User::factory()->admin()->create();
+    $other = User::factory()->admin()->create();
+
+    $this->actingAs($admin)->put("/users/{$other->id}", [
+        'name' => 'Renamed', 'email' => $other->email, 'role' => 'Admin', 'status' => 'Active',
+    ])->assertSessionHasNoErrors();
+});
+
+it('forbids editing a deleted user', function () {
+    $admin = User::factory()->admin()->create();
+    $deleted = User::factory()->staff()->create(['status' => \App\Enums\Status::DELETED]);
+
+    $this->actingAs($admin)->put("/users/{$deleted->id}", [
+        'name' => 'X', 'email' => $deleted->email, 'role' => 'Staff', 'status' => 'Active',
+    ])->assertForbidden();
+});

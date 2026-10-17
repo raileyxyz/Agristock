@@ -19,7 +19,7 @@ class SendStockTransferNotification
             'stock_transfer',
             'Stock Transfer Completed',
             "{$event->actor->name} transferred {$event->stockOut->quantity} {$product->unit->abbreviation} of {$product->name} from {$event->stockOut->location} to {$event->stockOut->transfer_to}.",
-            route('inventories.index'),
+            route('inventory-history.index', ['type' => 'transfer', 'search' => $product->name]),
             $event->actor
         );
     }

@@ -17,7 +17,7 @@ class SendUserRestoredNotification
             'user_restored',
             'User Account Restored',
             "{$event->actor->name} restored access for {$event->restoredUser->name} ({$event->restoredUser->role->value}).",
-            route('users.index'),
+            route('users.index', ['search' => $event->restoredUser->email]),
             $event->actor
         );
     }

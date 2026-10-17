@@ -20,7 +20,7 @@ class CheckStockLevelNotification
                 'critical_stock',
                 'Critical Stock Alert',
                 "{$product->name} has reached a critical stock level ({$event->after} remaining).",
-                route('low-stock.index'),
+                route('low-stock.index', ['search' => $product->name]),
                 $event->actor
             );
 
@@ -32,7 +32,7 @@ class CheckStockLevelNotification
                 'low_stock',
                 'Low Stock Alert',
                 "{$product->name} has reached its reorder point ({$event->after} remaining).",
-                route('low-stock.index'),
+                route('low-stock.index', ['search' => $product->name]),
                 $event->actor
             );
         }

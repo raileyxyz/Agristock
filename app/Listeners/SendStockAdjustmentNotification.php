@@ -19,7 +19,7 @@ class SendStockAdjustmentNotification
             'stock_adjusted',
             'Stock Adjustment Made',
             "{$event->actor->name} adjusted {$product->name} from {$event->adjustment->system_quantity} to {$event->adjustment->actual_quantity} ({$event->adjustment->reason}).",
-            route('stock-adjustments.create'),
+            route('inventory-history.index', ['type' => 'adjustment', 'search' => $product->name]),
             $event->actor
         );
     }

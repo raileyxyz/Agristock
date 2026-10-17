@@ -55,15 +55,15 @@ class UpdateUserRequest extends FormRequest
                 new Enum(UserRole::class)
             ],
 
-            'password' => [
-                'nullable',
-                'string',
-                'min:8'
-            ],
-
             'status' => [
                 'required',
                 Rule::in(Status::values())
+            ],
+
+            'current_password' => [
+                Rule::requiredIf(fn () => $this->input('role') === UserRole::ADMIN->value
+                    && $this->route('user')->role !== UserRole::ADMIN),
+                'current_password',
             ],
         ];
     }
@@ -76,7 +76,8 @@ class UpdateUserRequest extends FormRequest
             'email.unique' => 'This email is already registered.',
             'role.required' => 'Please select a role.',
             'role.in' => 'Selected role is invalid.',
-            'password.min' => 'Password must be at least 8 characters.',
+            'current_password.required' => 'Enter your password to confirm promoting a user to Admin.',
+            'current_password.current_password' => 'The password you entered is incorrect.',
         ];
     }
 }

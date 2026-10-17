@@ -19,7 +19,7 @@ class SendStockOutNotification
             'stock_out',
             'Stock Out Recorded',
             "{$event->actor->name} recorded {$event->stockOut->quantity} {$product->unit->abbreviation} of {$product->name} removed ({$event->stockOut->reason}).",
-            route('inventories.index'),
+            route('inventory-history.index', ['type' => 'stock-out', 'search' => $product->name]),
             $event->actor
         );
     }

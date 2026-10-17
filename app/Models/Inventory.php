@@ -55,12 +55,14 @@ class Inventory extends Model
     public function scopeSearch($query, $search)
     {
         return $query->when($search, function ($query) use ($search) {
-            $query->whereHas('product', function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%")
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('product', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
                     ->orWhere('sku', 'like', "%{$search}%");
-            })
-            ->orWhere('batch_number', 'like', "%{$search}%")
-            ->orWhere('location', 'like', "%{$search}%");
+                })
+                ->orWhere('batch_number', 'like', "%{$search}%")
+                ->orWhere('location', 'like', "%{$search}%");
+            });
         });
     }
 

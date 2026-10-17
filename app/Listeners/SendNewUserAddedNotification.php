@@ -17,7 +17,7 @@ class SendNewUserAddedNotification
             'user_added',
             'New User Added',
             "{$event->actor->name} added a new {$event->newUser->role->value}: {$event->newUser->name}.",
-            route('users.index'),
+            route('users.index', ['search' => $event->newUser->email]),
             $event->actor
         );
     }

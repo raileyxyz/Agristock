@@ -90,13 +90,15 @@
 
                 <div class="max-h-[60vh] sm:max-h-80 overflow-y-auto divide-y divide-gray-100 dark:divide-[#27332C]">
                     @forelse($topbarNotifications ?? [] as $notification)
-                        <div class="flex items-start gap-3 px-4 py-3 {{ $notification->read_at ? '' : 'bg-black/50 dark:bg-[#121212]/80' }}">
-                            <x-notification-icon :type="$notification->data['type']" />
-                            <div class="min-w-0 flex-1">
-                                <p class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $notification->data['title'] }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ $notification->data['body'] }}</p>
-                                <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
-                            </div>
+                        <div class="flex items-start gap-3 px-4 py-3 {{ $notification->read_at ? '' : 'bg-green-50/40 dark:bg-green-950/20' }}">
+                            <a href="{{ route('notifications.open', $notification->id) }}" class="flex items-start gap-3 flex-1 min-w-0">
+                                <x-notification-icon :type="$notification->data['type']" />
+                                <div class="min-w-0 flex-1">
+                                    <p class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $notification->data['title'] }}</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ $notification->data['body'] }}</p>
+                                    <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
+                                </div>
+                            </a>
                             @if(! $notification->read_at)
                                 <form method="POST" action="{{ route('notifications.read', $notification->id) }}">
                                     @csrf @method('PATCH')
@@ -167,13 +169,15 @@
                     <!-- Modal Body -->
                     <div class="overflow-y-auto divide-y divide-gray-100 dark:divide-[#27332C]">
                         @forelse($topbarNotifications ?? [] as $notification)
-                            <div class="flex items-start gap-3.5 px-6 py-4 {{ $notification->read_at ? '' : 'bg-black/50 dark:bg-[#121212]/80' }}">
-                                <x-notification-icon :type="$notification->data['type']" />
-                                <div class="min-w-0 flex-1">
-                                    <p class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $notification->data['title'] }}</p>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{{ $notification->data['body'] }}</p>
-                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1.5">{{ $notification->created_at->diffForHumans() }}</p>
-                                </div>
+                            <div class="flex items-start gap-3.5 px-6 py-4 {{ $notification->read_at ? '' : 'bg-green-50/40 dark:bg-green-950/20' }}">
+                                <a href="{{ route('notifications.open', $notification->id) }}" class="flex items-start gap-3 flex-1 min-w-0">
+                                    <x-notification-icon :type="$notification->data['type']" />
+                                    <div class="min-w-0 flex-1">
+                                        <p class="text-sm font-medium text-gray-800 dark:text-gray-100">{{ $notification->data['title'] }}</p>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{{ $notification->data['body'] }}</p>
+                                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1.5">{{ $notification->created_at->diffForHumans() }}</p>
+                                    </div>
+                                </a>
                                 @if(! $notification->read_at)
                                     <form method="POST" action="{{ route('notifications.read', $notification->id) }}">
                                         @csrf @method('PATCH')

@@ -17,7 +17,7 @@ class SendUserRoleChangedNotification
             'user_role_changed',
             'User Role Changed',
             "{$event->actor->name} changed {$event->targetUser->name}'s role from {$event->oldRole} to {$event->newRole}.",
-            route('users.index'),
+            route('users.index', ['search' => $event->targetUser->email]),
             $event->actor
         );
     }
