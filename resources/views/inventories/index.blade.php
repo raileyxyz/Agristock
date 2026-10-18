@@ -192,7 +192,7 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-[#1F2B23]">
                         @forelse($inventories as $inventory)
-                            <tr class="hover:bg-gray-50 dark:hover:bg-[#121212]/60 transition-colors duration-200 ease-in-out">
+                            <tr class="hover:bg-gray-50 dark:hover:bg-[#161F1A]/60 transition-colors duration-200 ease-in-out">
                             <td class="px-4 py-3 max-w-[220px]">
                                 <p class="font-medium text-gray-800 dark:text-gray-200 truncate" title="{{ $inventory->product->name }}">
                                     {{ $inventory->product->name }}

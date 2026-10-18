@@ -38,7 +38,7 @@
                 <!-- KALIWANG COLUMN: Account Details -->
                 <div class="lg:col-span-2 space-y-4 sm:space-y-6">
 
-                    <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-sm transition-colors duration-200 ease-in-out">
+                    <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-sm transition-colors duration-200 ease-in-out">
                         <h2 class="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200 border-b border-gray-100 dark:border-[#1F2B23] pb-2.5 sm:pb-3">User Profile Information</h2>
 
                         <!-- Full Name -->
@@ -47,7 +47,7 @@
                                 Full Name
                             </label>
                             <input type="text" name="name" value="{{ old('name') }}" placeholder="e.g. Juan Dela Cruz"
-                                   class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#0B0F0D] dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors
+                                   class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#121212] dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors
                                    {{ $errors->has('name') ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400' }}">
                             @error('name')
                                 <p class="text-xs text-red-600 dark:text-red-400 mt-1 sm:mt-1.5 flex items-center gap-1">
@@ -62,7 +62,7 @@
                                 Email Address
                             </label>
                             <input type="email" name="email" value="{{ old('email') }}" placeholder="user@agristock.ph"
-                                   class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#0B0F0D] dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors
+                                   class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#121212] dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors
                                    {{ $errors->has('email') ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400' }}">
                             @error('email')
                                 <p class="text-xs text-red-600 dark:text-red-400 mt-1 sm:mt-1.5 flex items-center gap-1">
@@ -77,7 +77,7 @@
                                 System Role
                             </label>
                             <select name="role" x-model="role"
-                                    class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm bg-white dark:bg-[#0B0F0D] dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors
+                                    class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm bg-white dark:bg-[#121212] dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors
                                     {{ $errors->has('role') ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400' }}">
                                 @foreach($roles as $roleOption)
                                     <option value="{{ $roleOption }}" {{ old('role', 'Staff') === $roleOption ? 'selected' : '' }}>
@@ -107,7 +107,7 @@
                             <input type="password" name="current_password" autocomplete="current-password"
                                 :disabled="role !== 'Admin'"
                                 placeholder="Enter your password"
-                                class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#0B0F0D] dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors
+                                class="w-full border rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm dark:bg-[#121212] dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors
                                 {{ $errors->has('current_password') ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400' }}">
                             @error('current_password')
                                 <p class="text-xs text-red-600 dark:text-red-400 mt-1 sm:mt-1.5 flex items-center gap-1">
@@ -131,7 +131,7 @@
                 <div class="space-y-4 sm:space-y-6">
 
                     <!-- Dynamic Permissions Card -->
-                    <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-6 shadow-sm space-y-3 sm:space-y-4 transition-colors duration-200 ease-in-out">
+                    <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-6 shadow-sm space-y-3 sm:space-y-4 transition-colors duration-200 ease-in-out">
                         <div class="flex items-center justify-between border-b border-gray-100 dark:border-[#1F2B23] pb-2.5 sm:pb-3">
                             <h2 class="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200">Role Capabilities</h2>
 
@@ -141,7 +141,7 @@
                                   x-text="role"></span>
                         </div>
 
-                        <div class="bg-gray-50/70 dark:bg-[#0B0F0D] border border-gray-200/80 dark:border-[#27332C] rounded-lg p-3 sm:p-4">
+                        <div class="bg-gray-50/70 dark:bg-[#121212] border border-gray-200/80 dark:border-[#27332C] rounded-lg p-3 sm:p-4">
                             <p class="text-[10px] sm:text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2.5 sm:mb-3">Allowed Actions</p>
                             <ul class="space-y-2 sm:space-y-2.5">
                                 <template x-for="perm in (permissions[role] || [])" :key="perm">
@@ -157,13 +157,13 @@
                     </div>
 
                     <!-- Action Buttons Card -->
-                    <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-6 shadow-sm space-y-2.5 sm:space-y-3 transition-colors duration-200 ease-in-out">
+                    <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-6 shadow-sm space-y-2.5 sm:space-y-3 transition-colors duration-200 ease-in-out">
                         <button type="submit"
                                 class="w-full bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-colors shadow-sm text-center active:scale-[0.99]">
                             Create User Account
                         </button>
                         <button type="reset"
-                                class="w-full bg-white dark:bg-[#111713] hover:bg-gray-50 dark:hover:bg-[#1C2621] text-gray-600 dark:text-gray-400 dark:hover:text-gray-100 border border-gray-200 dark:border-[#27332C] px-5 py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-colors text-center">
+                                class="w-full bg-white dark:bg-[#121212] hover:bg-gray-50 dark:hover:bg-[#121212] text-gray-600 dark:text-gray-400 dark:hover:text-gray-100 border border-gray-200 dark:border-[#27332C] px-5 py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-colors text-center">
                             Clear Form
                         </button>
                     </div>

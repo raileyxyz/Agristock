@@ -7,7 +7,7 @@
     </div>
 
     <!-- Type filter tabs -->
-    <div class="inline-flex items-center rounded-lg border border-slate-200 dark:border-[#27332C] bg-white dark:bg-[#111713] p-1 shadow-sm overflow-x-auto w-full sm:w-auto transition-colors duration-200 ease-in-out">
+    <div class="inline-flex items-center rounded-lg border border-slate-200 dark:border-[#27332C] bg-white dark:bg-[#121212] p-1 shadow-sm overflow-x-auto w-full sm:w-auto transition-colors duration-200 ease-in-out">
         @php
             $tabs = [
                 'all' => 'All',
@@ -37,16 +37,16 @@
         <div class="relative w-full sm:max-w-sm">
             <i data-lucide="search" class="w-4 h-4 text-gray-400 dark:text-gray-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
             <input type="text" name="search" x-model="search" placeholder="Search by product..."
-                   class="w-full border border-gray-300 dark:border-[#27332C] bg-white dark:bg-[#111713] text-gray-800 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
+                   class="w-full border border-gray-300 dark:border-[#27332C] bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
         </div>
     </form>
 
     <!-- Table -->
-    <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl overflow-hidden mt-4 transition-colors duration-200 ease-in-out">
+    <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl overflow-hidden mt-4 transition-colors duration-200 ease-in-out">
         <div class="overflow-x-auto -webkit-overflow-scrolling-touch">
             <table class="w-full text-sm min-w-[1000px]">
                 <thead>
-                    <tr class="bg-gray-50 dark:bg-[#161F1A] border-b border-gray-200 dark:border-[#1F2B23] text-left text-gray-500 dark:text-gray-400 transition-colors duration-200 ease-in-out">
+                    <tr class="bg-gray-50 dark:bg-[#121212] border-b border-gray-200 dark:border-[#1F2B23] text-left text-gray-500 dark:text-gray-400 transition-colors duration-200 ease-in-out">
                         <th class="px-4 py-3 font-medium whitespace-nowrap">Date</th>
                         <th class="px-4 py-3 font-medium whitespace-nowrap">Product</th>
                         <th class="px-4 py-3 font-medium whitespace-nowrap">Type</th>

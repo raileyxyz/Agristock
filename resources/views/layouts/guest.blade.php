@@ -78,12 +78,12 @@
             transition: background-color 5000s ease-in-out 0s;
         }
 
-        /* Dark autofill: surface #1C2621, text gray-100 (#f3f4f6) to match dashboard palette */
+        /* Dark autofill: surface #121212, text gray-100 (#f3f4f6) to match dashboard palette */
         .dark input:-webkit-autofill,
         .dark input:-webkit-autofill:hover,
         .dark input:-webkit-autofill:focus,
         .dark input:-webkit-autofill:active {
-            -webkit-box-shadow: 0 0 0 30px #1C2621 inset !important;
+            -webkit-box-shadow: 0 0 0 30px #121212 inset !important;
             -webkit-text-fill-color: #f3f4f6 !important;
             caret-color: #f3f4f6 !important;
         }
@@ -156,13 +156,13 @@
         </div>
 
         <!-- Right Panel: Auth Container -->
-        <div class="relative flex-1 flex flex-col justify-between p-6 sm:p-10 lg:p-12 lg:col-span-7 xl:col-span-6 bg-white dark:bg-[#161D19] min-h-screen lg:min-h-0 border-l border-transparent dark:border-[#27332C]">
+        <div class="relative flex-1 flex flex-col justify-between p-6 sm:p-10 lg:p-12 lg:col-span-7 xl:col-span-6 bg-white dark:bg-[#121212] min-h-screen lg:min-h-0 border-l border-transparent dark:border-[#27332C]">
 
             <!-- Top Right Corner Dark Mode Button (Inayos para gamitin ang Alpine toggleTheme method) -->
             <div class="absolute top-6 right-6 sm:top-8 sm:right-8 z-20">
                 <button @click="toggleTheme()"
                     type="button"
-                    class="p-2.5 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#1C2621] rounded-xl transition-all duration-300 focus:outline-none">
+                    class="p-2.5 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#121212] rounded-xl transition-all duration-300 focus:outline-none">
                     <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
                     <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
                 </button>

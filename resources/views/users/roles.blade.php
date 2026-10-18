@@ -16,7 +16,7 @@
 
         @foreach($permissions as $role => $perms)
             <!-- Card Container (Inilagay ang flex flex-col h-full) -->
-            <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-6 shadow-sm flex flex-col h-full space-y-4 transition-colors duration-200 ease-in-out">
+            <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-6 shadow-sm flex flex-col h-full space-y-4 transition-colors duration-200 ease-in-out">
                 <!-- Role Header Card Top -->
                 <div class="flex items-center gap-3 pb-3 sm:pb-4 border-b border-gray-100 dark:border-[#1F2B23] shrink-0">
                     <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-400 flex items-center justify-center shrink-0">

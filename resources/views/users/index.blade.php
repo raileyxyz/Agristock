@@ -97,7 +97,7 @@
             <div class="flex items-center gap-2 shrink-0">
                 @can('reviewDeletionRequests', \App\Models\User::class)
                     <a href="{{ route('users.deletion-requests.index') }}"
-                       class="relative border border-gray-300 dark:border-[#27332C] text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#161F1A] px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors">
+                       class="relative border border-gray-300 dark:border-[#27332C] text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#121212] px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium flex items-center justify-center gap-1 sm:gap-1.5 transition-colors">
                         <i data-lucide="user-minus" class="w-3.5 h-3.5"></i>
                         Deletion Requests
                         @if($statistics['pending_deletions'] > 0)
@@ -128,12 +128,12 @@
             <div class="relative flex-1 min-w-0 sm:min-w-[200px]">
                 <i data-lucide="search" class="w-4 h-4 text-gray-400 dark:text-gray-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
                 <input type="text" name="search" x-model="search" placeholder="Search by name or email..."
-                       class="w-full border border-gray-300 dark:border-[#27332C] bg-white dark:bg-[#111713] text-gray-800 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
+                       class="w-full border border-gray-300 dark:border-[#27332C] bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
             </div>
 
             <div class="relative w-full sm:w-auto">
                 <select name="role" onchange="this.form.submit()"
-                        class="w-full sm:w-auto appearance-none border border-gray-300 dark:border-[#27332C] rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white dark:bg-[#111713] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
+                        class="w-full sm:w-auto appearance-none border border-gray-300 dark:border-[#27332C] rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
                     <option value="">All Roles</option>
                     @foreach($roles as $roleOption)
                         <option value="{{ $roleOption }}" {{ request('role') === $roleOption ? 'selected' : '' }}>
@@ -146,7 +146,7 @@
 
             <div class="relative w-full sm:w-auto">
                 <select name="status" onchange="this.form.submit()"
-                        class="w-full sm:w-auto appearance-none border border-gray-300 dark:border-[#27332C] rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white dark:bg-[#111713] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
+                        class="w-full sm:w-auto appearance-none border border-gray-300 dark:border-[#27332C] rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
                     <option value="">All Status</option>
                     <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
                     <option value="archived" {{ request('status') === 'archived' ? 'selected' : '' }}>Archived</option>
@@ -158,14 +158,14 @@
         </form>
 
         <!-- Users table -->
-        <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl overflow-hidden mt-4 transition-colors duration-200 ease-in-out">
+        <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl overflow-hidden mt-4 transition-colors duration-200 ease-in-out">
             <div class="overflow-x-auto">
                 @php
                     $canManageUnits = Auth::user()->can('suppliers.update') || Auth::user()->can('suppliers.delete');
                 @endphp
                 <table class="w-full text-sm min-w-[850px]">
                     <thead>
-                        <tr class="bg-gray-50 dark:bg-[#161F1A] border-b border-gray-200 dark:border-[#1F2B23] text-left text-gray-500 dark:text-gray-400 transition-colors duration-200 ease-in-out">
+                        <tr class="bg-gray-50 dark:bg-[#121212] border-b border-gray-200 dark:border-[#1F2B23] text-left text-gray-500 dark:text-gray-400 transition-colors duration-200 ease-in-out">
                             <th class="px-3 py-2.5 font-medium whitespace-nowrap">User</th>
                             <th class="px-3 py-2.5 font-medium whitespace-nowrap">Email</th>
                             <th class="px-3 py-2.5 font-medium whitespace-nowrap">Role</th>
@@ -189,7 +189,7 @@
                                         <div class="relative shrink-0">
                                             <x-avatar :user="$user" size="w-9 h-9" text-size="text-xs font-semibold" />
                                             @if($user->id === auth()->id())
-                                                <div class="absolute -bottom-0.5 -right-0.5 w-4.5 h-4.5 rounded-full bg-green-600 dark:bg-green-500 border-2 border-white dark:border-[#111713] flex items-center justify-center shadow-sm" title="You">
+                                                <div class="absolute -bottom-0.5 -right-0.5 w-4.5 h-4.5 rounded-full bg-green-600 dark:bg-green-500 border-2 border-white dark:border-[#121212] flex items-center justify-center shadow-sm" title="You">
                                                     <i data-lucide="check" class="w-2.5 h-2.5 text-white stroke-[3]"></i>
                                                 </div>
                                             @endif
@@ -209,7 +209,7 @@
                                         {{ match($user->status) {
                                             \App\Enums\Status::ACTIVE => 'bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400',
                                             \App\Enums\Status::DELETED => 'bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400',
-                                            default => 'bg-gray-100 text-gray-500 dark:bg-[#1C2621] dark:text-gray-400',
+                                            default => 'bg-gray-100 text-gray-500 dark:bg-[#121212] dark:text-gray-400',
                                         } }}">
                                         {{ $user->status->value }}
                                     </span>
@@ -224,7 +224,7 @@
                                         <button @click="open = !open"
                                                 @click.outside="open = false"
                                                 title="Options"
-                                                class="text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#1C2621] p-1.5 rounded-lg transition-colors">
+                                                class="text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#121212] p-1.5 rounded-lg transition-colors">
                                             <i data-lucide="more-vertical" class="w-4 h-4"></i>
                                         </button>
 
@@ -235,7 +235,7 @@
                                             x-transition:leave="transition ease-in duration-75"
                                             x-transition:leave-start="transform opacity-100 scale-100"
                                             x-transition:leave-end="transform opacity-0 scale-95"
-                                            class="absolute right-0 z-20 mt-1 w-36 origin-top-right rounded-xl bg-white dark:bg-[#161D19] p-1 shadow-lg ring-1 ring-black/5 dark:ring-0 dark:border dark:border-[#27332C] focus:outline-none"
+                                            class="absolute right-0 z-20 mt-1 w-36 origin-top-right rounded-xl bg-white dark:bg-[#121212] p-1 shadow-lg ring-1 ring-black/5 dark:ring-0 dark:border dark:border-[#27332C] focus:outline-none"
                                             x-cloak>
 
                                             <!-- View -->
@@ -251,7 +251,7 @@
                                                         'last_login_at' => $user->last_login_at?->format('M d, Y - h:i A'),
                                                         'created_at' => $user->created_at?->format('M d, Y'),
                                                     ]))"
-                                                    class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#1C2621] hover:text-green-600 dark:hover:text-green-400 transition-colors">
+                                                    class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#121212] hover:text-green-600 dark:hover:text-green-400 transition-colors">
                                                 <i data-lucide="eye" class="w-3.5 h-3.5"></i>
                                                 View
                                             </button>
@@ -266,7 +266,7 @@
                                                                 'role' => $user->role->value,
                                                                 'status' => $user->status->value,
                                                             ]))"
-                                                            class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#1C2621] hover:text-green-600 dark:hover:text-green-400 transition-colors">
+                                                            class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#121212] hover:text-green-600 dark:hover:text-green-400 transition-colors">
                                                         <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
                                                         Edit
                                                     </button>
@@ -290,7 +290,7 @@
                                                     <form method="POST" action="{{ route('users.resend-invite', $user) }}">
                                                         @csrf
                                                         <button type="submit"
-                                                                class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#1C2621] hover:text-green-600 dark:hover:text-green-400 transition-colors">
+                                                                class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#121212] hover:text-green-600 dark:hover:text-green-400 transition-colors">
                                                             <i data-lucide="mail" class="w-3.5 h-3.5"></i>
                                                             Resend invite
                                                         </button>
@@ -325,7 +325,7 @@
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
             x-transition:leave="transition-opacity ease-in duration-150"
             x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-            class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            class="fixed inset-0 bg-black/50 dark:bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             style="display: none;" x-cloak>
 
             <div @click.outside="showViewModal = false"
@@ -333,7 +333,7 @@
                 x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-2"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                class="bg-white dark:bg-[#161D19] rounded-2xl shadow-xl border border-gray-100 dark:border-[#27332C] w-full max-w-sm overflow-hidden max-h-[90vh] flex flex-col">
+                class="bg-white dark:bg-[#121212] rounded-2xl shadow-xl border border-gray-100 dark:border-[#27332C] w-full max-w-sm overflow-hidden max-h-[90vh] flex flex-col">
 
                 <!-- Top Action Bar -->
                 <div class="flex items-center justify-between gap-3 px-4 sm:px-6 pt-5 pb-4 shrink-0 border-b border-gray-100 dark:border-[#27332C]">
@@ -347,7 +347,7 @@
                         </div>
                     </div>
                     <button type="button" @click="showViewModal = false"
-                            class="text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-100 hover:bg-gray-100/80 dark:hover:bg-[#1C2621] rounded-lg p-1.5 transition-colors shrink-0">
+                            class="text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-100 hover:bg-gray-100/80 dark:hover:bg-[#121212] rounded-lg p-1.5 transition-colors shrink-0">
                         <i data-lucide="x" class="w-4.5 h-4.5"></i>
                     </button>
                 </div>
@@ -377,7 +377,7 @@
                             <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset"
                                 :class="viewTarget.status === 'Active'
                                     ? 'bg-green-50 text-green-600 ring-green-600/20 dark:bg-green-950/40 dark:text-green-400 dark:ring-green-400/20'
-                                    : 'bg-gray-50 text-gray-600 ring-gray-500/10 dark:bg-[#1C2621] dark:text-gray-400 dark:ring-gray-500/20'">
+                                    : 'bg-gray-50 text-gray-600 ring-gray-500/10 dark:bg-[#121212] dark:text-gray-400 dark:ring-gray-500/20'">
                                 <span class="h-1.5 w-1.5 rounded-full"
                                     :class="viewTarget.status === 'Active' ? 'bg-green-600 dark:bg-green-400' : 'bg-gray-400 dark:bg-gray-500'"></span>
                                 <span x-text="viewTarget.status"></span>
@@ -392,7 +392,7 @@
                     </div>
 
                     <!-- Details List -->
-                    <div class="px-4 sm:px-6 py-5 bg-gray-50/50 dark:bg-[#111713] space-y-3.5">
+                    <div class="px-4 sm:px-6 py-5 bg-gray-50/50 dark:bg-[#121212] space-y-3.5">
                         <div class="flex items-center justify-between gap-3 text-xs">
                             <span class="text-gray-500 dark:text-gray-400 flex items-center gap-2 shrink-0">
                                 <i data-lucide="phone" class="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"></i>
@@ -428,9 +428,9 @@
                 </div>
 
                 <!-- Footer -->
-                <div class="px-4 sm:px-6 py-4 bg-white dark:bg-[#161D19] border-t border-gray-100 dark:border-[#27332C] shrink-0">
+                <div class="px-4 sm:px-6 py-4 bg-white dark:bg-[#121212] border-t border-gray-100 dark:border-[#27332C] shrink-0">
                     <button type="button" @click="showViewModal = false"
-                            class="w-full h-9 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-[#1C2621] hover:bg-gray-200/80 dark:hover:bg-[#27332C] transition-colors">
+                            class="w-full h-9 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-[#121212] hover:bg-gray-200/80 dark:hover:bg-[#27332C] transition-colors">
                         Done
                     </button>
                 </div>
@@ -444,14 +444,14 @@
              x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
              x-transition:leave="transition-opacity ease-in duration-150"
              x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-             class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+             class="fixed inset-0 bg-black/50 dark:bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
              style="display: none;" x-cloak>
             <div @click.outside="closeEdit()"
                  x-show="showEditModal"
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0 scale-95 translate-y-2"
                  x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                 class="bg-white dark:bg-[#161D19] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden max-h-[90vh] flex flex-col">
+                 class="bg-white dark:bg-[#121212] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden max-h-[90vh] flex flex-col">
 
                 <template x-if="editForm">
                     <form method="POST" :action="'/users/' + editForm.id" class="flex flex-col overflow-hidden">
@@ -472,7 +472,7 @@
                                 </div>
                             </div>
                             <button type="button" @click="closeEdit()"
-                                    class="text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#1C2621] rounded-lg p-1.5 -mt-1 -mr-1 transition-colors shrink-0">
+                                    class="text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#121212] rounded-lg p-1.5 -mt-1 -mr-1 transition-colors shrink-0">
                                 <i data-lucide="x" class="w-4.5 h-4.5"></i>
                             </button>
                         </div>
@@ -482,7 +482,7 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Full Name</label>
                                 <input type="text" name="name" x-model="editForm.name"
-                                    class="w-full border rounded-lg px-3.5 py-2.5 text-sm dark:bg-[#0B0F0D] dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors"
+                                    class="w-full border rounded-lg px-3.5 py-2.5 text-sm dark:bg-[#121212] dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors"
                                     :class="editErrors.name ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
                                 <template x-if="editErrors.name">
                                     <p class="text-xs text-red-600 dark:text-red-400 mt-1.5" x-text="editErrors.name?.[0]"></p>
@@ -492,7 +492,7 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Email Address</label>
                                 <input type="email" name="email" x-model="editForm.email"
-                                    class="w-full border rounded-lg px-3.5 py-2.5 text-sm dark:bg-[#0B0F0D] dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors"
+                                    class="w-full border rounded-lg px-3.5 py-2.5 text-sm dark:bg-[#121212] dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors"
                                     :class="editErrors.email ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
                                 <template x-if="editErrors.email">
                                     <p class="text-xs text-red-600 dark:text-red-400 mt-1.5" x-text="editErrors.email?.[0]"></p>
@@ -505,7 +505,7 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Role</label>
                                 <select name="role" x-model="editForm.role"
-                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#0B0F0D] dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors"
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm bg-white dark:bg-[#121212] dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 transition-colors"
                                         :class="editErrors.role ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
                                     @foreach($roles as $roleOption)
                                         <option value="{{ $roleOption }}">{{ $roleOption }}</option>
@@ -526,7 +526,7 @@
                                     </div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Your Password</label>
                                     <input type="password" name="current_password" x-model="editForm.current_password" autocomplete="current-password" placeholder="Enter your password"
-                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm dark:bg-[#0B0F0D] dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors"
+                                        class="w-full border rounded-lg px-3.5 py-2.5 text-sm dark:bg-[#121212] dark:text-gray-100 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-colors"
                                         :class="editErrors.current_password ? 'border-red-300 dark:border-red-500/60 focus:ring-red-500/40 focus:border-red-500' : 'border-gray-300 dark:border-[#27332C] focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400'">
                                     <template x-if="editErrors.current_password">
                                         <p class="text-xs text-red-600 dark:text-red-400 mt-1.5" x-text="editErrors.current_password?.[0]"></p>
@@ -537,7 +537,7 @@
                             <template x-if="editForm.id !== {{ auth()->id() }}">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Status</label>
-                                    <div class="flex items-center gap-1.5 bg-gray-50 dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] p-1 rounded-lg w-full sm:w-fit">
+                                    <div class="flex items-center gap-1.5 bg-gray-50 dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] p-1 rounded-lg w-full sm:w-fit">
                                         <button type="button" @click="editForm.status = 'Active'"
                                                 :class="editForm.status === 'Active' ? 'bg-green-600 text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'"
                                                 class="flex-1 sm:flex-none px-4 py-1.5 rounded-md text-xs font-medium transition-colors">
@@ -555,16 +555,16 @@
                         </div>
 
                         <!-- Footer -->
-                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-4 sm:px-6 py-4 bg-gray-50 dark:bg-[#111713] border-t border-gray-100 dark:border-[#27332C] shrink-0">
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-4 sm:px-6 py-4 bg-gray-50 dark:bg-[#121212] border-t border-gray-100 dark:border-[#27332C] shrink-0">
                             <button type="button" @click="closeEdit()"
-                                    class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#1C2621] dark:hover:text-gray-100 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
+                                    class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#121212] dark:hover:text-gray-100 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
                                 Cancel
                             </button>
                             <button type="submit"
                                     :disabled="!hasChanges()"
                                     :class="hasChanges()
                                         ? 'bg-green-600 hover:bg-green-700 cursor-pointer text-white'
-                                        : 'bg-gray-300 dark:bg-[#1C2621] text-white dark:text-gray-500 cursor-not-allowed'"
+                                        : 'bg-gray-300 dark:bg-[#27332C] text-white dark:text-gray-500 cursor-not-allowed'"
                                     class="px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm order-1 sm:order-2">
                                 Save changes
                             </button>
@@ -580,14 +580,14 @@
              x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
              x-transition:leave="transition-opacity ease-in duration-150"
              x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-             class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+             class="fixed inset-0 bg-black/50 dark:bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
              style="display: none;" x-cloak>
             <div @click.outside="showArchiveModal = false"
                  x-show="showArchiveModal"
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0 scale-95 translate-y-2"
                  x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                 class="bg-white dark:bg-[#161D19] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+                 class="bg-white dark:bg-[#121212] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
                 <div class="px-6 pt-6 pb-5">
                     <div class="w-11 h-11 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-4">
                         <i data-lucide="archive" class="w-5 h-5"></i>
@@ -598,10 +598,10 @@
                     </p>
                 </div>
                 <form method="POST" :action="`/users/${archiveTarget.id}`"
-                      class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 dark:bg-[#111713] border-t border-gray-100 dark:border-[#27332C]">
+                      class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 dark:bg-[#121212] border-t border-gray-100 dark:border-[#27332C]">
                     @csrf @method('DELETE')
                     <button type="button" @click="showArchiveModal = false"
-                            class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#1C2621] dark:hover:text-gray-100 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
+                            class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#121212] dark:hover:text-gray-100 px-4 py-2 rounded-lg text-sm font-medium transition-colors order-2 sm:order-1">
                         Cancel
                     </button>
                     <button type="submit"
@@ -618,14 +618,14 @@
              x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
              x-transition:leave="transition-opacity ease-in duration-150"
              x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-             class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+             class="fixed inset-0 bg-black/50 dark:bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
              style="display: none;" x-cloak>
             <div @click.outside="showSuccessModal = false"
                  x-show="showSuccessModal"
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0 scale-95 translate-y-2"
                  x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                 class="bg-white dark:bg-[#161D19] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+                 class="bg-white dark:bg-[#121212] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
                 <div class="px-6 pt-6 pb-5 text-center">
                     <div class="w-12 h-12 rounded-full bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-400 flex items-center justify-center mb-4 mx-auto">
                         <i data-lucide="check" class="w-6 h-6"></i>
@@ -633,7 +633,7 @@
                     <h2 class="font-semibold text-gray-800 dark:text-gray-100 text-base mb-1.5">Done</h2>
                     <p class="text-sm text-gray-500 dark:text-gray-400" x-text="successMessage"></p>
                 </div>
-                <div class="flex items-center justify-center px-6 py-4 bg-gray-50 dark:bg-[#111713] border-t border-gray-100 dark:border-[#27332C]">
+                <div class="flex items-center justify-center px-6 py-4 bg-gray-50 dark:bg-[#121212] border-t border-gray-100 dark:border-[#27332C]">
                     <button @click="showSuccessModal = false"
                             class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                         Got it
@@ -648,14 +648,14 @@
              x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
              x-transition:leave="transition-opacity ease-in duration-150"
              x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-             class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+             class="fixed inset-0 bg-black/50 dark:bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
              style="display: none;" x-cloak>
             <div @click.outside="showErrorModal = false"
                  x-show="showErrorModal"
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0 scale-95 translate-y-2"
                  x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                 class="bg-white dark:bg-[#161D19] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+                 class="bg-white dark:bg-[#121212] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
                 <div class="px-6 pt-6 pb-5 text-center">
                     <div class="w-12 h-12 rounded-full bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 flex items-center justify-center mb-4 mx-auto">
                         <i data-lucide="x" class="w-6 h-6"></i>
@@ -663,7 +663,7 @@
                     <h2 class="font-semibold text-gray-800 dark:text-gray-100 text-base mb-1.5">Something went wrong</h2>
                     <p class="text-sm text-gray-500 dark:text-gray-400" x-text="errorMessage"></p>
                 </div>
-                <div class="flex items-center justify-center px-6 py-4 bg-gray-50 dark:bg-[#111713] border-t border-gray-100 dark:border-[#27332C]">
+                <div class="flex items-center justify-center px-6 py-4 bg-gray-50 dark:bg-[#121212] border-t border-gray-100 dark:border-[#27332C]">
                     <button @click="showErrorModal = false"
                             class="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                         Got it

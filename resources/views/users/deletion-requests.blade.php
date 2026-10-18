@@ -16,7 +16,7 @@
                 </p>
             </div>
             <a href="{{ route('users.index') }}"
-               class="inline-flex items-center justify-center gap-2 border border-gray-300 dark:border-[#27332C] text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#161F1A] px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors shrink-0">
+               class="inline-flex items-center justify-center gap-2 border border-gray-300 dark:border-[#27332C] text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#121212] px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors shrink-0">
                 <i data-lucide="arrow-left" class="w-4 h-4"></i>
                 Back to users
             </a>
@@ -45,7 +45,7 @@
         <!-- Pending requests -->
         <div class="mt-6 space-y-4">
             @forelse ($pending as $deletionRequest)
-                <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm transition-colors">
+                <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm transition-colors">
                     <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
 
                         <!-- User Info with Avatar -->
@@ -77,7 +77,7 @@
                         <!-- Action Buttons -->
                         <div class="flex items-center gap-2 shrink-0 self-start sm:self-center">
                             <button type="button" @click="openReject({{ $deletionRequest->id }}, @js($deletionRequest->user->name))"
-                                    class="border border-gray-300 dark:border-[#27332C] text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#161F1A] px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors">
+                                    class="border border-gray-300 dark:border-[#27332C] text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-[#121212] px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors">
                                 Decline
                             </button>
                             <button type="button" @click="openApprove({{ $deletionRequest->id }}, @js($deletionRequest->user->name))"
@@ -88,14 +88,14 @@
                     </div>
 
                     <!-- Reason Box -->
-                    <div class="mt-4 rounded-lg bg-gray-50 dark:bg-[#161D19] border border-gray-100 dark:border-[#27332C] px-3.5 py-2.5">
+                    <div class="mt-4 rounded-lg bg-gray-50 dark:bg-[#121212] border border-gray-100 dark:border-[#27332C] px-3.5 py-2.5">
                         <p class="text-[11px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">Reason for request</p>
                         <p class="text-xs sm:text-sm text-gray-700 dark:text-gray-200 whitespace-pre-line leading-relaxed">{{ $deletionRequest->reason }}</p>
                     </div>
                 </div>
             @empty
-                <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl px-5 py-12 text-center shadow-sm">
-                    <div class="w-12 h-12 rounded-full bg-gray-100 dark:bg-[#161D19] flex items-center justify-center mx-auto mb-3 text-gray-400 dark:text-gray-500">
+                <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl px-5 py-12 text-center shadow-sm">
+                    <div class="w-12 h-12 rounded-full bg-gray-100 dark:bg-[#121212] flex items-center justify-center mx-auto mb-3 text-gray-400 dark:text-gray-500">
                         <i data-lucide="inbox" class="w-6 h-6"></i>
                     </div>
                     <p class="text-gray-800 dark:text-gray-200 font-medium text-sm">No pending deletion requests</p>
@@ -110,11 +110,11 @@
                 <h2 class="text-sm font-semibold text-gray-800 dark:text-gray-200">Recently reviewed</h2>
             </div>
 
-            <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl overflow-hidden shadow-sm">
+            <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl overflow-hidden shadow-sm">
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm min-w-[700px]">
                         <thead>
-                            <tr class="bg-gray-50 dark:bg-[#161F1A] border-b border-gray-200 dark:border-[#27332C] text-left text-xs uppercase tracking-wider font-semibold text-gray-500 dark:text-gray-400">
+                            <tr class="bg-gray-50 dark:bg-[#121212] border-b border-gray-200 dark:border-[#27332C] text-left text-xs uppercase tracking-wider font-semibold text-gray-500 dark:text-gray-400">
                                 <th class="px-4 py-3">User</th>
                                 <th class="px-4 py-3">Decision</th>
                                 <th class="px-4 py-3">Decided by</th>
@@ -160,8 +160,8 @@
         @endif
 
         <!-- Approve Modal -->
-        <div x-show="showApproveModal" class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;" x-cloak>
-            <div @click.outside="showApproveModal = false" class="bg-white dark:bg-[#161D19] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+        <div x-show="showApproveModal" class="fixed inset-0 bg-black/50 dark:bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;" x-cloak>
+            <div @click.outside="showApproveModal = false" class="bg-white dark:bg-[#121212] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
                 <div class="px-6 pt-6 pb-5">
                     <div class="w-11 h-11 rounded-full bg-rose-50 dark:bg-rose-950/40 text-red-600 dark:text-red-400 flex items-center justify-center mb-4 shrink-0">
                         <i data-lucide="user-x" class="w-5 h-5"></i>
@@ -173,10 +173,10 @@
                     </p>
                 </div>
                 <form method="POST" :action="`/users/deletion-requests/${target.id}/approve`"
-                      class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 dark:bg-[#111713] border-t border-gray-100 dark:border-[#27332C]">
+                      class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 dark:bg-[#121212] border-t border-gray-100 dark:border-[#27332C]">
                     @csrf
                     <button type="button" @click="showApproveModal = false"
-                            class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#1C2621] px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors order-2 sm:order-1">
+                            class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#121212] px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors order-2 sm:order-1">
                         Cancel
                     </button>
                     <button type="submit"
@@ -188,8 +188,8 @@
         </div>
 
         <!-- Decline Modal -->
-        <div x-show="showRejectModal" class="fixed inset-0 bg-black/50 dark:bg-[#0B0F0D]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;" x-cloak>
-            <div @click.outside="showRejectModal = false" class="bg-white dark:bg-[#161D19] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+        <div x-show="showRejectModal" class="fixed inset-0 bg-black/50 dark:bg-[#121212]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;" x-cloak>
+            <div @click.outside="showRejectModal = false" class="bg-white dark:bg-[#121212] border border-transparent dark:border-[#27332C] rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
                 <form method="POST" :action="`/users/deletion-requests/${target.id}/reject`">
                     @csrf
                     <div class="px-6 pt-6 pb-5">
@@ -201,11 +201,11 @@
                             <span class="font-semibold text-gray-800 dark:text-gray-100 break-words" x-text="target.name"></span> stays active. You can leave an optional note explaining why.
                         </p>
                         <textarea name="admin_note" rows="3" maxlength="500" placeholder="Optional note for user..."
-                                class="w-full border border-gray-300 dark:border-[#27332C] rounded-lg px-3 py-2 text-xs sm:text-sm dark:bg-[#0B0F0D] dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500/40 dark:focus:ring-green-400/40 resize-none"></textarea>
+                                class="w-full border border-gray-300 dark:border-[#27332C] rounded-lg px-3 py-2 text-xs sm:text-sm dark:bg-[#121212] dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500/40 dark:focus:ring-green-400/40 resize-none"></textarea>
                     </div>
-                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 dark:bg-[#111713] border-t border-gray-100 dark:border-[#27332C]">
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2.5 px-6 py-4 bg-gray-50 dark:bg-[#121212] border-t border-gray-100 dark:border-[#27332C]">
                         <button type="button" @click="showRejectModal = false"
-                                class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#1C2621] px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors order-2 sm:order-1">
+                                class="text-gray-600 dark:text-gray-400 hover:bg-gray-200/70 dark:hover:bg-[#121212] px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors order-2 sm:order-1">
                             Cancel
                         </button>
                         <button type="submit"

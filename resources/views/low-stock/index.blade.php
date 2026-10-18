@@ -16,12 +16,12 @@
         <div class="relative flex-1 min-w-0">
             <i data-lucide="search" class="w-4 h-4 text-gray-400 dark:text-gray-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
             <input type="text" name="search" x-model="search" placeholder="Search products..."
-                   class="w-full border border-gray-300 dark:border-[#27332C] bg-white dark:bg-[#111713] text-gray-800 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
+                   class="w-full border border-gray-300 dark:border-[#27332C] bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
         </div>
 
         <div class="relative w-full sm:w-auto">
             <select name="category_id" onchange="this.form.submit()"
-                    class="w-full sm:w-auto appearance-none border border-gray-300 dark:border-[#27332C] rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white dark:bg-[#111713] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
+                    class="w-full sm:w-auto appearance-none border border-gray-300 dark:border-[#27332C] rounded-lg pl-3.5 pr-9 py-2.5 text-sm bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 dark:[color-scheme:dark] focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400/50 focus:border-transparent transition-colors duration-200 ease-in-out">
                 <option value="">All Categories</option>
                 @foreach($categories as $category)
                     <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
@@ -43,14 +43,14 @@
                 $percent = $reorderPoint > 0 ? min(100, ($current / $reorderPoint) * 100) : 0;
 
                 if ($current <= 0) {
-                    $status = ['label' => 'Out of Stock', 'badge' => 'bg-gray-100 text-gray-600 dark:bg-[#1C2621] dark:text-gray-400', 'bar' => 'bg-gray-300 dark:bg-gray-600'];
+                    $status = ['label' => 'Out of Stock', 'badge' => 'bg-gray-100 text-gray-600 dark:bg-[#121212] dark:text-gray-400', 'bar' => 'bg-gray-300 dark:bg-gray-600'];
                 } elseif ($current <= $minimumStock) {
                     $status = ['label' => 'Critical', 'badge' => 'bg-red-50 text-red-600 dark:bg-red-950/50 dark:text-red-400', 'bar' => 'bg-red-500'];
                 } else {
                     $status = ['label' => 'Low Stock', 'badge' => 'bg-amber-50 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400', 'bar' => 'bg-amber-500'];
                 }
             @endphp
-            <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl p-3 sm:p-4 transition-colors duration-200 ease-in-out">
+            <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl p-3 sm:p-4 transition-colors duration-200 ease-in-out">
                 <div class="flex items-start sm:items-center gap-3 sm:gap-4">
                     <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg flex items-center justify-center text-lg sm:text-xl shrink-0"
                          style="background-color: {{ $product->category->icon_color ?? '#6b7280' }}22;">
@@ -71,7 +71,7 @@
                             </div>
                         </div>
 
-                        <div class="relative h-2 bg-gray-100 dark:bg-[#1C2621] rounded-full overflow-hidden">
+                        <div class="relative h-2 bg-gray-100 dark:bg-[#27332C] rounded-full overflow-hidden">
                             <div class="absolute inset-y-0 left-0 rounded-full {{ $status['bar'] }}" style="width: {{ $percent }}%;"></div>
                         </div>
 
@@ -83,7 +83,7 @@
                 </div>
             </div>
         @empty
-            <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl px-5 py-14 text-center transition-colors duration-200 ease-in-out">
+            <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl px-5 py-14 text-center transition-colors duration-200 ease-in-out">
                 <i data-lucide="check-circle" class="w-8 h-8 text-green-300 dark:text-green-700 mx-auto mb-2"></i>
                 <p class="text-gray-500 dark:text-gray-400 text-sm">No products need attention right now.</p>
                 <p class="text-gray-400 dark:text-gray-500 text-xs mt-1">All active products are above their reorder point.</p>
