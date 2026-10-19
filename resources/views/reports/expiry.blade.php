@@ -12,7 +12,7 @@
         <!-- Summary KPI Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
             <!-- Expired Items -->
-            <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
+            <div class="bg-white dark:bg-[#121212] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
                 <div>
                     <p class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Expired Items</p>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ $summary['expired'] }}</p>
@@ -24,7 +24,7 @@
             </div>
 
             <!-- Critical (Within 30 Days) -->
-            <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
+            <div class="bg-white dark:bg-[#121212] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
                 <div>
                     <p class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Critical (&le; 30 Days)</p>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ $summary['within_30'] }}</p>
@@ -36,7 +36,7 @@
             </div>
 
             <!-- Warning (31 to 60 Days) -->
-            <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
+            <div class="bg-white dark:bg-[#121212] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
                 <div>
                     <p class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Warning (31-60 Days)</p>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ $summary['within_60'] }}</p>
@@ -48,7 +48,7 @@
             </div>
 
             <!-- Safe (Over 60 Days) -->
-            <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
+            <div class="bg-white dark:bg-[#121212] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
                 <div>
                     <p class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Good (&gt; 60 Days)</p>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ $summary['safe'] }}</p>
@@ -82,11 +82,11 @@
                         </div>
 
                         <!-- Data Table Container -->
-                        <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl shadow-sm overflow-hidden transition-colors duration-200 ease-in-out">
+                        <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl shadow-sm overflow-hidden transition-colors duration-200 ease-in-out">
                             <div class="overflow-x-auto">
                                 <table class="w-full text-xs sm:text-sm min-w-[750px]">
                                     <thead>
-                                        <tr class="bg-gray-50 dark:bg-[#161F1A] border-b border-gray-200 dark:border-[#1F2B23] text-left text-gray-500 dark:text-gray-400 transition-colors duration-200 ease-in-out">
+                                        <tr class="bg-gray-50 dark:bg-[#121212] border-b border-gray-200 dark:border-[#1F2B23] text-left text-gray-500 dark:text-gray-400 transition-colors duration-200 ease-in-out">
                                             <th class="px-3.5 sm:px-4 py-2.5 sm:py-3 font-medium whitespace-nowrap">Product</th>
                                             <th class="px-3.5 sm:px-4 py-2.5 sm:py-3 font-medium whitespace-nowrap">Category</th>
                                             <th class="px-3.5 sm:px-4 py-2.5 sm:py-3 font-medium whitespace-nowrap">Qty</th>

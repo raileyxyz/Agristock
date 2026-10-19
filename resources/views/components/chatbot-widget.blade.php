@@ -17,7 +17,7 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100 translate-y-0 scale-100"
          x-transition:leave-end="opacity-0 translate-y-4 scale-95"
-         class="absolute bottom-16 right-0 mb-3 flex h-[32rem] w-80 flex-col rounded-2xl border border-gray-100 dark:border-[#27332C] bg-white dark:bg-[#161D19] shadow-2xl sm:w-96 overflow-hidden">
+         class="absolute bottom-16 right-0 mb-3 flex h-[32rem] w-80 flex-col rounded-2xl border border-gray-100 dark:border-[#27332C] bg-white dark:bg-[#121212] shadow-2xl sm:w-96 overflow-hidden">
 
         <!-- Header -->
         <div class="flex items-center justify-between border-b border-green-800/10 dark:border-[#27332C] bg-green-600 px-4 py-3.5 text-white">
@@ -39,7 +39,7 @@
         </div>
 
         <!-- Chat Messages Container -->
-        <div x-ref="list" class="flex-1 space-y-3.5 overflow-y-auto p-4 text-sm bg-gray-50/50 dark:bg-[#0B0F0D] scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-[#27332C]">
+        <div x-ref="list" class="flex-1 space-y-3.5 overflow-y-auto p-4 text-sm bg-gray-50/50 dark:bg-[#121212] scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-[#27332C]">
 
             <!-- Empty State / Welcome Screen -->
             <div x-show="messages.length === 0" class="flex h-full flex-col items-center justify-center text-center p-4">
@@ -51,11 +51,11 @@
 
                 <!-- Quick Suggestion Chips with Lucide Icons -->
                 <div class="flex flex-wrap justify-center gap-1.5">
-                    <button type="button" @click="sendQuick('Who are the active suppliers?')" class="inline-flex items-center gap-1.5 rounded-full border border-gray-200 dark:border-[#27332C] bg-white dark:bg-[#111713] px-3 py-1 text-[11px] font-medium text-gray-600 dark:text-gray-400 hover:border-green-500 dark:hover:border-green-400 hover:text-green-600 dark:hover:text-green-400 transition-colors shadow-2xs">
+                    <button type="button" @click="sendQuick('Who are the active suppliers?')" class="inline-flex items-center gap-1.5 rounded-full border border-gray-200 dark:border-[#27332C] bg-white dark:bg-[#121212] px-3 py-1 text-[11px] font-medium text-gray-600 dark:text-gray-400 hover:border-green-500 dark:hover:border-green-400 hover:text-green-600 dark:hover:text-green-400 transition-colors shadow-2xs">
                         <i data-lucide="truck" class="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"></i>
                         <span>Active suppliers</span>
                     </button>
-                    <button type="button" @click="sendQuick('Are there any low stock items?')" class="inline-flex items-center gap-1.5 rounded-full border border-gray-200 dark:border-[#27332C] bg-white dark:bg-[#111713] px-3 py-1 text-[11px] font-medium text-gray-600 dark:text-gray-400 hover:border-green-500 dark:hover:border-green-400 hover:text-green-600 dark:hover:text-green-400 transition-colors shadow-2xs">
+                    <button type="button" @click="sendQuick('Are there any low stock items?')" class="inline-flex items-center gap-1.5 rounded-full border border-gray-200 dark:border-[#27332C] bg-white dark:bg-[#121212] px-3 py-1 text-[11px] font-medium text-gray-600 dark:text-gray-400 hover:border-green-500 dark:hover:border-green-400 hover:text-green-600 dark:hover:text-green-400 transition-colors shadow-2xs">
                         <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-500 dark:text-amber-400"></i>
                         <span>Low stock check</span>
                     </button>
@@ -68,14 +68,14 @@
                     <div class="max-w-[85%] whitespace-pre-wrap rounded-2xl px-3.5 py-2.5 text-xs sm:text-sm shadow-2xs leading-relaxed"
                          :class="m.role === 'user'
                             ? 'bg-green-600 text-white rounded-br-none'
-                            : 'bg-white dark:bg-[#111713] text-gray-800 dark:text-gray-100 border border-gray-100 dark:border-[#27332C] rounded-bl-none shadow-sm'"
+                            : 'bg-white dark:bg-[#121212] text-gray-800 dark:text-gray-100 border border-gray-100 dark:border-[#27332C] rounded-bl-none shadow-sm'"
                          x-text="m.content"></div>
                 </div>
             </template>
 
             <!-- Loading Indicator (Typing Dots) -->
             <div x-show="loading" class="flex justify-start" x-cloak>
-                <div class="flex items-center gap-1 rounded-2xl rounded-bl-none border border-gray-100 dark:border-[#27332C] bg-white dark:bg-[#111713] px-4 py-3 shadow-xs">
+                <div class="flex items-center gap-1 rounded-2xl rounded-bl-none border border-gray-100 dark:border-[#27332C] bg-white dark:bg-[#121212] px-4 py-3 shadow-xs">
                     <span class="h-1.5 w-1.5 animate-bounce rounded-full bg-green-500 dark:bg-green-400"></span>
                     <span class="h-1.5 w-1.5 animate-bounce rounded-full bg-green-500 dark:bg-green-400 [animation-delay:0.2s]"></span>
                     <span class="h-1.5 w-1.5 animate-bounce rounded-full bg-green-500 dark:bg-green-400 [animation-delay:0.4s]"></span>
@@ -84,9 +84,9 @@
         </div>
 
         <!-- Input Area -->
-        <form @submit.prevent="send()" class="flex items-center gap-2 border-t border-gray-100 dark:border-[#27332C] bg-white dark:bg-[#161D19] p-3">
+        <form @submit.prevent="send()" class="flex items-center gap-2 border-t border-gray-100 dark:border-[#27332C] bg-white dark:bg-[#121212] p-3">
             <input type="text" x-model="input" maxlength="500" placeholder="Type a message..."
-                   class="flex-1 rounded-xl border border-gray-200 dark:border-[#27332C] bg-gray-50/50 dark:bg-[#0B0F0D] px-3.5 py-2 text-xs sm:text-sm text-gray-800 dark:text-gray-100 focus:border-green-500 dark:focus:border-green-400 focus:bg-white dark:focus:bg-[#0B0F0D] focus:outline-none focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/30 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500 disabled:opacity-60"
+                   class="flex-1 rounded-xl border border-gray-200 dark:border-[#27332C] bg-gray-50/50 dark:bg-[#121212] px-3.5 py-2 text-xs sm:text-sm text-gray-800 dark:text-gray-100 focus:border-green-500 dark:focus:border-green-400 focus:bg-white dark:focus:bg-[#121212] focus:outline-none focus:ring-2 focus:ring-green-500/20 dark:focus:ring-green-400/30 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500 disabled:opacity-60"
                    :disabled="loading">
 
             <button type="submit" :disabled="loading || input.trim() === ''"

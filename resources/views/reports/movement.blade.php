@@ -48,7 +48,7 @@
                             }
                         },
                         tooltip: {
-                            backgroundColor: this.isDark ? '#1C2621' : '#1e293b',
+                            backgroundColor: this.isDark ? '#121212' : '#1e293b',
                             borderColor: '#27332C',
                             borderWidth: this.isDark ? 1 : 0,
                             padding: 12,
@@ -103,7 +103,7 @@
             <!-- Range Selector Control -->
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2" x-data="{ showCustom: {{ $range === 'custom' ? 'true' : 'false' }} }">
                 <!-- Preset Options Pills -->
-                <div class="inline-flex items-center rounded-xl border border-gray-200 dark:border-[#27332C] bg-white dark:bg-[#111713] p-1 shadow-sm overflow-x-auto">
+                <div class="inline-flex items-center rounded-xl border border-gray-200 dark:border-[#27332C] bg-white dark:bg-[#121212] p-1 shadow-sm overflow-x-auto">
                     <a href="{{ route('reports.movement', ['range' => '7d']) }}"
                        class="px-3 py-1.5 text-xs font-medium rounded-lg whitespace-nowrap transition-colors flex-1 text-center {{ $range === '7d' ? 'bg-green-600 text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-100' }}">
                         7 Days
@@ -127,13 +127,13 @@
                 </div>
 
                 <!-- Custom Date Range Form -->
-                <form method="GET" action="{{ route('reports.movement') }}" x-show="showCustom" x-cloak class="flex items-center gap-2 bg-white dark:bg-[#111713] p-1 border border-gray-200 dark:border-[#27332C] rounded-xl shadow-sm">
+                <form method="GET" action="{{ route('reports.movement') }}" x-show="showCustom" x-cloak class="flex items-center gap-2 bg-white dark:bg-[#121212] p-1 border border-gray-200 dark:border-[#27332C] rounded-xl shadow-sm">
                     <input type="hidden" name="range" value="custom">
                     <input type="date" name="start_date" value="{{ $customStart }}" required
-                           class="w-full sm:w-auto border border-gray-200 dark:border-[#27332C] dark:bg-[#0B0F0D] dark:[color-scheme:dark] rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400 text-gray-700 dark:text-gray-100">
+                           class="w-full sm:w-auto border border-gray-200 dark:border-[#27332C] dark:bg-[#121212] dark:[color-scheme:dark] rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400 text-gray-700 dark:text-gray-100">
                     <span class="text-xs text-gray-400 dark:text-gray-500 font-medium">to</span>
                     <input type="date" name="end_date" value="{{ $customEnd }}" required
-                           class="w-full sm:w-auto border border-gray-200 dark:border-[#27332C] dark:bg-[#0B0F0D] dark:[color-scheme:dark] rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400 text-gray-700 dark:text-gray-100">
+                           class="w-full sm:w-auto border border-gray-200 dark:border-[#27332C] dark:bg-[#121212] dark:[color-scheme:dark] rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 dark:focus:border-green-400 text-gray-700 dark:text-gray-100">
                     <button type="submit"
                             class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-xs font-medium transition-colors shrink-0">
                         Apply
@@ -145,7 +145,7 @@
         <!-- Metric Summary Cards Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
             <!-- Total Received -->
-            <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
+            <div class="bg-white dark:bg-[#121212] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
                 <div>
                     <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Total Received</span>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ number_format($summary['total_received'], 0) }}</p>
@@ -157,7 +157,7 @@
             </div>
 
             <!-- Total Consumed -->
-            <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
+            <div class="bg-white dark:bg-[#121212] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
                 <div>
                     <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Total Consumed</span>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ number_format($summary['total_consumed'], 0) }}</p>
@@ -169,20 +169,20 @@
             </div>
 
             <!-- Adjustments -->
-            <div class="bg-white dark:bg-[#111713] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between sm:col-span-2 lg:col-span-1">
+            <div class="bg-white dark:bg-[#121212] border border-gray-200/80 dark:border-[#27332C] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all flex items-center justify-between sm:col-span-2 lg:col-span-1">
                 <div>
                     <span class="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Adjustments</span>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1 sm:mt-1.5">{{ number_format($summary['adjustments_count']) }}</p>
                     <p class="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5">Manual inventory corrections</p>
                 </div>
-                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gray-100 dark:bg-[#1C2621] text-gray-600 dark:text-gray-400 flex items-center justify-center shrink-0">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gray-100 dark:bg-[#121212] text-gray-600 dark:text-gray-400 flex items-center justify-center shrink-0">
                     <i data-lucide="sliders" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                 </div>
             </div>
         </div>
 
         <!-- Main Chart Section -->
-        <div class="bg-white dark:bg-[#111713] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-6 shadow-sm transition-colors duration-200 ease-in-out">
+        <div class="bg-white dark:bg-[#121212] border border-gray-200 dark:border-[#27332C] rounded-xl p-4 sm:p-6 shadow-sm transition-colors duration-200 ease-in-out">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200">Stock In vs Out by Product</h2>
             </div>
