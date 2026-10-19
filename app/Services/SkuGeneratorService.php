@@ -2,24 +2,24 @@
 
 namespace App\Services;
 
-use App\Models\Product;
 use App\Models\Category;
-
+use App\Models\Product;
 
 class SkuGeneratorService
 {
-
     public function generate(Category $category): string
     {
-        $prefix = strtoupper(
-            substr($category->name,0,3)
-        );
+        $clean = preg_replace('/[^A-Za-z0-9]/', '', $category->name);
+        $prefix = str_pad(strtoupper(substr($clean, 0, 3)), 3, 'X');
+        $skuPrefix = $prefix . '-';
 
-        $count = Product::where('category_id',$category->id)->count();
+        $last = Product::where('sku', 'like', $skuPrefix . '%')
+            ->orderByRaw('LENGTH(sku) DESC')
+            ->orderByDesc('sku')
+            ->value('sku');
 
-        $number = $count + 1;
+        $next = $last ? ((int) substr($last, strlen($skuPrefix))) + 1 : 1;
 
-        return $prefix . '-' . str_pad($number, 3, '0', STR_PAD_LEFT);
+        return $skuPrefix . str_pad($next, 3, '0', STR_PAD_LEFT);
     }
-
 }

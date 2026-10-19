@@ -8,9 +8,15 @@ class BatchNumberGeneratorService
 {
     public function generate(): string
     {
-        $year = now()->format('Y');
-        $countThisYear = Inventory::whereYear('created_at', now()->year)->count();
+        $prefix = 'BT-' . now()->format('Y') . '-';
 
-        return 'BT-' . $year . '-' . str_pad($countThisYear + 1, 3, '0', STR_PAD_LEFT);
+        $last = Inventory::where('batch_number', 'like', $prefix . '%')
+            ->orderByRaw('LENGTH(batch_number) DESC')
+            ->orderByDesc('batch_number')
+            ->value('batch_number');
+
+        $next = $last ? ((int) substr($last, strlen($prefix))) + 1 : 1;
+
+        return $prefix . str_pad($next, 3, '0', STR_PAD_LEFT);
     }
 }
