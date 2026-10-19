@@ -1,59 +1,170 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# AgriStock
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Smart Agriculture Inventory Management System** — a web-based inventory system for an agricultural business (farm supply store or farm) to track seeds, fertilizers, pesticides, equipment, and harvests, with built-in low-stock alerts, expiry monitoring, and reports.
 
-## About Laravel
+> AgriStock is built for a **single business** (not multi-tenant).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Inventory**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Batch-based stock tracking with expiry dates
+- **Stock In** with auto-generated batch numbers
+- **Stock Out** with automatic **FEFO** (first-expiry-first-out) for expiry-tracked products and **FIFO** for the rest
+- **Transfer** between storage locations
+- **Stock Adjustment** that records the system quantity at the time of the adjustment
+- Unified **Inventory History** (Stock In, Stock Out, Transfer, Adjustment)
+- **Low Stock Monitoring** per product (reorder point and minimum stock)
 
-## Learning Laravel
+**Products and suppliers**
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- Products with auto-generated SKUs, categories, and units of measurement
+- Suppliers linked to the categories they supply
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+**Reports and dashboard**
 
-## Laravel Sponsors
+- Dashboard with stock statistics and charts
+- Stock, Movement, and Expiry reports
+- Inventory value shown on the dashboard (Admin and Manager only)
+- Weekly and monthly report digests
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+**Notifications**
 
-### Premium Partners
+- In-app notification bell. Clicking a notification opens the page it refers to (for example, the expired batch)
+- Optional email for important events (critical stock, expired products)
+- Per-user notification preferences
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+**Users and security**
 
-## Contributing
+- Three roles: Admin, Manager, Staff
+- Invite-based onboarding: the admin adds a user, and the user sets their own password from an emailed link
+- Email verification (users cannot make changes until their email is verified)
+- Archived and deleted accounts cannot log in or reset their password
+- Creating an Admin account requires the acting admin's password
+- Account deletion requests that an admin reviews
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Extras**
 
-## Code of Conduct
+- AI chatbot assistant (OpenRouter) that answers questions about your inventory based on the user's role
+- Dark mode
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Roles
 
-## Security Vulnerabilities
+| Capability                                           | Admin | Manager | Staff |
+| ---------------------------------------------------- | :---: | :-----: | :---: |
+| Dashboard                                            |  ✅   |   ✅    |  ✅   |
+| View products, inventory, suppliers                  |  ✅   |   ✅    |  ✅   |
+| Stock In / Stock Out                                 |  ✅   |   ✅    |  ✅   |
+| Stock report, Expiry report                          |  ✅   |   ✅    |  ✅   |
+| Create / edit products, add suppliers                |  ✅   |   ✅    |  ❌   |
+| Edit stock, Stock Adjustment                         |  ✅   |   ✅    |  ❌   |
+| Movement report and inventory value on the dashboard |  ✅   |   ✅    |  ❌   |
+| User management and roles                            |  ✅   |   ❌    |  ❌   |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Permissions are defined in `config/abilities.php`, and user management rules are in `app/Policies/UserPolicy.php`.
+
+## Tech Stack
+
+- **Backend:** Laravel 12, PHP 8.2+ (developed on 8.4), MySQL 8
+- **Frontend:** Blade, Tailwind CSS, Alpine.js, Chart.js, Lucide icons, Vite
+- **Auth:** Laravel Breeze (customized)
+- **Testing:** Pest
+- **AI chatbot:** OpenRouter API
+
+## Architecture
+
+- Thin controllers that delegate to a service class per module (`app/Services`)
+- Form Requests for validation, Policies and Gates for authorization
+- Events and listeners for notifications (`app/Events`, `app/Listeners`)
+- Scheduled commands for expiry checks and report digests (`app/Console/Commands`, `routes/console.php`)
+
+## Getting Started
+
+### Requirements
+
+PHP 8.2+, Composer, Node.js and npm, MySQL 8
+
+### Setup
+
+```bash
+git clone https://github.com/raileyxyz/Agristock.git
+cd Agristock
+
+composer install
+npm install
+
+cp .env.example .env
+php artisan key:generate
+```
+
+Create an empty MySQL database named `agristock`, then check the `DB_*` and `APP_URL` values in `.env`:
+
+```bash
+php artisan migrate --seed
+php artisan storage:link
+```
+
+### Run the app
+
+If you use [Laravel Herd](https://herd.laravel.com), put the project in a Herd-linked folder and open `http://<folder-name>.test` (set `APP_URL` to match). Otherwise:
+
+```bash
+php artisan serve        # http://localhost:8000
+```
+
+In separate terminals:
+
+```bash
+npm run dev              # Vite (use `npm run build` for production assets)
+php artisan queue:work   # sends alert emails; required for queued emails
+php artisan schedule:work  # runs the daily/weekly/monthly scheduled commands (development)
+```
+
+Or run the server, queue, logs, and Vite together with `composer dev` (this includes `php artisan serve`).
+
+### Default admin account
+
+The seeder creates one Admin account:
+
+| Email             | Password   |
+| ----------------- | ---------- |
+| `admin@gmail.com` | `admin123` |
+
+**Change this password immediately**, and never keep the default credentials on a real deployment.
+
+### Email
+
+By default, emails are written to `storage/logs/laravel.log` (`MAIL_MAILER=log`). To send real email, set up SMTP in `.env` (see the commented Gmail and Mailtrap examples in `.env.example`). Alert emails are queued, so keep `php artisan queue:work` running.
+
+### AI chatbot
+
+Add your key to `.env` to enable the chatbot:
+
+```env
+OPENROUTER_API_KEY=your-key
+OPENROUTER_MODEL=openrouter/free
+```
+
+Get a key at <https://openrouter.ai/keys>.
+
+## Scheduled Tasks
+
+| Command                    | Schedule               | Purpose                                     |
+| -------------------------- | ---------------------- | ------------------------------------------- |
+| `inventory:check-expiring` | Daily                  | Notifies about expiring and expired batches |
+| `reports:weekly-digest`    | Mondays 00:00          | Weekly report notification                  |
+| `reports:monthly-digest`   | 1st of the month 00:00 | Monthly report notification                 |
+
+In production, run `php artisan schedule:run` every minute from cron, and run the queue worker under a process manager such as Supervisor.
+
+## Testing
+
+```bash
+php artisan test
+```
+
+Tests use an in-memory SQLite database, configured in `phpunit.xml`.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project was built for educational purposes.
