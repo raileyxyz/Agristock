@@ -19,7 +19,7 @@ class CategoryController extends Controller
 
     public function index(Request $request)
     {
-        $categories = $this->categoryService->getCategories($request->all());
+        $categories = $this->categoryService->getCategories($request->only(['search', 'status']));
 
         return view('categories.index', compact('categories'));
     }

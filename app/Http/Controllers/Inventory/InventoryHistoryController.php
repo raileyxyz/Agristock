@@ -14,7 +14,7 @@ class InventoryHistoryController extends Controller
 
     public function index(Request $request)
     {
-        $movements = $this->historyService->getMovements($request->all());
+        $movements = $this->historyService->getMovements($request->only(['type', 'search', 'page', 'days', 'user_id']));
 
         return view('inventory-history.index', compact('movements'));
     }

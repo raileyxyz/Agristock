@@ -24,7 +24,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = $this->productService->getProducts($request->all());
+        $products = $this->productService->getProducts($request->only(['search', 'status', 'category']));
 
         $categories = Category::active()->orderBy('name')->get();
         $units = Unit::all();

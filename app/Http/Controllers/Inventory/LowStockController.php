@@ -15,7 +15,7 @@ class LowStockController extends Controller
 
     public function index(Request $request)
     {
-        $products = $this->lowStockService->getLowStockProducts($request->all());
+        $products = $this->lowStockService->getLowStockProducts($request->only(['search', 'category_id']));
         $totalCount = $this->lowStockService->getSummary();
         $categories = Category::active()->orderBy('name')->get();
 

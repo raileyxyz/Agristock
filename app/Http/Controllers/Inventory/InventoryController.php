@@ -20,7 +20,7 @@ class InventoryController extends Controller
 
     public function index(Request $request)
     {
-        $inventories = $this->inventoryService->getInventories($request->all());
+        $inventories = $this->inventoryService->getInventories($request->only(['search', 'category_id', 'location', 'supplier_id', 'stock']));
         $summary = $this->inventoryService->getSummary();
         $categories = Category::active()->orderBy('name')->get();
         $products = $this->inventoryService->getActiveProducts();

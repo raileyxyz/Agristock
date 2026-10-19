@@ -21,7 +21,7 @@ class SupplierController extends Controller
      */
     public function index(Request $request)
     {
-        $suppliers = $this->supplierService->getSuppliers($request->all());
+        $suppliers = $this->supplierService->getSuppliers($request->only(['search', 'status', 'category_id']));
         $statistics = $this->supplierService->getStatistics();
         $categories = Category::active()->orderBy('name')->get();
 
