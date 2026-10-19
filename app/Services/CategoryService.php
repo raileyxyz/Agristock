@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Enums\Status;
 use App\Models\Category;
+use App\Exceptions\BusinessRuleException;
+use Illuminate\Support\Facades\Log;
 
 class CategoryService
 {
@@ -37,7 +39,7 @@ class CategoryService
                 $activeProductsCount = $category->products()->where('status', Status::ACTIVE->value)->count();
 
                 if ($activeProductsCount > 0) {
-                    throw new \Exception(
+                    throw new BusinessRuleException(
                         "Cannot archive \"{$category->name}\" — it still has {$activeProductsCount} active " .
                         ($activeProductsCount === 1 ? 'product' : 'products') . '.'
                     );
@@ -47,8 +49,12 @@ class CategoryService
             $category->update($data);
 
             return ['success' => true, 'message' => "{$category->name} updated successfully."];
-        } catch (\Exception $e) {
+        } catch (BusinessRuleException $e) {
             return ['success' => false, 'message' => $e->getMessage()];
+        } catch (\Throwable $e) {
+            Log::error('Failed to update category', ['category_id' => $category->id, 'error' => $e->getMessage()]);
+
+            return ['success' => false, 'message' => 'Something went wrong. Please try again.'];
         }
     }
 
@@ -58,7 +64,7 @@ class CategoryService
             $activeProductsCount = $category->products()->where('status', Status::ACTIVE->value)->count();
 
             if ($activeProductsCount > 0) {
-                throw new \Exception(
+                throw new BusinessRuleException(
                     "Cannot archive \"{$category->name}\" — it still has {$activeProductsCount} active " .
                     ($activeProductsCount === 1 ? 'product' : 'products') . '.'
                 );
@@ -69,8 +75,12 @@ class CategoryService
             ]);
 
             return ['success' => true, 'message' => "{$category->name} archived successfully."];
-        } catch (\Exception $e) {
+        } catch (BusinessRuleException $e) {
             return ['success' => false, 'message' => $e->getMessage()];
+        } catch (\Throwable $e) {
+            Log::error('Failed to archive category', ['category_id' => $category->id, 'error' => $e->getMessage()]);
+
+            return ['success' => false, 'message' => 'Something went wrong. Please try again.'];
         }
     }
 

@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Unit;
+use App\Exceptions\BusinessRuleException;
+use Illuminate\Support\Facades\Log;
 
 class UnitService
 {
@@ -31,14 +33,18 @@ class UnitService
     {
         try {
             if ($unit->products()->exists()) {
-                throw new \Exception("Cannot delete \"{$unit->name}\" — it is still used by one or more products.");
+                throw new BusinessRuleException("Cannot delete \"{$unit->name}\" — it is still used by one or more products.");
             }
 
             $unit->delete();
 
             return ['success' => true, 'message' => "{$unit->name} deleted successfully."];
-        } catch (\Exception $e) {
+        } catch (BusinessRuleException $e) {
             return ['success' => false, 'message' => $e->getMessage()];
+        } catch (\Throwable $e) {
+            Log::error('Failed to delete unit', ['unit_id' => $unit->id, 'error' => $e->getMessage()]);
+
+            return ['success' => false, 'message' => 'Something went wrong. Please try again.'];
         }
     }
 }

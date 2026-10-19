@@ -7,6 +7,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class InventoryService
 {
@@ -88,8 +89,10 @@ class InventoryService
             $inventory->update($data);
 
             return ['success' => true, 'message' => 'Stock updated successfully.'];
-        } catch (\Exception $e) {
-            return ['success' => false, 'message' => $e->getMessage()];
+        } catch (\Throwable $e) {
+            Log::error('Failed to update stock', ['inventory_id' => $inventory->id, 'error' => $e->getMessage()]);
+
+            return ['success' => false, 'message' => 'Could not update the stock. Please try again.'];
         }
     }
 }

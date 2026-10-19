@@ -6,6 +6,7 @@ use App\Models\Inventory;
 use App\Models\User;
 use App\Models\StockAdjustment;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class StockAdjustmentService
 {
@@ -71,8 +72,10 @@ class StockAdjustmentService
             });
 
             return ['success' => true, 'message' => 'Stock adjustment recorded successfully.'];
-        } catch (\Exception $e) {
-            return ['success' => false, 'message' => $e->getMessage()];
+        } catch (\Throwable $e) {
+            Log::error('Failed to record stock adjustment', ['inventory_id' => $data['inventory_id'] ?? null, 'error' => $e->getMessage()]);
+
+            return ['success' => false, 'message' => 'Could not record the adjustment. Please try again.'];
         }
     }
 }
