@@ -37,8 +37,10 @@ class Supplier extends Model
     public function scopeSearch($query, $search)
     {
         return $query->when($search, function ($query) use ($search) {
-            $query->where('company_name', 'like', "%{$search}%")
-                ->orWhere('contact_person', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                ->orWhere('sku', 'like', "%{$search}%");
+            });
         });
     }
 

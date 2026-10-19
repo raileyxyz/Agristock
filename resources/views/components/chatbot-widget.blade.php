@@ -3,7 +3,7 @@
     <button type="button" @click="toggle()"
             class="group ml-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-600 text-white shadow-lg shadow-green-600/30 hover:bg-green-700 hover:shadow-xl hover:shadow-green-600/40 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-green-500/30">
         <!-- Chat Icon (visible when closed) -->
-        <i data-lucide="message-square-more" x-show="!open" class="w-6 h-6 transition-transform duration-300 group-hover:scale-110"></i>
+        <i data-lucide="message-circle-more" x-show="!open" class="w-6 h-6 transition-transform duration-300 group-hover:scale-110"></i>
         <!-- Close Icon (visible when open) -->
         <i data-lucide="x" x-show="open" x-cloak class="w-6 h-6 transition-transform duration-300 group-hover:scale-110"></i>
     </button>

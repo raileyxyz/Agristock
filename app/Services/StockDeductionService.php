@@ -21,6 +21,7 @@ class StockDeductionService
                 fn($q) => $q->orderBy('expiry_date', 'asc'),
                 fn($q) => $q->orderBy('created_at', 'asc')
             )
+            ->lockForUpdate()
             ->get();
 
         $remaining = $quantity;

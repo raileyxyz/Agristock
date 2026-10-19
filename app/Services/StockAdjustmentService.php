@@ -45,7 +45,7 @@ class StockAdjustmentService
     {
         try {
             DB::transaction(function () use ($data, $actor) {
-                $inventory = Inventory::findOrFail($data['inventory_id']);
+                $inventory = Inventory::lockForUpdate()->findOrFail($data['inventory_id']);
                 $product = $inventory->product;
 
                 $remainingBefore = $product->inventories()->sum('remaining_quantity');

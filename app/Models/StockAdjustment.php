@@ -38,18 +38,20 @@ class StockAdjustment extends Model
         return (float) $this->actual_quantity - (float) $this->system_quantity;
     }
 
-    public function scopeSearch($query, $search)
-    {
-        return $query->when($search, function ($query) use ($search) {
-            $query->whereHas('inventory.product', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                ->orWhere('sku', 'like', "%{$search}%");
+public function scopeSearch($query, $search)
+{
+    return $query->when($search, function ($query) use ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->whereHas('inventory.product', function ($product) use ($search) {
+                $product->where('name', 'like', "%{$search}%")
+                        ->orWhere('sku', 'like', "%{$search}%");
             })
-            ->orWhereHas('inventory', function ($q) use ($search) {
-                $q->where('batch_number', 'like', "%{$search}%");
+            ->orWhereHas('inventory', function ($inventory) use ($search) {
+                $inventory->where('batch_number', 'like', "%{$search}%");
             });
         });
-    }
+    });
+}
 
     public function scopeFilterReason($query, $reason)
     {

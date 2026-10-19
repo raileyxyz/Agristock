@@ -56,9 +56,9 @@ class Inventory extends Model
     {
         return $query->when($search, function ($query) use ($search) {
             $query->where(function ($q) use ($search) {
-                $q->whereHas('product', function ($q) use ($search) {
-                    $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('sku', 'like', "%{$search}%");
+                $q->whereHas('product', function ($product) use ($search) {
+                    $product->where('name', 'like', "%{$search}%")
+                            ->orWhere('sku', 'like', "%{$search}%");
                 })
                 ->orWhere('batch_number', 'like', "%{$search}%")
                 ->orWhere('location', 'like', "%{$search}%");

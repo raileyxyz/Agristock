@@ -56,3 +56,23 @@ it('counts only batches with stock in the current stock summary', function () {
     expect($summary['total_items'])->toBe(2)
         ->and($summary['total_locations'])->toBe(2);
 });
+
+it('keeps the stock filter applied when searching', function () {
+    $admin = User::factory()->admin()->create();
+    $product = Product::factory()->create(['name' => 'Urea Fertilizer']);
+
+    $inStock = Inventory::factory()->create([
+        'product_id' => $product->id,
+        'batch_number' => 'BT-2026-001',
+        'remaining_quantity' => 10,
+    ]);
+    $depleted = Inventory::factory()->create([
+        'product_id' => $product->id,
+        'batch_number' => 'BT-2026-002',
+        'remaining_quantity' => 0,
+    ]);
+
+    $response = $this->actingAs($admin)->get(route('inventories.index', ['search' => 'Urea']));
+
+    $response->assertSee('BT-2026-001')->assertDontSee('BT-2026-002');
+});

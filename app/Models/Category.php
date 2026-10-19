@@ -38,12 +38,13 @@ class Category extends Model
         return $query->where('status', Status::ACTIVE->value);
     }
 
-    public function scopeSearch($query,$search)
+    public function scopeSearch($query, $search)
     {
-        return $query->when($search,function($query) use($search){
-
-            $query->where('name','like',"%{$search}%")->orWhere('description','like',"%{$search}%");
-
+        return $query->when($search, function ($query) use ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                ->orWhere('sku', 'like', "%{$search}%");
+            });
         });
     }
 
